@@ -1,0 +1,39 @@
+<script setup lang="ts">
+import { RouterView } from "vue-router";
+import TopBar from "@/components/top-bar/index.vue";
+import { menus } from "@/constants/menus";
+</script>
+
+<template>
+  <div class="main">
+    <TopBar :data="menus" />
+
+    <RouterView />
+  </div>
+</template>
+
+<style scoped>
+header {
+  line-height: 1.5;
+  max-height: 100vh;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
+}
+
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
+</style>
