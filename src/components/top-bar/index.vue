@@ -12,24 +12,22 @@
   </header>
 </template>
 
-
-
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { toRefs } from "vue";
 import type { PropType } from "vue";
-import type { IMenuItem } from "./type";
 
-const props = defineProps({
+interface IMenuItem {
+  path: string;
+  name: string;
+}
+
+defineProps({
   data: {
     type: Array as PropType<IMenuItem[]>,
     default: () => [],
   },
 });
-
-const { data } = toRefs(props);
 </script>
-
 
 <style scoped lang="less">
 header {
