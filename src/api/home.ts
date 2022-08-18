@@ -4,3 +4,7 @@ import { getAjax } from "./index";
 export const getRecommendPlaylist = (limit = 24) => {
   return getAjax("/personalized", { params: { limit } });
 };
+
+export const getBanner = () => {
+  return getAjax("/banner");
+};

@@ -60,7 +60,7 @@ interface IAjaxConfig extends AxiosRequestConfig {
 
 /** get 请求 */
 // todo 处理全局请求loading
-export const getAjax = async (url: string, config: IAjaxConfig) => {
+export const getAjax = async (url: string, config?: IAjaxConfig) => {
   try {
     const resp = await instance.get(url, config);
     return resp;
