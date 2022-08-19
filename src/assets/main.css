@@ -15,7 +15,7 @@ a {
 
 @media (hover: hover) {
   a:hover {
-    color: #b2281e;
+    color: var(--color-text-red);
   }
 }
 

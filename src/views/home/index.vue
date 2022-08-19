@@ -1,27 +1,37 @@
-
 <template>
   <TopBanner :data="bannerData" />
-  <RecommendSongs :data="recommendData" />
+  <RecommendPlayList :data="recommendData" />
+  <RecommendSong :data="songsData" />
 </template>
 
 <script setup lang="ts">
-import { getBanner, getRecommendPlaylist } from "@/api/home";
 import { onMounted, ref } from "vue";
-import RecommendSongs, { IRecommendSongItem } from "@/components/recommend-songs/index.vue";
+import { getBanner, getRecommendPlaylist, getNewSongs } from "@/api/home";
+import RecommendPlayList, {
+  IRecommendPlayItem,
+} from "@/components/recommend-play-list/index.vue";
 import TopBanner, { IBannerItem } from "@/components/top-banner/index.vue";
+import RecommendSong, {
+  IRecommendSongItem,
+} from "@/components/recommend-song/index.vue";
 
-const recommendData = ref<IRecommendSongItem[]>([])
-const bannerData = ref<IBannerItem[]>([])
+const recommendData = ref<IRecommendPlayItem[]>([]);
+const bannerData = ref<IBannerItem[]>([]);
+const songsData = ref<IRecommendSongItem[]>([]);
 
 onMounted(async () => {
-  //todo  promise.all 收敛
-  const bannerRes = await getBanner() as any;
-  bannerData.value = bannerRes.banners
+  const [bannerRes, playlistRes, newSongsRes] = await Promise.all([
+    getBanner(),
+    getRecommendPlaylist(),
+    getNewSongs(9),
+  ]);
 
-  const playlistRes = await getRecommendPlaylist() as any;
-  recommendData.value = playlistRes.result
+  bannerData.value = bannerRes.banners;
+
+  recommendData.value = playlistRes.result;
+
+  songsData.value = newSongsRes.result;
 });
 </script>
 
-<style scoped lang="less">
-</style>
+<style scoped lang="less"></style>
