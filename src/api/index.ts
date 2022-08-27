@@ -60,22 +60,27 @@ interface IAjaxConfig extends AxiosRequestConfig {
 
 /** get 请求 */
 // todo 处理全局请求loading
-export const getAjax = async (
+export const getAjax = async <T = any>(
   url: string,
   config?: IAjaxConfig
-): Promise<any> => {
+): Promise<T> => {
   try {
     const resp = await instance.get(url, config);
-    return resp;
+    return resp as unknown as T;
   } catch (error) {
+    // todo
     console.log(`error__url：${url}  error：${error}`);
+    return error as unknown as T;
   } finally {
   }
 };
 
 /** post 请求 */
 // todo 处理全局请求loading
-export const postAjax = async (url: string, config: IAjaxConfig) => {
+export const postAjax = async <T = any>(
+  url: string,
+  config: IAjaxConfig
+): Promise<T> => {
   try {
     const resp = await instance.post(url, {
       ...config,
@@ -83,9 +88,11 @@ export const postAjax = async (url: string, config: IAjaxConfig) => {
         "Content-Type": "application/json; charset=UTF-8",
       },
     });
-    return resp;
+    return resp as unknown as T;
   } catch (error) {
+    // todo
     console.log(`error__url：${url}  error：${error}`);
+    return error as unknown as T;
   } finally {
   }
 };

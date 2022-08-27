@@ -1,4 +1,4 @@
-export function formatNumber(num: number, point = 0) {
+export function formatNumber(num: number, point = 2) {
   const numStr = num.toString();
   // 十万以内直接返回
   if (numStr.length < 6) {

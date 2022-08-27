@@ -12,9 +12,9 @@
         disableOnInteraction: false, //用户操作之后是否停止自动轮播默认true
       }"
       :coverflowEffect="{
-        rotate: 50,
+        rotate: 30,
         stretch: 0,
-        depth: 100,
+        depth: 80,
         modifier: 1,
         slideShadows: true,
       }"
@@ -73,7 +73,7 @@ const modules = [EffectCoverflow, Pagination, Autoplay, EffectFade];
 .swiper-slide img {
   display: block;
   width: 100%;
-  height: 200px;
+  height: 220px;
   border-radius: 8px;
 }
 

@@ -8,13 +8,21 @@
         :key="key"
         class="recommend-song__block--item"
       >
-        <img :src="item.picUrl" class="recommend-song__block--item-pic" />
-        <div class="recommend-song__block--item-content">
-          <div>
-            <div>{{ item.name }}</div>
-            <div>{{ item.song.artists[0].name }}</div>
+        <div class="recommend-song__block--item-box">
+          <img :src="item.picUrl" class="recommend-song__block--item-pic" />
+          <div class="recommend-song__block--item-content">
+            <div class="recommend-song__block--item-info">
+              <div class="recommend-song__block--item-title">
+                {{ item.name }}
+              </div>
+              <div class="recommend-song__block--item-name">
+                {{ item.song.artists.map((it) => it.name).join(" / ") }}
+              </div>
+            </div>
+            <div class="recommend-song__block--item-time">
+              {{ item.song.duration }}
+            </div>
           </div>
-          <div>{{ item.song.duration }}</div>
         </div>
       </div>
     </div>
@@ -85,10 +93,14 @@ defineProps({
     cursor: pointer;
 
     &--item {
-      display: flex;
-      width: 33.3%;
-      padding: 0 24px 28px 0;
-      font-size: 14px;
+      width: 33.33%;
+
+      &-box {
+        border-top: 1px solid #f2f2f2;
+        display: flex;
+        padding: 12px 0;
+        margin-right: 24px;
+      }
 
       &-pic {
         width: 86px;
@@ -101,6 +113,21 @@ defineProps({
         display: flex;
         align-items: center;
         justify-content: space-between;
+      }
+
+      &-info {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      &-name {
+        font-weight: 500;
+        color: #999;
+      }
+
+      &-title {
+        font-weight: 600;
+        color: #333;
       }
     }
   }
