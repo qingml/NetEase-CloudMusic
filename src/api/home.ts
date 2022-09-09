@@ -14,3 +14,8 @@ export const getBanner = () => {
 export const getNewSongs = (limit = 10) => {
   return getAjax("/personalized/newsong", { params: { limit } });
 };
+
+/** 獲取熱門歌手 */
+export const getHotSingers = (limit = 30, offset = 0) => {
+  return getAjax('/top/artists', { params: { limit, offset } })
+}
