@@ -4,16 +4,16 @@ export const menus = [
     path: "/",
   },
   {
+    name: "歌单",
+    path: "/playlist",
+  },
+  {
     name: "歌手",
     path: "/artist",
   },
   {
     name: "排行榜",
     path: "/toplist",
-  },
-  {
-    name: "歌单",
-    path: "/playlist",
   },
   {
     name: "MV",

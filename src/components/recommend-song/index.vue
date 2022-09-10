@@ -1,6 +1,6 @@
 <template>
   <div class="recommend-song__container">
-    <h2 class="recommend-song__title">新歌推荐</h2>
+    <TopTitle title="新歌推荐" />
 
     <div class="recommend-song__block">
       <div
@@ -65,6 +65,7 @@ export interface IRecommendSongItem {
 }
 
 import { type PropType, defineProps } from "vue";
+import TopTitle from "../top-title/index.vue";
 
 defineProps({
   data: {
@@ -78,12 +79,6 @@ defineProps({
 .recommend-song {
   &__container {
     width: 100%;
-  }
-
-  &__title {
-    padding-bottom: 16px;
-    font-size: 16px;
-    font-weight: bolder;
   }
 
   &__block {

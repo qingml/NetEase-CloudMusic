@@ -1,13 +1,16 @@
 <template>
   <div class="recommend-play-list__container">
-    <h2 class="recommend-play-list__title">歌单推荐</h2>
+    <TopTitle title="歌单推荐" />
     <div class="recommend-play-list__block">
       <div
         class="recommend-play-list__block--item"
         v-for="(item, index) in data"
         :key="index"
       >
-        <div class="recommend-play-list__block--item-wrap">
+        <div
+          class="recommend-play-list__block--item-wrap"
+          @click="() => handleJumpDetail(item.id)"
+        >
           <img :src="item.picUrl" />
           <div class="recommend-play-list__block--item-bottom">
             <span class="recommend-play-list__block--item-count">
@@ -28,6 +31,8 @@
 <script setup lang="ts">
 import { type PropType } from "vue";
 import { formatNumber } from "@/utils/number";
+import TopTitle from "../top-title/index.vue";
+import { useRouter } from "vue-router";
 
 export interface IRecommendPlayItem {
   picUrl: string;
@@ -38,30 +43,24 @@ export interface IRecommendPlayItem {
   alg: string;
 }
 
+const router = useRouter();
+
 defineProps({
   data: {
     type: Array as PropType<IRecommendPlayItem[]>,
     default: () => [],
   },
 });
+
+const handleJumpDetail = (id: number | string) => {
+  router.push(`/playlist-detail/${id}`);
+};
 </script>
 
 <style lang="less">
 @import "@/assets/base.css";
 
 .recommend-play-list {
-  &__title {
-    padding-bottom: 16px;
-    // font-size: 16px;
-    font-weight: bolder;
-  }
-
-  &__container {
-    h2 {
-      font-size: 16px;
-    }
-  }
-
   &__block {
     width: 100%;
     display: flex;
@@ -70,6 +69,7 @@ defineProps({
     &--item {
       padding: 0 12px 24px 0;
       width: 12.5%;
+      cursor: pointer;
 
       img {
         border-radius: 8px;
