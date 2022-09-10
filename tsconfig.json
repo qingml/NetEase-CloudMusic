@@ -7,7 +7,8 @@
       "@/*": ["./src/*"]
     },
     "importsNotUsedAsValues": "remove",
-    "preserveValueImports": false
+    "preserveValueImports": false,
+    "allowJs": true
   },
 
   "references": [

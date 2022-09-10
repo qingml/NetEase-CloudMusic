@@ -10,7 +10,10 @@
       >
         <img class="recommend-singers__block--item-img" :src="item.img1v1Url" />
         <div class="recommend-singers__block--item-info">
-          <div class="recommend-singers__block--item-name" :title="item.name">
+          <div
+            class="recommend-singers__block--item-name ellipsis"
+            :title="item.name"
+          >
             {{ item.name }}
           </div>
           <div class="recommend-singers__block--item-count">
@@ -68,9 +71,6 @@ defineProps({
       &-name {
         font-size: 14px;
         font-weight: bold;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
       }
 
       &-count {

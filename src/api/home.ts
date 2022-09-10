@@ -20,6 +20,3 @@ export const getHotSingers = (limit = 30, offset = 0) => {
   return getAjax('/top/artists', { params: { limit, offset } })
 }
 
-export const getPlaylistDetail = (id: number | string,timestamp=Math.round(new Date().getTime()/1000),s=100) => {
-  return getAjax('/playlist/detail',{params: { id, timestamp,s }})
-}
