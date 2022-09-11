@@ -2,7 +2,7 @@
   <div class="playlist__container">
     <div class="playlist__operate-btns">
       <ElButton color="#fa2800" round>播放全部</ElButton>
-      <ElButton color="#fa2800" round>收藏</ElButton>
+      <ElButton  round>收藏</ElButton>
     </div>
     <div class="playlist-content">
       <div class="playlist-content__item">
