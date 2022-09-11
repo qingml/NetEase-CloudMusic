@@ -6,10 +6,8 @@
 </template>
 
 <script setup lang="ts">
-import { type PropType } from "vue";
-import TopTitle from "@/components/base/top-title/index.vue";
-import SongList from "@/components/base/song-list/index.vue";
-import { IRecommendSongItem } from "../base/song-list/type";
+import SongList from "@/componets/base/song-list/index.vue";
+import TopTitle from "@/componets/base/top-title/index.vue";
 
 defineProps({
   data: {

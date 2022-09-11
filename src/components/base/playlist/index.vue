@@ -1,11 +1,17 @@
 <template>
   <div class="playlist__container">
     <div class="playlist__operate-btns">
-      <ElButton color="#fa2800" round>播放全部</ElButton>
-      <ElButton  round>收藏</ElButton>
+      <ElButton color="#fa2800" round>
+        <i class="iconfont icon-bofang"></i>
+        播放全部
+      </ElButton>
+      <ElButton round>
+        <i class="iconfont icon-aixin"></i>
+        收藏
+      </ElButton>
     </div>
     <div class="playlist-content">
-      <div class="playlist-content__item">
+      <div class="playlist-content__item playlist-content__header">
         <span class="playlist-content__item-index">序号</span>
         <span class="playlist-content__item-song">歌曲</span>
         <span class="playlist-content__item-singer">歌手</span>
@@ -17,7 +23,10 @@
         v-for="(item, index) in data"
         :key="index"
       >
-        <span class="playlist-content__item-index">{{ index }}</span>
+        <span class="playlist-content__item-index">
+          <i class="iconfont icon-bofang"></i>
+          <span>{{ paddingZero(index + 1, 2) }}</span>
+        </span>
         <span class="playlist-content__item-song">
           <img :src="item.coverImg" />
           <span>{{ item.name }}</span>
@@ -26,7 +35,9 @@
         <span class="playlist-content__item-album ellipsis" :title="item.album">
           {{ item.album }}
         </span>
-        <span class="playlist-content__item-time">{{ item.duration }}</span>
+        <span class="playlist-content__item-time">{{
+          formatDuration(formatSecond(item.dt))
+        }}</span>
       </div>
     </div>
   </div>
@@ -34,6 +45,7 @@
 
 <script setup>
 import { ElButton } from "element-plus";
+import { formatDuration, formatSecond, paddingZero } from "@/utils/number";
 
 defineProps({
   data: {
@@ -51,6 +63,17 @@ defineProps({
 
   &__operate-btns {
     float: right;
+    i {
+      padding-right: 5px;
+    }
+
+    button.el-button.el-button {
+      &:hover {
+        background-color: inherit;
+        border-color: inherit;
+        color: inherit;
+      }
+    }
   }
 
   &-content {
@@ -58,19 +81,32 @@ defineProps({
     width: 100%;
     padding-top: 20px;
 
-    div:nth-child(2n - 1) {
+    > div:nth-child(2n - 1) {
       background-color: #f7f7f7;
     }
 
-    div:hover {
+    > div:hover {
       background-color: #ffe8e9;
+
+      .playlist-content__item-index {
+        .icon-bofang {
+          display: inline-block;
+        }
+        span {
+          display: none;
+        }
+      }
     }
 
     &__item {
       display: flex;
       height: 50px;
       align-items: center;
-			cursor: pointer;
+      cursor: pointer;
+
+      .icon-bofang {
+        display: none;
+      }
 
       > span {
         padding: 0 16px;
@@ -104,6 +140,14 @@ defineProps({
 
       &-time {
         width: 10%;
+      }
+    }
+
+    &__header {
+      color: #999;
+
+      span {
+        font-weight: 300;
       }
     }
   }

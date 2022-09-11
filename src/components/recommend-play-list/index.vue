@@ -30,9 +30,10 @@
 
 <script setup lang="ts">
 import { type PropType } from "vue";
-import { formatNumber } from "@/utils/number";
-import TopTitle from "../top-title/index.vue";
 import { useRouter } from "vue-router";
+
+import { formatNumber } from "@/utils/number";
+import TopTitle from "@/components/base/top-title/index.vue";
 
 export interface IRecommendPlayItem {
   picUrl: string;

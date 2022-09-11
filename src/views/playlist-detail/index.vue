@@ -6,8 +6,6 @@
     </div>
     <div class="playlist-detail-right">
       <PlaylistDetailSubscribers :data="PlayListSubscriberData" />
-
-     
     </div>
   </div>
 </template>
@@ -16,8 +14,12 @@
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import PlayListDetailInfo from "@/components/playlist-detail-info/index.vue";
-import { getPlaylistDetail, getPlayList, getPlayListSubscribers } from "@/api/playlist-detail";
-import Playlist from "@/components/playlist/index.vue";
+import {
+  getPlaylistDetail,
+  getPlayList,
+  getPlayListSubscribers,
+} from "@/api/playlist-detail";
+import Playlist from "@/components/base/playlist/index.vue";
 import PlaylistDetailSubscribers from "@/components/playlist-detail-subscribers/index.vue";
 
 const { currentRoute } = useRouter();
@@ -26,12 +28,12 @@ const playId = currentRoute?.value?.params?.id as string;
 
 const playlistdetailData = ref({});
 const playListData = ref([]);
-const PlayListSubscriberData = ref([])
+const PlayListSubscriberData = ref([]);
 
 onMounted(async () => {
-  const [playListDetailRes,PlayListSubscriberRes] = await Promise.all([
-  getPlaylistDetail(playId),
-  getPlayListSubscribers(playId)
+  const [playListDetailRes, PlayListSubscriberRes] = await Promise.all([
+    getPlaylistDetail(playId),
+    getPlayListSubscribers(playId),
   ]);
 
   playlistdetailData.value = playListDetailRes.playlist;
@@ -44,11 +46,11 @@ onMounted(async () => {
   const playListRes = await getPlayList(ids);
 
   playListData.value = playListRes.songs.map((songItem: any) => ({
+    ...songItem,
     name: songItem.name,
     coverImg: songItem.al.picUrl,
     singer: songItem.ar.map((arItem: any) => arItem.name).join(" / "),
     album: songItem.al.name,
-    duration: "03:58",
   }));
 
   console.log(

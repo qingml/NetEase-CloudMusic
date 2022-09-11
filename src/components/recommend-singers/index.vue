@@ -27,8 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { type PropType } from "vue";
-import TopTitle from "../top-title/index.vue";
+import { PropType } from "vue";
+import TopTitle from "@/components/base/top-title/index.vue";
 
 export interface IRecommendSingersItem {
   img1v1Url: string;

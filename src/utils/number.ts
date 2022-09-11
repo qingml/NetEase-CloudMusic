@@ -19,3 +19,38 @@ export function formatNumber(num: number, point = 2) {
     return parseFloat(parseInt(`${num / 10000}`) + "." + decimal) + "万";
   }
 }
+
+/**
+ * 补零
+ * @param num format number
+ * @param len
+ */
+export const paddingZero = (num: number, len: number) => {
+  if (String(num).length > len) return num;
+
+  const restLen = len - String(num).length;
+
+  return `${"0".repeat(restLen)}${num}`;
+};
+
+export const formatSecond = (time: number) => {
+  // 取整
+  time = ~~time;
+
+  var m = ~~parseInt(`${(time % (1000 * 60 * 60)) / (1000 * 60)}`);
+  var s = ~~parseInt(`${(time % (1000 * 60)) / 1000}`);
+  return Number(m * 60 + s);
+};
+
+/**
+ * 格式化时间
+ * @param time
+ * @returns
+ */
+export const formatDuration = (time: number) => {
+  const m = ((time | 0) / 60) | 0;
+
+  const s = (time | 0) % 60 | 0;
+
+  return `${paddingZero(m, 2)}:${paddingZero(s, 2)}`;
+};
