@@ -1,32 +1,26 @@
 import { getAjax, postAjax } from ".";
 
 /** 获取歌单详情信息 */
-export const getPlaylistDetail = (
-  id: string,
-  s = 100
-) => {
-  return getAjax("/playlist/detail", { params: { id,  s } });
+export const getPlaylistDetail = (id: string, s = 100) => {
+  return getAjax("/playlist/detail", { params: { id, s } });
 };
 
 /** 获取歌单详情列表 */
 export const getPlayList = (ids: string[]) => {
-  // @ts-ignore
-  return postAjax("/song/detail", { ids: ids.join(",") });
+  return postAjax(`/song/detail?timestamp=${new Date().getTime()}`, {
+    // @ts-ignore
+    ids: ids.join(","),
+  });
 };
 /** 获取歌单详订阅者 */
-export const getPlayListSubscribers = (
-  id: string,
-  limit = 28, 
-  offset = 0) => {
-  return getAjax('/playlist/subscribers', { params: { id,limit, offset } })
-}
+export const getPlayListSubscribers = (id: string, limit = 28, offset = 0) => {
+  return getAjax("/playlist/subscribers", { params: { id, limit, offset } });
+};
 /** 获取歌单相关推荐*/
 export const getPlayListRelatedrecommend = (id: string) => {
-  return getAjax('/related/playlist', { params: { id } })
-}
+  return getAjax("/related/playlist", { params: { id } });
+};
 /** 获取歌单评论*/
-export const getPlayListComments = (id: string,
-  limit = 28, 
-  offset = 0) => {
-  return getAjax('/comment/playlist', { params: { id,limit, offset } })
-}
+export const getPlayListComments = (id: string, limit = 28, offset = 0) => {
+  return getAjax("/comment/playlist", { params: { id, limit, offset } });
+};

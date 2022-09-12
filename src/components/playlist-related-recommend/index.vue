@@ -6,6 +6,7 @@
         v-for="(item, index) in data"
         :key="index"
         class="playlist-related-recommend__block--item"
+        @click="() => handleJumpDetail(item.id)"
       >
         <img
           :src="item.coverImgUrl"
@@ -27,6 +28,9 @@
 </template>
 <script setup>
 import TopTitle from "@/components/base/top-title/index.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 defineProps({
   data: {
@@ -34,6 +38,10 @@ defineProps({
     default: () => [],
   },
 });
+
+const handleJumpDetail = (id) => {
+  router.replace(`/playlist-detail/${id}`);
+};
 </script>
 
 <style lang="less">
