@@ -57,9 +57,9 @@ export const formatDuration = (time: number) => {
 
 /**
  * 计算时间差
- * 
+ *
  */
-export const dateDifference = (time:number) => {
-  const currDate = new Date().getTime()
-  return Math.ceil ((currDate - time) / (1000 * 3600 * 24 * 30))
-}
+export const dateDifference = (time: number) => {
+  const currDate = new Date().getTime();
+  return Math.ceil((currDate - time) / (1000 * 3600 * 24 * 30));
+};
