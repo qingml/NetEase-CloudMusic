@@ -54,3 +54,12 @@ export const formatDuration = (time: number) => {
 
   return `${paddingZero(m, 2)}:${paddingZero(s, 2)}`;
 };
+
+/**
+ * 计算时间差
+ * 
+ */
+export const dateDifference = (time:number) => {
+  const currDate = new Date().getTime()
+  return Math.ceil ((currDate - time) / (1000 * 3600 * 24 * 30))
+}

@@ -32,13 +32,13 @@ defineProps({
   &__container {
     width: 320px;
     height: 250px;
-    padding: 10px 10px 10px;
+    padding: 15px 10px 15px;
     padding-bottom: 5px;
   }
 
   &__block {
     width: 300px;
-    height: 230px;
+    height: 170px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

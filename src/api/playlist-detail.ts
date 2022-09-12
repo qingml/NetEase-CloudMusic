@@ -20,3 +20,13 @@ export const getPlayListSubscribers = (
   offset = 0) => {
   return getAjax('/playlist/subscribers', { params: { id,limit, offset } })
 }
+/** 获取歌单相关推荐*/
+export const getPlayListRelatedrecommend = (id: string) => {
+  return getAjax('/related/playlist', { params: { id } })
+}
+/** 获取歌单评论*/
+export const getPlayListComments = (id: string,
+  limit = 28, 
+  offset = 0) => {
+  return getAjax('/comment/playlist', { params: { id,limit, offset } })
+}
