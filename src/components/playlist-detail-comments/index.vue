@@ -75,10 +75,10 @@ defineProps({
 
           &-content{
             display: block;
-            width: 100%;
+            width: 240px;
             margin-top: 10px;
             background-color: #f5f5f5;
-            padding: 5px 10px 5px;
+            padding: 5px 10px 5px 10px;
             
             font-size: 12px;
             border-radius: 5px;

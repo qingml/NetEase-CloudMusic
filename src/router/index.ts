@@ -23,6 +23,11 @@ const router = createRouter({
       name: 'playlist-detail',
       component: () => import('../views/playlist-detail/index.vue')
     },
+    {
+      path: "/toplist",
+      name: 'toplist',
+      component: () => import('../views/toplist/index.vue')
+    },
   ],
 });
 

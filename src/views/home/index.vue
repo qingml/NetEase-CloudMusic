@@ -13,15 +13,14 @@ import {
   getNewSongs,
   getHotSingers,
 } from "@/api/home";
-import RecommendPlayList, {
-  IRecommendPlayItem,
-} from "@/components/recommend-play-list/index.vue";
+import RecommendPlayList from "@/components/recommend-play-list/index.vue";
 import TopBanner, { IBannerItem } from "@/components/top-banner/index.vue";
 import RecommendSong from "@/components/recommend-song/index.vue";
-import RecommendSingers, {
-  IRecommendSingersItem,
-} from "@/components/recommend-singers/index.vue";
+import RecommendSingers from "@/components/recommend-singers/index.vue";
+
 import { IRecommendSongItem } from "@/components/base/song-list/type";
+import { IRecommendPlayItem} from  "@/components/base/curate-playlist/type"
+import {IRecommendSingersItem} from "@/components/base/singers/type"
 
 const recommendData = ref<IRecommendPlayItem[]>([]);
 const bannerData = ref<IBannerItem[]>([]);

@@ -1,27 +1,8 @@
 <template>
   <div class="recommend-singers__container">
     <TopTitle title="推荐歌手" />
-
     <div class="recommend-singers__block">
-      <div
-        v-for="(item, index) in data"
-        :key="index"
-        class="recommend-singers__block--item"
-      >
-        <img class="recommend-singers__block--item-img" :src="item.img1v1Url" />
-        <div class="recommend-singers__block--item-info">
-          <div
-            class="recommend-singers__block--item-name ellipsis"
-            :title="item.name"
-          >
-            {{ item.name }}
-          </div>
-          <div class="recommend-singers__block--item-count">
-            单曲数
-            {{ item.musicSize }}
-          </div>
-        </div>
-      </div>
+      <SingerList :data="data" />
     </div>
   </div>
 </template>
@@ -29,12 +10,9 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import TopTitle from "@/components/base/top-title/index.vue";
+import SingerList from "@/components/base/singers/index.vue";
+import {IRecommendSingersItem} from "@/components/base/singers/type";
 
-export interface IRecommendSingersItem {
-  img1v1Url: string;
-  name: string;
-  musicSize: number;
-}
 
 defineProps({
   data: {
@@ -48,37 +26,9 @@ defineProps({
 .recommend-singers {
   &__container {
     padding-top: 24px;
+    
   }
+  
 
-  &__block {
-    &--item {
-      float: left;
-      width: 128px;
-      padding: 16px;
-      text-align: center;
-      cursor: pointer;
-
-      &-info {
-        padding-top: 12px;
-      }
-
-      &-img {
-        width: 96px;
-        height: 96px;
-        border-radius: 50%;
-      }
-
-      &-name {
-        font-size: 14px;
-        font-weight: bold;
-      }
-
-      &-count {
-        padding-top: 8px;
-        color: #fa2800;
-        font-size: 12px;
-      }
-    }
-  }
 }
 </style>
