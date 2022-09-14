@@ -28,6 +28,11 @@ const router = createRouter({
       name: 'toplist',
       component: () => import('../views/toplist/index.vue')
     },
+    {
+      path: "/singerlist-detail/:id",
+      name: 'singerlist-detail',
+      component: () => import('../views/singerlist-detail/index.vue'),
+    },
   ],
 });
 

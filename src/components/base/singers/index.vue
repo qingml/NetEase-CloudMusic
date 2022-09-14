@@ -4,7 +4,8 @@
         v-for="(item, index) in data"
         :key="index"
         class="recommend-singers__block--item"
-      >
+        @click="() => handleJumpSingerDeatil(item.id)"
+        >
         <img class="recommend-singers__block--item-img" :src="item.img1v1Url" />
         <div class="recommend-singers__block--item-info">
           <div
@@ -23,8 +24,10 @@
 </template>
 <script setup lang="ts">
 import { PropType } from "vue";
+import { useRouter } from "vue-router";
 import {IRecommendSingersItem} from "./type"
 
+const router = useRouter();
 
 
 defineProps({
@@ -33,6 +36,10 @@ defineProps({
     default: () => [],
   },
 });
+
+const handleJumpSingerDeatil = (id: number | string) => {
+    router.push(`/singerlist-detail/${id}`);
+  };
 </script>
 
 <style lang="less">
@@ -42,6 +49,7 @@ defineProps({
         float: left;
         width: 128px;
         padding: 16px;
+        padding-left:0px;
         text-align: center;
         cursor: pointer;
   
