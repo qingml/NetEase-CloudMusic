@@ -53,8 +53,10 @@ const queryPlayListData = async (playId: string) => {
 
   playlistdetailData.value = playListDetailRes.playlist;
   PlayListSubscriberData.value = PlayListSubscriberRes.subscribers;
-  playlistRelatedRecommendData.value = playlistRelatedRecommendRes.playlists;
-  playlistDetailCommentsData.value = playlistDetailCommentsRes.hotComments;
+  playlistRelatedRecommendData.value =
+    playlistRelatedRecommendRes?.playlists || [];
+  playlistDetailCommentsData.value =
+    playlistDetailCommentsRes?.hotComments || [];
 
   const ids = playListDetailRes.playlist.trackIds.map(
     (it: any) => it.id
@@ -62,13 +64,14 @@ const queryPlayListData = async (playId: string) => {
 
   const playListRes = await getPlayList(ids);
 
-  playListData.value = playListRes.songs.map((songItem: any) => ({
-    ...songItem,
-    name: songItem.name,
-    coverImg: songItem.al.picUrl,
-    singer: songItem.ar.map((arItem: any) => arItem.name).join(" / "),
-    album: songItem.al.name,
-  }));
+  playListData.value =
+    playListRes?.songs?.map((songItem: any) => ({
+      ...songItem,
+      name: songItem.name,
+      coverImg: songItem.al.picUrl,
+      singer: songItem.ar.map((arItem: any) => arItem.name).join(" / "),
+      album: songItem.al.name,
+    })) || [];
 };
 
 onMounted(() => queryPlayListData(playListId));

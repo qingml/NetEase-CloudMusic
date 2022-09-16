@@ -5,8 +5,8 @@
         <i class="iconfont icon-bofang"></i>
         播放全部
       </ElButton>
-      <ElButton v-if="hascollect" round>
-        <i  class="iconfont icon-aixin"></i>
+      <ElButton v-if="hasCollect" round>
+        <i class="iconfont icon-aixin"></i>
         收藏
       </ElButton>
     </div>
@@ -52,11 +52,10 @@ defineProps({
     type: Array,
     default: () => [],
   },
-  hascollect:{
-    type:Boolean,
-    default:true,
-   
-  }
+  hasCollect: {
+    type: Boolean,
+    default: true,
+  },
 });
 </script>
 

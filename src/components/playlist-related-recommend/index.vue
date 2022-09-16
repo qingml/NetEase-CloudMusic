@@ -40,7 +40,7 @@ defineProps({
 });
 
 const handleJumpDetail = (id) => {
-  router.replace(`/playlist-detail/${id}`);
+  router.push(`/playlist-detail/${id}`);
 };
 </script>
 
