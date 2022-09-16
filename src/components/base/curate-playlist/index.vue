@@ -42,7 +42,7 @@
   });
 
   const handleJumpDetail = (id: number | string) => {
-    router.push(`/playlist-detail/${id}`);
+    router.replace(`/playlist-detail/${id}`);
   };
 </script>
 

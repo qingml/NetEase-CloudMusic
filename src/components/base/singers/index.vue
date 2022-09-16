@@ -7,7 +7,7 @@
         @click="() => handleJumpSingerDeatil(item.id)"
         >
         <img class="recommend-singers__block--item-img" :src="item.img1v1Url" />
-        <div class="recommend-singers__block--item-info">
+        <div class="recommend-singers__block--item-info" >
           <div
             class="recommend-singers__block--item-name ellipsis"
             :title="item.name"
@@ -38,7 +38,7 @@ defineProps({
 });
 
 const handleJumpSingerDeatil = (id: number | string) => {
-    router.push(`/singerlist-detail/${id}`);
+    router.replace(`/singerlist-detail/${id}`);
   };
 </script>
 

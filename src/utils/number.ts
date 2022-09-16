@@ -43,11 +43,11 @@ export const formatSecond = (time: number) => {
 };
 
 /**
- * 格式化时间
+ * 格式化播放列表的时间
  * @param time
  * @returns
  */
-export const formatDuration = (time: number) => {
+export const formatDurationPlay = (time: number) => {
   const m = ((time | 0) / 60) | 0;
 
   const s = (time | 0) % 60 | 0;
@@ -62,4 +62,17 @@ export const formatDuration = (time: number) => {
 export const dateDifference = (time: number) => {
   const currDate = new Date().getTime();
   return Math.ceil((currDate - time) / (1000 * 3600 * 24 * 30));
+};
+/**
+ * 格式化MV里的时间
+ * @param time
+ * @returns
+ */
+ export const formatDurationMv = (time: number) => {
+  const time1 = time/1000
+  const m = ((time1 | 0) / 60) | 0;
+
+  const s = (time1 | 0) % 60 | 0;
+
+  return `${paddingZero(m, 2)}:${paddingZero(s, 2)}`;
 };

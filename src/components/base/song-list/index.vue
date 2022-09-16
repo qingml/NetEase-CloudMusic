@@ -17,7 +17,7 @@
             </div>
           </div>
           <div class="recommend-song__block--item-time">
-            {{ formatDuration(formatSecond(item.song.duration)) }}
+            {{ formatDurationPlay(formatSecond(item.song.duration)) }}
           </div>
         </div>
       </div>
@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import { IRecommendSongItem } from "./type";
-import { formatDuration, formatSecond } from "@/utils/number";
+import { formatDurationPlay, formatSecond } from "@/utils/number";
 
 defineProps({
   data: {

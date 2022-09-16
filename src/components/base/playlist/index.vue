@@ -29,14 +29,14 @@
         </span>
         <span class="playlist-content__item-song">
           <img :src="item.coverImg" />
-          <span>{{ item.name }}</span>
+          <span >{{ item.name }}</span>
         </span>
-        <span class="playlist-content__item-singer">{{ item.singer }}</span>
+        <span class="playlist-content__item-singer ellipsis">{{ item.singer }}</span>
         <span class="playlist-content__item-album ellipsis" :title="item.album">
           {{ item.album }}
         </span>
         <span class="playlist-content__item-time">{{
-          formatDuration(formatSecond(item.dt))
+          formatDurationPlay(formatSecond(item.dt))
         }}</span>
       </div>
     </div>
@@ -45,7 +45,7 @@
 
 <script setup>
 import { ElButton } from "element-plus";
-import { formatDuration, formatSecond, paddingZero } from "@/utils/number";
+import { formatDurationPlay, formatSecond, paddingZero } from "@/utils/number";
 
 defineProps({
   data: {
