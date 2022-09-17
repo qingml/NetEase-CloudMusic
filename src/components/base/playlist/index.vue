@@ -29,9 +29,11 @@
         </span>
         <span class="playlist-content__item-song">
           <img :src="item.coverImg" />
-          <span >{{ item.name }}</span>
+          <span class="ellipsis" :title="item.name">{{ item.name }}</span>
         </span>
-        <span class="playlist-content__item-singer ellipsis">{{ item.singer }}</span>
+        <span class="playlist-content__item-singer ellipsis">{{
+          item.singer
+        }}</span>
         <span class="playlist-content__item-album ellipsis" :title="item.album">
           {{ item.album }}
         </span>

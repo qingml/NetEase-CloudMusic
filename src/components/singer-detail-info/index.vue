@@ -1,7 +1,7 @@
 <template>
   <div class="singer-detail-info__container">
     <div class="singer-detail-info__block">
-      <img :src="data.picUrl" class="singer-detail-info__block-img" />
+      <img :src="data.img1v1Url" class="singer-detail-info__block-img" />
       <p class="singer-detail-info__block-singername">{{ data.name }}</p>
       <div class="singer-detail-info__block-follow">
         <i class="iconfont icon-add"></i>
@@ -47,6 +47,7 @@ defineProps({
     background: rgba(0, 0, 0, 0.6);
     text-align: center;
   }
+
   &__block {
     height: 370px;
     position: absolute;
@@ -65,14 +66,16 @@ defineProps({
       border-radius: 50%;
       background: #fff;
       border: 3px solid rgba(255, 255, 255, 0.6);
+      &:hover {
+        box-shadow: 0px 5px 20px 0px rgb(255 255 255 / 80%);
+      }
     }
 
     &-follow {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 24px;
-      margin-bottom: 30px;
+      margin: 20px 0;
       width: 96px;
       line-height: 36px;
       font-size: 12px;
@@ -91,13 +94,11 @@ defineProps({
 
     &-brefdescrip {
       width: 730px;
-      height: 48px;
       font-size: 14px;
       font-weight: bold;
       color: rgba(255, 255, 255, 0.6);
       line-height: 24px;
       margin-bottom: 24px;
-      margin-top: auto;
     }
     &-worknumeber {
       width: 370px;
