@@ -9,7 +9,7 @@
             <span> {{ formatNumber(item.playCount) }}</span>
           </span>
         </div>
-        <div class="mv__block--item-middle">
+        <div class="mv__block--item-middle" @click="() => handleJumpDetail(item.id)">
           <i class="iconfont icon-bofang"></i>
         </div>
         <div class="mv__block--item-bottom">
@@ -29,12 +29,17 @@ import { useRouter } from "vue-router";
 
 import { formatNumber, formatDurationMv } from "@/utils/number";
 
+const router = useRouter();
 defineProps({
   data: {
     type: Array,
     default: () => [],
   },
 });
+
+const handleJumpDetail = (id) => {
+  router.push(`/mv-detail/${id}`);
+};
 </script>
 
 <style lang="less">

@@ -8,9 +8,11 @@
         <el-tab-pane label="作品" name="work">
           <Playlist :data="singerPlaylistData" :hasCollect="false" />
         </el-tab-pane>
-        <el-tab-pane label="专辑" name="album"> Config </el-tab-pane>
+        <el-tab-pane label="专辑" name="album"> 
+         <Album :data='singerAlbumData'/> 
+        </el-tab-pane>
         <el-tab-pane label="MV" name="mv">
-          <MV :data="singerMvData"/>
+          <MV :data="singerMvData" />
         </el-tab-pane>
         <el-tab-pane label="歌手详情" name="singerDetai">
           <SingerIntro :data="singerIntroductionData" />
@@ -25,19 +27,22 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useRouter,onBeforeRouteUpdate  } from "vue-router";
+import { useRouter, onBeforeRouteUpdate } from "vue-router";
 
-import SingerInfo from "@/components/singer-detail-info/index.vue";
+
 import {
   getSingerDetailInfo,
   getSingerIntroduction,
   getSimSingerDetail,
   getSingerMV,
+  getSingerAlbum
 } from "@/api/singerlist-detail";
 import Playlist from "@/components/base/playlist/index.vue";
+import SingerInfo from "@/components/singer-detail-info/index.vue";
 import SimSingers from "@/components/base/singers/index.vue";
 import SingerIntro from "@/components/singers-introduction/index.vue";
-import MV from "@/components/base/mv/index.vue"
+import MV from "@/components/base/mv/index.vue";
+import Album from "@/components/base/album/index.vue";
 
 const { currentRoute } = useRouter();
 const singerId = currentRoute?.value?.params?.id as string;
@@ -48,20 +53,18 @@ const singerPlaylistData = ref([]);
 const simSingerData = ref([]);
 const singerIntroductionData = ref({});
 const singerMvData = ref([]);
+const singerAlbumData = ref([])
 
 const queryPlayListData = async (singerId: string) => {
-  const [
-      singerInfoRes, 
-      simSingerRes,
-      singerIntroductionRes,
-      singerMVRes
-  ] = await Promise.all([
+  const [singerInfoRes, simSingerRes, singerIntroductionRes, singerMVRes,singerAlbumRes] =
+    await Promise.all([
       getSingerDetailInfo(singerId),
       getSimSingerDetail(singerId),
       getSingerIntroduction(singerId),
       getSingerMV(singerId),
-  ]);
-  
+      getSingerAlbum(singerId)
+    ]);
+
   singerInfoData.value = singerInfoRes.artist;
   singerPlaylistData.value = singerInfoRes.hotSongs.map((songItem: any) => ({
     ...songItem,
@@ -70,21 +73,20 @@ const queryPlayListData = async (singerId: string) => {
     singer: songItem.ar.map((arItem: any) => arItem.name).join(" / "),
     album: songItem.al.name,
   }));
-  activeName.value = 'work'
+  activeName.value = "work";
   simSingerData.value = simSingerRes.artists;
   singerIntroductionData.value = singerIntroductionRes;
-  singerMvData.value = singerMVRes.mvs
+  singerMvData.value = singerMVRes.mvs;
+  singerAlbumData.value = singerAlbumRes.hotAlbums.flat(2);
 };
 
-onMounted(()=>queryPlayListData(singerId));
+onMounted(() => queryPlayListData(singerId));
 
 onBeforeRouteUpdate(async (to, from) => {
- 
   if (to.params.id !== from.params.id) {
     queryPlayListData(to.params.id as string);
   }
 });
-
 </script>
 
 <style lang="less">
@@ -111,15 +113,15 @@ onBeforeRouteUpdate(async (to, from) => {
   &-bottom {
     margin-bottom: 100px;
     //padding-left: 30px;
-   // padding-right: 30px;
-  //  text-align: center;
+    // padding-right: 30px;
+    //  text-align: center;
     .singer-detail-nav-title {
       padding-top: 20px;
 
       .el-tabs__nav-wrap::after {
         display: none;
       }
-      .el-tabs__item{
+      .el-tabs__item {
         font-weight: bold;
       }
 
@@ -129,19 +131,18 @@ onBeforeRouteUpdate(async (to, from) => {
         display: flex;
         justify-content: space-around;
         margin: auto;
-      
+
         .el-tabs__item.is-active {
-          color:  var(--color-text-red);
+          color: var(--color-text-red);
         }
 
         .el-tabs__item:hover {
-          color:  var(--color-text-red);
+          color: var(--color-text-red);
         }
 
         .el-tabs__active-bar {
-          background-color:  var(--color-text-red);
+          background-color: var(--color-text-red);
         }
-        
       }
     }
   }

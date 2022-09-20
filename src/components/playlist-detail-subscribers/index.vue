@@ -30,6 +30,7 @@ defineProps({
 <style lang="less">
 .playlist-detail-subscribers {
   &__container {
+    background-color: #fff;
     width: 320px;
     height: 250px;
     padding: 15px 10px 15px;

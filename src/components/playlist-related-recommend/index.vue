@@ -37,6 +37,7 @@ defineProps({
     type: Array,
     default: () => [],
   },
+
 });
 
 const handleJumpDetail = (id) => {
@@ -47,6 +48,7 @@ const handleJumpDetail = (id) => {
 <style lang="less">
 .playlist-related-recommend {
   &__container {
+    background-color: #fff;
     width: 320px;
     padding: 15px 10px 15px;
     padding-bottom: 25px;

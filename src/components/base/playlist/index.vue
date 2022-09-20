@@ -64,6 +64,7 @@ defineProps({
 <style lang="less">
 .playlist {
   &__container {
+    background-color: #fff;
     padding-top: 20px;
   }
 

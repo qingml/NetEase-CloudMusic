@@ -36,6 +36,7 @@ defineProps({
 <style lang="less">
   .playlist-detail-comments{
     &__container {
+      background-color: #fff;
       width: 320px;
      
       padding: 15px 10px 15px;

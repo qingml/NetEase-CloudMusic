@@ -26,80 +26,80 @@
 </template>
 
 <script setup lang="ts">
-  import { PropType } from "vue";
-  import { useRouter } from "vue-router";
+import { PropType } from "vue";
+import { useRouter } from "vue-router";
 
-  import { formatNumber } from "@/utils/number";
-  import {IRecommendPlayItem} from "./type";
+import { formatNumber } from "@/utils/number";
+import { IRecommendPlayItem } from "./type";
 
-  const router = useRouter();
+const router = useRouter();
 
-  defineProps({
-    data: {
-      type: Array as PropType<IRecommendPlayItem[]>,
-      default: () => [],
-    },
-  });
+defineProps({
+  data: {
+    type: Array as PropType<IRecommendPlayItem[]>,
+    default: () => [],
+  },
+});
 
-  const handleJumpDetail = (id: number | string) => {
-    router.replace(`/playlist-detail/${id}`);
-  };
+const handleJumpDetail = (id: number | string) => {
+  router.replace(`/playlist-detail/${id}`);
+};
 </script>
 
 <style lang="less">
-  @import "@/assets/base.css";
-  
-  .recommend-play-list {
-    &__block {
-      width: 100%;
-      display: flex;
-      flex-wrap: wrap;
-  
-      &--item {
-        padding: 0 12px 24px 0;
-        width: 12.5%;
+@import "@/assets/base.css";
+
+.recommend-play-list {
+  &__block {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    &--item {
+      padding: 0 12px 24px 0;
+      width: 12.5%;
+      cursor: pointer;
+
+      img {
+        border-radius: 8px;
+        height: 100%;
+      }
+
+      &-wrap {
+        height: 136px;
+        width: 100%;
+        position: relative;
+      }
+
+      &-title {
+        padding-top: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         cursor: pointer;
-  
-        img {
-          border-radius: 8px;
-          height: 100%;
+        width: 136px;
+        &:hover {
+          color: var(--color-text-red);
         }
-  
-        &-wrap {
-          height: 136px;
-          width: 100%;
-          position: relative;
-        }
-  
-        &-title {
-          padding-top: 6px;
-          font-size: 14px;
-          font-weight: 600;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          cursor: pointer;
-          width: 136px;
-          &:hover {
-            color: var(--color-text-red);
-          }
-        }
-  
-        &-bottom {
-          background-color: rgb(16 22 26 / 35%);
-          display: flex;
-          justify-content: space-between;
-          position: absolute;
-          bottom: 0;
-          color: #fff;
-          width: 136px;
-          font-size: 12px;
-          border-radius: 8px;
-          padding: 0 4px;
-        }
+      }
+
+      &-bottom {
+        background-color: rgb(16 22 26 / 35%);
+        display: flex;
+        justify-content: space-between;
+        position: absolute;
+        bottom: 0;
+        color: #fff;
+        width: 136px;
+        font-size: 12px;
+        border-radius: 8px;
+        padding: 0 4px;
       }
     }
   }
-  </style>
+}
+</style>

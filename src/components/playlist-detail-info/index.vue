@@ -17,7 +17,10 @@
           {{ dayjs(data.createTime).format("YYYY-MM-DD") }} 创建
         </span>
       </div>
-      <div class="playlist-detail-info__tags">
+      <div v-if="hasPublishCompany" class="publish-company mr-32">
+        发行公司：{{ data.company }}
+      </div>
+      <div v-if="hasTag" class="playlist-detail-info__tags">
         <span class="mr-16">标签</span>
         <span class="playlist-detail-info__tags-item" v-for="tag in data?.tags">
           {{ tag }}
@@ -40,15 +43,30 @@ defineProps({
     type: Object,
     default: () => ({}),
   },
+  hasTag: {
+    type: Boolean,
+    default: true,
+  },
+  hasPublishCompany: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 
 <style lang="less">
+   .publish-company{
+    color: #4a4a4a;
+    font-size:14px;
+    font-weight: 400;
+    padding-bottom: 15px;
+  }
 .playlist-detail-info {
   &__container {
+    background-color: #fff;
     display: flex;
   }
-
+ 
   &__img {
     width: 212px;
     height: 212px;

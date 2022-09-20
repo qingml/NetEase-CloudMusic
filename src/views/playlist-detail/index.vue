@@ -6,7 +6,7 @@
     </div>
     <div class="playlist-detail-right">
       <PlaylistDetailSubscribers :data="PlayListSubscriberData" />
-      <PlaylistRelatedRecommend :data="playlistRelatedRecommendData" />
+      <PlaylistRelatedRecommend :data="playlistRelatedRecommendData"  />
       <PlaylistDetailComments :data="playlistDetailCommentsData" />
     </div>
   </div>

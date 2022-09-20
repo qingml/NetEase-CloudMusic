@@ -76,3 +76,15 @@ export const dateDifference = (time: number) => {
 
   return `${paddingZero(m, 2)}:${paddingZero(s, 2)}`;
 };
+/**
+ * 格式化日期
+ * @param time
+ * @returns
+ */
+ export const formatDate = (timestamp:number) => {
+  const date = new Date(timestamp)
+  const Y = date.getFullYear() + '-';
+  const M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+  const D = (date.getDate()+1 < 10 ? '0'+(date.getDate()+1) : date.getDate()+1) + '';
+  return Y+M+D;
+};
