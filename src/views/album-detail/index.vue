@@ -1,15 +1,16 @@
 <template>
-  <div class="playlist-detail-whole">
-    <div class="playlist-detail-left">
+  <div class="album-detail-whole">
+    <div class="album-detail-left">
       <PlayListDetailInfo
         :data="AlbumDetailData"
         :hasTag="false"
         :hasPublishCompany="true"
+        :isRed="true"
       />
       <Playlist :data="AlbumPlaylistData" :hasCollect="false" />
     </div>
-    <div class="playlist-detail-right">
-      <PlaylistRelatedRecommend  :data="HotAlbumData" />
+    <div class="album-detail-right">
+      <PlaylistRelatedRecommend  :data="HotAlbumData" :isHotAlbum="true"/>
       <PlaylistDetailComments :data="HotCommentData" />
     </div>
   </div>
@@ -75,7 +76,7 @@ onBeforeRouteUpdate(async (to, from) => {
 });
 </script>
 <style lang="less">
-.playlist-detail {
+.album-detail {
   &-whole {
     display: flex;
   }

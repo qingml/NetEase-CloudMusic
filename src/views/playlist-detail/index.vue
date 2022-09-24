@@ -85,6 +85,9 @@ onBeforeRouteUpdate(async (to, from) => {
 </script>
 
 <style lang="less">
+.left-wrap {
+  margin-right: 16px;
+}
 .playlist-detail {
   &-whole {
     display: flex;

@@ -80,13 +80,13 @@ const handleJumpDetail = (id) => {
           background-color: black;
           content: "";
           display: block;
-          left: 10px;
-          transition: left 0.5s;
+          left: 8px;
+          transition: left 0.4s;
         }
 
         &:hover {
           &::after {
-            left: 16px;
+            left: 12px;
           }
         }
       }

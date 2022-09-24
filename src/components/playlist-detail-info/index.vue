@@ -10,9 +10,9 @@
           class="playlist-detail-info__content-avator mr-16"
           :src="data?.creator?.avatarUrl"
         />
-        <span class="mr-32">
-          {{ data?.creator?.nickname }}
-        </span>
+        <span  v-if="isRed" class="mr-32" style="color:red"> {{ data?.creator?.nickname }} </span>
+        <span  v-else class="mr-32" >{{ data?.creator?.nickname }}</span>
+       
         <span class="playlist-detail-info__content-createtime">
           {{ dayjs(data.createTime).format("YYYY-MM-DD") }} 创建
         </span>
@@ -51,10 +51,17 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  isRed:{
+    type: Boolean,
+    default: false,
+  }
 });
 </script>
 
 <style lang="less">
+  .isRed{
+    color: red;
+  }
    .publish-company{
     color: #4a4a4a;
     font-size:14px;
@@ -65,6 +72,8 @@ defineProps({
   &__container {
     background-color: #fff;
     display: flex;
+    padding: 0 15px;
+    
   }
  
   &__img {

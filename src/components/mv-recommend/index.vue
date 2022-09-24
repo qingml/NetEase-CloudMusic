@@ -1,27 +1,35 @@
 <template>
   <div class="playlist-related-recommend__container">
-    <TopTitle v-if=" isHotAlbum" :show-line="true" title="热门专辑" />
-    <TopTitle v-else :show-line="true" title="相关推荐" />
-
-    <div class="playlist-related-recommend__block">
+    <TopTitle :show-line="true" title="相关推荐" />
+    <div class="mv-related-recommend__block">
       <div
         v-for="(item, index) in data"
         :key="index"
         class="playlist-related-recommend__block--item"
         @click="() => handleJumpDetail(item.id)"
       >
-        <img
-          :src="item.coverImgUrl"
+        <div class="paly">
+          <img
+          :src="item.cover"
           class="playlist-related-recommend__block--item-img"
         />
+        <div class="middle" @click="() => handleJumpDetail(item.id)">
+          <i class="iconfont icon-bofang"></i>
+        </div>
+        </div>
+
         <div class="playlist-related-recommend__block--item-content">
-          <div
+          <div class="mv-name">
+            <i class="iconfont icon-mv"></i>
+            <div
             class="playlist-related-recommend__block--item-content-name ellipsis"
-          >
+          > 
             {{ item.name }}
           </div>
+          </div>
+          
           <span class="playlist-related-recommend__block--item-content-creator">
-            By. {{ item.creator.nickname }}
+            By. {{ item.artistName }}
           </span>
         </div>
       </div>
@@ -39,27 +47,36 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  isHotAlbum:{
-    type: Boolean,
-    default:false
-  },
-  isMv:{
-    type: Boolean,
-    default:false
-  }
+
 });
 
 const handleJumpDetail = (id) => {
-  if(props.isHotAlbum) {
-    router.replace(`/album-detail/${id}`)
-  } else {
-    router.replace(`/playlist-detail/${id}`);
-  }
- 
+  router.replace(`/mv-detail/${id}`);
 };
 </script>
 
 <style lang="less">
+  .play{
+    position: relative;
+  }
+  .middle {
+        display: flex;
+        height: 0;
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+        background: rgba(0, 0, 0, 0);
+        color: red;
+        top: 0;
+        left: 0;
+        position: absolute;
+        justify-content: center;
+        align-items: center;
+        i {
+          font-size: 0px;
+        }
+        transition: all 0.5s;
+      }
 .playlist-related-recommend {
   &__container {
     background-color: #fff;
@@ -71,40 +88,54 @@ const handleJumpDetail = (id) => {
   }
 
   &__block {
-    width: 300px;
-    height: 300px;
+    width:100%;
+    height: auto;
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: space-between;
     box-sizing: border-box;
 
     &--item {
       width: 100%;
-      height: 50px;
+      height: auto;
       display: flex;
+      flex-direction: column;
       &-img {
-        width: 50px;
-        height: 50px;
-        border-radius: 5px;
-        cursor: pointer;
+        width: 100%;
+        height: 100%;
       }
       &-content {
-        padding-left: 15px;
+        padding-top:10px;
         height: 50px;
         width: 240px;
+        margin-bottom: 20px;
+        .mv-name {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          i{
+            color: var(--vt-c-text-light-2);
+          }
+
+        }
         &-name {
           font-size: 14px;
-          cursor: pointer;
-          &:hover {
-            color: var(--color-text-red);
-          }
+          padding-left: 8px;
         }
         &-creator {
           font-size: 12px;
           color: #a5a5c1;
-          cursor: pointer;
+          
         }
+        
+      }
+    }
+
+    &--item:hover {
+      .middle{
+        background: rgba(0, 0, 0, 0.5);
+          i {
+            font-size: 28px;
+          }
       }
     }
   }

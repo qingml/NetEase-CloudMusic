@@ -1,10 +1,11 @@
 
+
 /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
   font-family: 'iconfont';  /* Project id 3595695 */
-  src: url('//at.alicdn.com/t/c/font_3595695_xa12bpylk0q.woff2?t=1663151804013') format('woff2'),
-       url('//at.alicdn.com/t/c/font_3595695_xa12bpylk0q.woff?t=1663151804013') format('woff'),
-       url('//at.alicdn.com/t/c/font_3595695_xa12bpylk0q.ttf?t=1663151804013') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_3595695_n7ikv864xzh.woff2?t=1664018083165') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3595695_n7ikv864xzh.woff?t=1664018083165') format('woff'),
+       url('//at.alicdn.com/t/c/font_3595695_n7ikv864xzh.ttf?t=1664018083165') format('truetype');
 }
 .iconfont {
   font-family: "iconfont" !important;
@@ -28,4 +29,25 @@
 
 .icon-add:before{
   content: "\e6da";
+}
+.icon-mv:before{
+  content:"\e62c"
+}
+.icon-like:before{
+  content:"\e62e"
+}
+.icon-collect:before{
+  content:"\e699"
+}
+.icon-share:before{
+  content:"\e68b"
+}
+.icon-pinglun2:before{
+  content:"\e607"
+}
+.icon-pinglun1:before{
+  content:"\e60f"
+}
+.icon-dianzan:before{
+  content:"\e870"
 }

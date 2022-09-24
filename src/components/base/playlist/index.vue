@@ -65,7 +65,8 @@ defineProps({
 .playlist {
   &__container {
     background-color: #fff;
-    padding-top: 20px;
+    padding:20px 15px;
+    
   }
 
   &__operate-btns {

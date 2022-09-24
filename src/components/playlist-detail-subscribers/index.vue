@@ -1,7 +1,11 @@
 <template>
   <div class="playlist-detail-subscribers__container">
-    <TopTitle :show-line="true" title="喜欢这个歌单的人" />
-    <div class="playlist-detail-subscribers__block">
+    <TopTitle v-if="isMvDescri" :show-line="true" title="视频简介" />
+    <TopTitle v-else :show-line="true" title="喜欢这个歌单的人" />
+    <div v-if="isMvDescri" class="mv-descri">
+      <p>{{mvDescriData}} </p>
+    </div>
+    <div v-else class="playlist-detail-subscribers__block">
       <div
         v-for="(item, index) in data"
         :key="index"
@@ -25,16 +29,36 @@ defineProps({
     type: Array,
     default: () => [],
   },
+  isMvDescri: {
+    type: Boolean,
+    default: false,
+  },
+  mvDescriData: {
+    type: String,
+    default: () => "",
+  },
 });
 </script>
 <style lang="less">
+
+
 .playlist-detail-subscribers {
   &__container {
     background-color: #fff;
     width: 320px;
-    height: 250px;
+    height: auto;
     padding: 15px 10px 15px;
     padding-bottom: 5px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+
+    .mv-descri{
+    p {
+        font-size: 14px;
+        color: #4a4a4a;
+        padding-bottom: 5px;
+      }
+  }
   }
 
   &__block {
@@ -58,6 +82,7 @@ defineProps({
           border-radius: 5px;
         }
       }
+      
     }
   }
 }
