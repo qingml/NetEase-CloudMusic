@@ -25,7 +25,7 @@ import { getAlbumDetail, getHotAlbum,getHotComment } from "@/api/ablum-detail";
 import Playlist from "@/components/base/playlist/index.vue";
 import PlayListDetailInfo from "@/components/playlist-detail-info/index.vue";
 import PlaylistRelatedRecommend from "@/components/playlist-related-recommend/index.vue";
-import PlaylistDetailComments from "@/components/playlist-detail-comments/index.vue";
+import PlaylistDetailComments from "@/components/comments-detail/index.vue";
 
 const { currentRoute } = useRouter();
 const AlbumId = currentRoute?.value?.params?.id as string;

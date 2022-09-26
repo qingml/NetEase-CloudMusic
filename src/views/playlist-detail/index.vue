@@ -26,7 +26,7 @@ import {
 import Playlist from "@/components/base/playlist/index.vue";
 import PlaylistDetailSubscribers from "@/components/playlist-detail-subscribers/index.vue";
 import PlaylistRelatedRecommend from "@/components/playlist-related-recommend/index.vue";
-import PlaylistDetailComments from "@/components/playlist-detail-comments/index.vue";
+import PlaylistDetailComments from "@/components/comments-detail/index.vue";
 
 const { currentRoute } = useRouter();
 

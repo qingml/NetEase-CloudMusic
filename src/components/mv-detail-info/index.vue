@@ -9,7 +9,7 @@
     </div>
     <div class="mv-detail-info-other">
       <span class="publish">发布：{{descriData.publishTime}}</span>
-      <!-- <span>播放次数：{{formatNumber(descriData.playCount)}}</span> -->
+      <span>播放次数：{{formatNumber(descriData.playCount)}}</span>
     </div>
     <div class="mv-detail-info-count">
       <div class="likeCount">
@@ -28,7 +28,7 @@
     <div class="mv-detail-info-foot">
       <i class="iconfont icon-pinglun1"></i>
        Comments | 
-      <span><a href="">{{descriData.commentCount}}评论</a></span>
+      <span><a href="">{{descriData.commentCount}} 条评论</a></span>
     </div>
   </div>
 </template>
@@ -134,6 +134,7 @@ defineProps({
       padding-left:3px;
       font-size: 14px;
       font-weight: 400;
+      color: #161e27;
     }
   }
 
@@ -145,6 +146,7 @@ defineProps({
     margin-bottom: 10px;
     font-size: 14px;
     border-radius: 3px;
+    color:#4a4a4a;
     border-bottom: 1px solid #f1f1f1;
 
     i{

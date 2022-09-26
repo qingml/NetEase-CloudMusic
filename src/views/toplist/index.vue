@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="featured-list__container" >
-      <TopTitle :show-line="true" title="云音乐特色榜" />
+      <TopTitle :showLine="true" title="云音乐特色榜" />
       <CuratePlaylist :data="FeaturedListData" />
     </div>
     <div class="medai-list__container">
-      <TopTitle :show-line="true" title="全球媒体榜" />
+      <TopTitle :showLine="true" title="全球媒体榜" />
       <CuratePlaylist :data="MediaListData" />
     </div>
   </div>

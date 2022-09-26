@@ -1,7 +1,7 @@
 <template>
   <div class="playlist-related-recommend__container">
-    <TopTitle v-if=" isHotAlbum" :show-line="true" title="热门专辑" />
-    <TopTitle v-else :show-line="true" title="相关推荐" />
+    <TopTitle v-if=" isHotAlbum" :showLine="true" title="热门专辑" />
+    <TopTitle v-else :showLine="true" title="相关推荐" />
 
     <div class="playlist-related-recommend__block">
       <div
@@ -83,6 +83,8 @@ const handleJumpDetail = (id) => {
       width: 100%;
       height: 50px;
       display: flex;
+      flex-direction: row;
+      align-items: center;
       &-img {
         width: 50px;
         height: 50px;

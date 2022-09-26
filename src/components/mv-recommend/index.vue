@@ -1,33 +1,32 @@
 <template>
   <div class="playlist-related-recommend__container">
-    <TopTitle :show-line="true" title="相关推荐" />
+    <TopTitle :showLine="true" :title="title" />
     <div class="mv-related-recommend__block">
       <div
         v-for="(item, index) in data"
         :key="index"
         class="playlist-related-recommend__block--item"
-        @click="() => handleJumpDetail(item.id)"
       >
         <div class="paly">
           <img
-          :src="item.cover"
-          class="playlist-related-recommend__block--item-img"
-        />
-        <div class="middle" @click="() => handleJumpDetail(item.id)">
-          <i class="iconfont icon-bofang"></i>
-        </div>
+            :src="item.cover"
+            class="playlist-related-recommend__block--item-img"
+          />
+          <div class="middle" >
+            <i class="iconfont icon-bofang" @click="() => handleJumpMvDetail(item.id)"></i>
+          </div>
         </div>
 
         <div class="playlist-related-recommend__block--item-content">
           <div class="mv-name">
             <i class="iconfont icon-mv"></i>
             <div
-            class="playlist-related-recommend__block--item-content-name ellipsis"
-          > 
-            {{ item.name }}
+              class="playlist-related-recommend__block--item-content-name ellipsis"
+            >
+              {{ item.name }}
+            </div>
           </div>
-          </div>
-          
+
           <span class="playlist-related-recommend__block--item-content-creator">
             By. {{ item.artistName }}
           </span>
@@ -47,36 +46,39 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-
+  title: {
+    type: String,
+    default: "相关推荐",
+  },
 });
 
-const handleJumpDetail = (id) => {
+const handleJumpMvDetail = (id) => {
   router.replace(`/mv-detail/${id}`);
 };
 </script>
 
 <style lang="less">
-  .play{
-    position: relative;
+.play {
+  position: relative;
+}
+.middle {
+  display: flex;
+  height: 0;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0);
+  color: red;
+  top: 0;
+  left: 0;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  i {
+    font-size: 0px;
   }
-  .middle {
-        display: flex;
-        height: 0;
-        overflow: hidden;
-        height: 100%;
-        width: 100%;
-        background: rgba(0, 0, 0, 0);
-        color: red;
-        top: 0;
-        left: 0;
-        position: absolute;
-        justify-content: center;
-        align-items: center;
-        i {
-          font-size: 0px;
-        }
-        transition: all 0.5s;
-      }
+  transition: all 0.5s;
+}
 .playlist-related-recommend {
   &__container {
     background-color: #fff;
@@ -88,7 +90,7 @@ const handleJumpDetail = (id) => {
   }
 
   &__block {
-    width:100%;
+    width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -104,7 +106,7 @@ const handleJumpDetail = (id) => {
         height: 100%;
       }
       &-content {
-        padding-top:10px;
+        padding-top: 10px;
         height: 50px;
         width: 240px;
         margin-bottom: 20px;
@@ -112,10 +114,9 @@ const handleJumpDetail = (id) => {
           display: flex;
           flex-direction: row;
           align-items: center;
-          i{
+          i {
             color: var(--vt-c-text-light-2);
           }
-
         }
         &-name {
           font-size: 14px;
@@ -124,18 +125,16 @@ const handleJumpDetail = (id) => {
         &-creator {
           font-size: 12px;
           color: #a5a5c1;
-          
         }
-        
       }
     }
 
     &--item:hover {
-      .middle{
+      .middle {
         background: rgba(0, 0, 0, 0.5);
-          i {
-            font-size: 28px;
-          }
+        i {
+          font-size: 28px;
+        }
       }
     }
   }

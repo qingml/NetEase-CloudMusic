@@ -21,8 +21,18 @@ export const getMVDetailComment = (id: string,
  ) => {
  return getAjax("/mv/detail/info", { params: { id,limit,offset } });
 };
-/** 获取mv评论 */
+/** 获取mv相关推荐 */
 export const getMVRecommend = (mvid: string,
  ) => {
  return getAjax("/simi/mv", { params: { mvid } });
 };
+/** 获取mv评论内容 */
+export const getMVComment = (
+  id: string,
+  offset=0,
+  limit=20,
+  timestamp = new Date().getTime()
+  ) => {
+  return getAjax("/comment/mv", { params: { id ,offset,limit,timestamp} });
+ };
+

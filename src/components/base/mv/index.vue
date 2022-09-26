@@ -9,8 +9,8 @@
             <span> {{ formatNumber(item.playCount) }}</span>
           </span>
         </div>
-        <div class="mv__block--item-middle" @click="() => handleJumpDetail(item.id)">
-          <i class="iconfont icon-bofang"></i>
+        <div class="mv__block--item-middle">
+          <i class="iconfont icon-bofang"  @click="() => handleJumpDetail(item.id)"></i>
         </div>
         <div class="mv__block--item-bottom">
           <span>{{ item.artistName }}</span>
@@ -54,7 +54,7 @@ const handleJumpDetail = (id) => {
     &--item {
       padding: 20px 15px;
       width: 25%;
-      cursor: pointer;
+      
 
       img {
         width: 100%;
@@ -90,6 +90,7 @@ const handleJumpDetail = (id) => {
         align-items: center;
         i {
           font-size: 0px;
+          cursor: pointer;
         }
         transition: all 0.5s;
       }

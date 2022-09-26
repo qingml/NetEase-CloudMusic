@@ -25,8 +25,8 @@ defineProps({
   align-items: center;
 
   span {
-    font-weight: bolder;
-    font-size: 16px;
+    font-weight: bold;
+    font-size: 14px;
   }
 }
 
