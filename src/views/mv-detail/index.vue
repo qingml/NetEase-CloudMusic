@@ -68,7 +68,6 @@ const small = ref(false);
 const background = ref(false);
 const disabled = ref(false);
 
-
 const { currentRoute } = useRouter();
 const mvId = currentRoute?.value?.params?.id as string;
 const hasHotCom = ref(true);
@@ -82,23 +81,18 @@ const mvHotCommentData = ref([]);
 const mvLatestCommentData = ref([]);
 
 const queryMVDetailData = async (mvId: string) => {
-  const [
-    mvDetailDataRes,
-    mvDescriRes,
-    mvRelatedCountRes,
-    mvRecommendRes
-  ] = await Promise.all([
-    getMVDetailInfo(mvId),
-    getMVDetailDesc(mvId),
-    getMVDetailCount(mvId),
-    getMVRecommend(mvId),
-   
-  ]);
+  const [mvDetailDataRes, mvDescriRes, mvRelatedCountRes, mvRecommendRes] =
+    await Promise.all([
+      getMVDetailInfo(mvId),
+      getMVDetailDesc(mvId),
+      getMVDetailCount(mvId),
+      getMVRecommend(mvId),
+    ]);
 
   mvDetailData.value = mvDetailDataRes?.data;
   mvDescriData.value = mvDescriRes?.data;
   mvRelatedCountData.value = mvRelatedCountRes;
-  commentCount.value = mvRelatedCountRes?.commentCount;
+
   mvBriefDescriData.value = mvDescriRes?.data.briefDesc.length
     ? mvDescriRes.data.briefDesc
     : "视频暂无简介";
@@ -107,19 +101,20 @@ const queryMVDetailData = async (mvId: string) => {
 
 const queryCommentData = async (mvId: string, offset: number = 0) => {
   const mvCommentRes = await getMVComment(mvId, offset);
-
+  commentCount.value = mvCommentRes?.total;
   mvHotCommentData.value = mvCommentRes?.hotComments;
   mvLatestCommentData.value = mvCommentRes?.comments;
   hasHotCom.value = mvCommentRes?.hotComments ? true : false;
-  
 };
 const handleCurrentChange = (val: number) => {
   queryCommentData(mvId, (val - 1) * 20);
 };
 
 onMounted(() => {
-  queryMVDetailData(mvId), queryCommentData(mvId);
+  queryMVDetailData(mvId);
+  queryCommentData(mvId);
 });
+
 onBeforeRouteUpdate(async (to, from) => {
   // only fetch the user if the id changed as maybe only the query or the hash changed
   if (to.params.id !== from.params.id) {

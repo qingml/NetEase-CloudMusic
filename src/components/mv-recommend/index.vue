@@ -12,8 +12,11 @@
             :src="item.cover"
             class="playlist-related-recommend__block--item-img"
           />
-          <div class="middle" >
-            <i class="iconfont icon-bofang" @click="() => handleJumpMvDetail(item.id)"></i>
+          <div class="middle">
+            <i
+              class="iconfont icon-bofang"
+              @click="() => handleJumpMvDetail(item.id)"
+            ></i>
           </div>
         </div>
 
@@ -57,7 +60,7 @@ const handleJumpMvDetail = (id) => {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .play {
   position: relative;
 }

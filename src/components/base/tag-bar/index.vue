@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { ref, toRefs } from "vue";
+import { ref, toRefs, watch } from "vue";
 
 const props = defineProps({
   hotTagList: {
@@ -59,9 +59,13 @@ const showTagPopover = ref(false);
 const popoverRef = ref(null);
 const currentTag = ref();
 
+watch(currentTag, (newTag) => {
+  emit("clickTag", newTag);
+});
+
 const changeHotTagStatus = (tagIndex) => {
   emit(
-    "changeTag",
+    "changeStatus",
     "hotTag",
     hotTagList.value.map((it, index) => ({
       ...it,
@@ -89,7 +93,8 @@ const changeTagCategoryStatus = (itemKey, tagKey) => {
       list: list.map((listItem) => ({ ...listItem, activity: false })),
     };
   });
-  emit("changeTag", "catgoryList", newCategoryList);
+
+  emit("changeStatus", "catgoryList", newCategoryList);
 };
 
 const handleChangeHotTag = (tagItem, tagIndex) => {
@@ -134,6 +139,8 @@ const handleTagClick = (itemKey, tagKey) => {
 
   // change tagCatoryList tag activity
   changeTagCategoryStatus(itemKey, tagKey);
+
+  showTagPopover.value = false;
 };
 </script>
 
@@ -141,6 +148,7 @@ const handleTagClick = (itemKey, tagKey) => {
 .tag-bar {
   &__container {
     position: relative;
+    width: 100%;
   }
 
   &__block {
@@ -150,6 +158,7 @@ const handleTagClick = (itemKey, tagKey) => {
     background-color: #fff;
     border-radius: 8px;
     font-size: 14px;
+    overflow: hidden;
 
     &--all {
       padding: 8px 20px;
@@ -199,6 +208,7 @@ const handleTagClick = (itemKey, tagKey) => {
     width: 868px;
     transition: all 1s;
     opacity: 0;
+    z-index: 9;
 
     &--title {
       font-weight: bold;

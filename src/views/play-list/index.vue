@@ -1,10 +1,10 @@
 <template>
   <div class="playlist">
     <TagBar
-      class="playlist-topbar"
       :catgoryList="tagCatgoryList"
       :hotTagList="hotTags"
-      @changeTag="handleChangeTagActive"
+      @changeStatus="handleChangeTagActive"
+      @clickTag="handleClick"
     />
   </div>
   <div class="playlist-main">
@@ -14,11 +14,11 @@
     <div class="playlist-pagination-block-wrap">
       <span class="el-page-total">共{{ playlistCount }}条</span>
       <el-pagination
-        v-model:currentPage="currentPage1"
+        v-model:currentPage="currentPage"
         :page-size="40"
-        :small="small"
-        :disabled="disabled"
-        :background="background"
+        :small="false"
+        :disabled="false"
+        :background="false"
         :total="playlistCount"
         layout="prev, pager, next"
         @current-change="handleCurrentChange"
@@ -29,19 +29,25 @@
 
 <script setup>
 import { getHotTag, getTagCatgoryList, getPlaylist } from "@/api/playlist";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import TagBar from "@/components/base/tag-bar/index.vue";
 import CuratePlaylist from "@/components/base/curate-playlist/index.vue";
+import { ElLoading } from "element-plus";
 
-const currentPage1 = ref(1);
-const small = ref(false);
-const background = ref(false);
-const disabled = ref(false);
+const currentPage = ref(1);
+
+const playlistCount = ref(0);
+const playListData = ref([]);
+const currentTag = ref("");
 
 const hotTags = ref([]);
 const tagCatgoryList = ref([]);
-const playlistCount = ref(0);
-const playListData = ref([]);
+
+watch([currentPage, currentTag], ([newPage = 1, newTag = ""], [_, oldTag]) => {
+  let offset = (newPage - 1) * 40;
+
+  queryPlaylistData(newTag, offset);
+});
 
 const queryHotTags = async () => {
   try {
@@ -69,8 +75,8 @@ const queryTagCatgoryList = async () => {
   } catch (error) {}
 };
 
-const queryPlaylistData = async () => {
-  const playlistRes = await getPlaylist();
+const queryPlaylistData = async (cat, offset) => {
+  const playlistRes = await getPlaylist({ cat, offset });
 
   playlistCount.value = playlistRes?.total;
   playListData.value = playlistRes?.playlists.map((playlistItem) => ({
@@ -96,6 +102,11 @@ const handleChangeTagActive = (type, data) => {
     tagCatgoryList.value = data;
   }
 };
+
+const handleClick = (tagName) => {
+  currentPage.value = 1;
+  currentTag.value = tagName;
+};
 </script>
 
 <style lang="less">
@@ -103,20 +114,11 @@ const handleChangeTagActive = (type, data) => {
   width: 100%;
   display: flex;
 
-  &-topbar {
-    width: 100%;
-
-    &:hover{
-      z-index: 3;
-    }
-  }
-  
-  &-main{
+  &-main {
     padding: 20px 0 20px;
   }
 
   &-pagination-block {
-  
     display: flex;
     align-items: center;
     justify-content: center;

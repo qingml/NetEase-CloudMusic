@@ -20,15 +20,13 @@
               </h2>
               <div v-if="isMv" class="mv-comment-count">
                 <i class="iconfont icon-dianzan"></i>
-                <span>({{item.likedCount}})</span>| 
+                <span>({{ item.likedCount }})</span>|
                 <i class="iconfont icon-pinglun2"></i>
               </div>
-
             </div>
             <p class="comments-detail__block--item-info-content">
               {{ item.content }}
             </p>
-            
           </div>
         </div>
       </div>
@@ -111,36 +109,36 @@ defineProps({
           border-radius: 5px;
           color: #666;
         }
-        .mv-layout{
+        
+        &-whole {
+          flex: 1;
+        }
+
+        .mv-layout {
           display: flex;
           flex-direction: row;
           justify-content: space-between;
-        
 
-          .mv-comment-count{
-          display: flex;
-          flex-direction: row;
-          justify-content: space-aroud;
-          align-items: center;
-          font-size: 12px;
-          margin-top: 2px;
-          color: #666;
-          font-weight: 200;
-          position: relative;
+          .mv-comment-count {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-aroud;
+            align-items: center;
+            font-size: 12px;
+            margin-top: 2px;
+            color: #666;
+            font-weight: 200;
+            position: relative;
 
-          .icon-pinglun2{
-            padding-left: 5px;
-          }
-          
-          >*{
-            padding-right:8px;
-            
+            .icon-pinglun2 {
+              padding-left: 5px;
+            }
+
+            > * {
+              padding-right: 8px;
+            }
           }
         }
-
-        }
-
-        
       }
     }
   }

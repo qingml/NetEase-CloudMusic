@@ -59,7 +59,7 @@ const handleJumpDetail = (id) => {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .playlist-related-recommend {
   &__container {
     background-color: #fff;
