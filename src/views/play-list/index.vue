@@ -38,15 +38,15 @@ const currentPage = ref(1);
 
 const playlistCount = ref(0);
 const playListData = ref([]);
-const currentTag = ref("");
+const currentTag = ref("全部");
 
 const hotTags = ref([]);
 const tagCatgoryList = ref([]);
 
 watch([currentPage, currentTag], ([newPage = 1, newTag = ""], [_, oldTag]) => {
   let offset = (newPage - 1) * 40;
-
   queryPlaylistData(newTag, offset);
+  
 });
 
 const queryHotTags = async () => {
@@ -85,9 +85,10 @@ const queryPlaylistData = async (cat, offset) => {
   }));
 };
 
-const handleCurrentChange = (val) => {
-  queryPlaylistData(cat, (val - 1) * 40);
-};
+// const handleCurrentChange = (val) => {
+//   console.log(currentTag.value)
+//   queryPlaylistData(currentTag.value, (val - 1) * 40);
+// };
 
 onMounted(() => {
   queryHotTags();

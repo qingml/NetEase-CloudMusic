@@ -74,7 +74,7 @@ const queryPlayListData = async (singerId: string) => {
     album: songItem.al.name,
   }));
   activeName.value = "work";
-  simSingerData.value = simSingerRes.artists;
+  simSingerData.value = simSingerRes?.artists;
   singerIntroductionData.value = singerIntroductionRes;
   singerMvData.value = singerMVRes.mvs;
   singerAlbumData.value = singerAlbumRes.hotAlbums.flat(2);

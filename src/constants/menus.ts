@@ -21,3 +21,4 @@ export const menus = [
     path: "/mv",
   },
 ];
+
