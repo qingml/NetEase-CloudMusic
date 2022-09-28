@@ -1,32 +1,32 @@
 export const  artistAreaMenus = [
   {
     name:"全部",
-    area:-1,
+    key:-1,
     activity:true
   },
   {
     name:"华语",
-    area:7,
+    key:7,
     activity:false
   },
   {
     name:"欧美",
-    area:96,
+    key:96,
     activity:false
   },
   {
     name:"日本",
-    area:8,
+    key:8,
     activity:false
   },
   {
     name:"韩国",
-    area:16,
+    key:16,
     activity:false
   },
   {
     name:"其他",
-    area:0,
+    key:0,
     activity:false
   },
 ]
@@ -34,44 +34,44 @@ export const  artistAreaMenus = [
 export const artistTypeMenus = [
   {
     name:'全部',
-    type:-1,
+    key:-1,
     activity:true
   },
   {
     name:'男歌手',
-    type:1,
+    key:1,
     activity:false
   },
   {
     name:'女歌手',
-    type:2,
+    key:2,
     activity:false
   },
   {
     name:'乐队',
-    type:3,
+    key:3,
     activity:false
   },
 ]
 var initalPart = []
 for (let i = 65; i < 91; i++) {
-let obj = {name:'',initial:'',activity : false};
+let obj = {name:'',key:'',activity : false};
  obj.name = String.fromCharCode(i)
- obj.initial =String.fromCharCode(i+32)
+ obj.key =String.fromCharCode(i+32)
  initalPart.push(obj)
  
 }
 
-export const artistInitialMenus = [
+export const  artistInitialMenus = [
   {
     name:'热门',
-    initial:-1,
+    key:-1,
     activity:true
   },
   ...initalPart,
   {
     name:'其他',
-    initial:0,
+    key:0,
     activity:false
   },
 ]

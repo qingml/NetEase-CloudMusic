@@ -1,30 +1,34 @@
 <template>
-  <div class="artist-tag-bar__container">
-    <div class="artist-tag-bar-area">
+  <div class="noPopover-tag-bar__container">
+    <div class="noPopover-tag-bar-area">
       <span
-        v-for="(item, index) in artistAreaData"
+        v-for="(item, index) in areaData"
         :key="index"
-        @click="() => handleChangeArea(item, index)"
+        @click="() => handelChangeTag(index, 'area', item.key)"
         :class="[item.activity ? 'active' : '']"
       >
         {{ item.name }}
       </span>
     </div>
-    <div class="artist-tag-bar-type">
+    <div class="noPopover-tag-bar-type">
       <span
-        v-for="(item, index) in artistTypeData"
+        v-for="(item, index) in typeData"
         :key="index"
-        @click="() => handleChangeType(item, index)"
+        @click="() => handelChangeTag(index, 'type', item.key)"
         :class="[item.activity ? 'active' : '']"
       >
         {{ item.name }}
       </span>
     </div>
-    <div class="artist-tag-bar-initial">
+    <div
+      :class="[
+        isMV ? 'noPopover-tag-bar-initial' : 'noPopover-tag-bar-initial artist',
+      ]"
+    >
       <span
-        v-for="(item, index) in artistInitialData"
-        :key="key"
-        @click="() => handleChangeInitial(item, index)"
+        v-for="(item, index) in initialData"
+        :key="index"
+        @click="() => handelChangeTag(index, 'initial', item.key)"
         :class="[item.activity ? 'active' : '']"
       >
         {{ item.name }}
@@ -34,43 +38,43 @@
 </template>
 
 <script setup>
-import { defineEmits, toRefs } from "vue";
+import { toRefs } from "vue";
 
 const props = defineProps({
-  artistAreaData: {
+  areaData: {
     type: Array,
     default: () => [],
   },
-  artistTypeData: {
+  typeData: {
     type: Array,
     default: () => [],
   },
-  artistInitialData: {
+  initialData: {
     type: Array,
     default: () => [],
+  },
+  isMV: {
+    type: Boolean,
+    default: false,
   },
 });
 
-const { artistAreaData, artistTypeData, artistInitialData } = toRefs(props);
+const { areaData, typeData, initialData } = toRefs(props);
 
 const emit = defineEmits(["changeData"]);
 
-const handleChangeArea = (areaItem, areaindex) => {
-  handelChangeTagStatus(areaindex, "area", areaItem.area, artistAreaData);
-};
-const handleChangeType = (typeItem, typeindex) => {
-  handelChangeTagStatus(typeindex, "type", typeItem.type, artistTypeData);
-};
-const handleChangeInitial = (initialItem, initialindex) => {
-  handelChangeTagStatus(
-    initialindex,
-    "initial",
-    initialItem.initial,
-    artistInitialData
-  );
+const handelChangeTag = (index, type, val) => {
+  if (type === "area") {
+    handelChangeTagStatus(index, "area", val, areaData);
+  } else if (type === "type") {
+    handelChangeTagStatus(index, "type", val, typeData);
+  } else {
+    handelChangeTagStatus(index, "initial", val, initialData);
+  }
 };
 
 const handelChangeTagStatus = (dataIndex, type, val, data) => {
+  console.log(data);
   emit(
     "changeData",
     type,
@@ -84,7 +88,7 @@ const handelChangeTagStatus = (dataIndex, type, val, data) => {
 </script>
 
 <style lang="less" scoped>
-.artist-tag-bar {
+.noPopover-tag-bar {
   &__container {
     width: 100%;
     padding-top: 20px;
@@ -103,15 +107,20 @@ const handelChangeTagStatus = (dataIndex, type, val, data) => {
 
     span {
       height: 28px;
-      width: 56px;
+      width: auto;
+      padding: 0 15px;
       font-size: 13px;
       text-align: center;
       border-radius: 14px;
       cursor: pointer;
       // background-color: red;
-      margin-right: 6px;
+      margin-right: 5px;
       vertical-align: center;
       line-height: 29px;
+
+      &:hover {
+        color: var(--vt-c-text-light-2);
+      }
 
       &.active {
         background-color: red;
@@ -121,10 +130,11 @@ const handelChangeTagStatus = (dataIndex, type, val, data) => {
     }
   }
 
-  &-initial {
+  &-initial.artist {
     :not(:first-child) {
       width: 28px;
       height: 28px;
+      padding: 0;
       margin-right: 12px;
       text-align: center;
       border-radius: 50%;

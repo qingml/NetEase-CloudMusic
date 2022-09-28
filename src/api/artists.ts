@@ -5,7 +5,6 @@ interface getArtistProps {
   area:number;
   initial:number|string;
   offset: number;
-
   limit: number;
 }
 

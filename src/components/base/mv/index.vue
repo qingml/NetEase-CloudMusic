@@ -10,7 +10,10 @@
           </span>
         </div>
         <div class="mv__block--item-middle">
-          <i class="iconfont icon-bofang"  @click="() => handleJumpDetail(item.id)"></i>
+          <i
+            class="iconfont icon-bofang"
+            @click="() => handleJumpDetail(item.id)"
+          ></i>
         </div>
         <div class="mv__block--item-bottom">
           <span>{{ item.artistName }}</span>
@@ -54,7 +57,6 @@ const handleJumpDetail = (id) => {
     &--item {
       padding: 20px 15px;
       width: 25%;
-      
 
       img {
         width: 100%;
@@ -96,9 +98,11 @@ const handleJumpDetail = (id) => {
       }
 
       &-title {
-        padding-top: 6px;
+        padding-top: 10px;
         font-size: 14px;
         width: 90%;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.85);
       }
 
       &-bottom {

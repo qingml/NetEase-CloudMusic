@@ -1,9 +1,9 @@
 <template>
   <div class="aritst">
     <ArtistTagBar
-      :artistAreaData="artistAreaMenusList"
-      :artistTypeData="artistTypeMenusList"
-      :artistInitialData="artistInitialMenusList"
+      :areaData="artistAreaMenusList"
+      :typeData="artistTypeMenusList"
+      :initialData="artistInitialMenusList"
       @changeData="changeData"
     />
     <div class="artistList-main">
@@ -20,7 +20,7 @@ import {
 } from "@/constants/artistMenus";
 import { onMounted, ref, watch } from "vue";
 
-import ArtistTagBar from "@/components/base/artist-tag-bar/index.vue";
+import ArtistTagBar from "@/components/base/noPopover-tag-bar/index.vue";
 import Singers from "@/components/base/singers/index.vue";
 
 import { getArtistList } from "@/api/artists";
@@ -37,15 +37,15 @@ const artistListData = ref([]);
 watch(
   [currentArea, currentType, currentInitial],
   ([newArea, newType, newInitial], []) => {
-    console.log("new", newInitial);
     queryArtistListData(newArea, newType, newInitial);
   }
 );
 
 const queryArtistListData = async (area, type, initial, offset) => {
   const artistRes = await getArtistList({ area, type, initial, offset });
-  artistListData.value = artistRes.artists;
+  artistListData.value = artistRes?.artists;
 };
+
 onMounted(() => {
   queryArtistListData();
 });

@@ -16,24 +16,29 @@ const router = createRouter({
       component: () => import("../views/artist/index.vue"),
     },
     {
-      path: "/playlist-detail/:id",
-      name: "playlist-detail",
-      component: () => import("../views/playlist-detail/index.vue"),
-    },
-    {
       path: "/toplist",
       name: "toplist",
       component: () => import("../views/toplist/index.vue"),
     },
     {
-      path: "/singerlist-detail/:id",
-      name: "singerlist-detail",
-      component: () => import("../views/singerlist-detail/index.vue"),
+      path: "/mv",
+      name: "mv",
+      component: () => import("../views/mv/index.vue"),
     },
     {
       path: "/playlist",
       name: "playlist",
       component: () => import("../views/play-list/index.vue"),
+    },
+    {
+      path: "/playlist-detail/:id",
+      name: "playlist-detail",
+      component: () => import("../views/playlist-detail/index.vue"),
+    },
+    {
+      path: "/singerlist-detail/:id",
+      name: "singerlist-detail",
+      component: () => import("../views/singerlist-detail/index.vue"),
     },
     {
       path: "/mv-detail/:id",
