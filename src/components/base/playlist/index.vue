@@ -1,7 +1,7 @@
 <template>
   <div class="playlist__container">
     <div class="playlist__operate-btns">
-      <ElButton color="#fa2800" round>
+      <ElButton color="#fa2800" round @click="handlePlayAll">
         <i class="iconfont icon-bofang"></i>
         播放全部
       </ElButton>
@@ -22,6 +22,7 @@
         class="playlist-content__item"
         v-for="(item, index) in data"
         :key="index"
+        @click="() => handlePlayCurrent(index)"
       >
         <span class="playlist-content__item-index">
           <i class="iconfont icon-bofang"></i>
@@ -46,10 +47,14 @@
 </template>
 
 <script setup>
-import { ElButton } from "element-plus";
-import { formatDurationPlay, formatSecond, paddingZero } from "@/utils/number";
+import { toRefs } from 'vue';
+import { ElButton } from 'element-plus';
+import { formatDurationPlay, formatSecond, paddingZero } from '@/utils/number';
+import { usePlayerStore } from '../../../stores/player';
 
-defineProps({
+const playerStore = usePlayerStore();
+
+const props = defineProps({
   data: {
     type: Array,
     default: () => [],
@@ -59,14 +64,23 @@ defineProps({
     default: true,
   },
 });
+
+const { data, hasCollect } = toRefs(props);
+
+const handlePlayAll = () => {
+  playerStore.setCurrentPlaySongList(data.value);
+};
+
+const handlePlayCurrent = (current) => {
+  playerStore.setCurrentPlaySongList(data.value, current);
+};
 </script>
 
 <style lang="less">
 .playlist {
   &__container {
     background-color: #fff;
-    padding:20px 15px;
-    
+    padding: 20px 15px;
   }
 
   &__operate-btns {

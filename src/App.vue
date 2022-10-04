@@ -8,15 +8,18 @@
       id="cas"
       style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 0.5"
     ></canvas>
+    <PlayerBar />
   </div>
 </template>
 
 <script setup>
 //git test
-import { RouterView } from "vue-router";
-import { menus } from "@/constants/menus";
-import TopBar from "@/components/top-bar/index.vue";
-import { onMounted } from "vue";
+import { RouterView } from 'vue-router';
+import { menus } from '@/constants/menus';
+import TopBar from '@/components/top-bar/index.vue';
+import PlayerBar from '@/components/base/player-bar/index.vue';
+
+import { onMounted } from 'vue';
 
 // onMounted(() => {
 //   var canvas = document.getElementById("cas");

@@ -1,53 +1,97 @@
-
-
-/* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
-  font-family: 'iconfont';  /* Project id 3595695 */
-  src: url('//at.alicdn.com/t/c/font_3595695_n7ikv864xzh.woff2?t=1664018083165') format('woff2'),
-       url('//at.alicdn.com/t/c/font_3595695_n7ikv864xzh.woff?t=1664018083165') format('woff'),
-       url('//at.alicdn.com/t/c/font_3595695_n7ikv864xzh.ttf?t=1664018083165') format('truetype');
+  font-family: 'iconfont'; /* Project id 3595695 */
+  src: url('//at.alicdn.com/t/c/font_3595695_ubgs5bj5mfl.woff2?t=1664898514221')
+      format('woff2'),
+    url('//at.alicdn.com/t/c/font_3595695_ubgs5bj5mfl.woff?t=1664898514221')
+      format('woff'),
+    url('//at.alicdn.com/t/c/font_3595695_ubgs5bj5mfl.ttf?t=1664898514221')
+      format('truetype');
 }
+
 .iconfont {
-  font-family: "iconfont" !important;
+  font-family: 'iconfont' !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-erji:before {
-  content: "\e60a";
+.icon-xiayishou:before {
+  content: '\e6ae';
 }
 
-.icon-bofang:before {
-  content: "\e624";
+.icon-bofang1:before {
+  content: '\e6af';
+}
+
+.icon-zanting:before {
+  content: '\e6b0';
+}
+
+.icon-shangyishouge:before {
+  content: '\e6bf';
+}
+
+.icon-xunhuanbofang:before {
+  content: '\e6c0';
+}
+
+.icon-gedan:before {
+  content: '\e6c1';
+}
+
+.icon-pinglun:before {
+  content: '\e607';
+}
+
+.icon-zan:before {
+  content: '\e870';
+}
+
+.icon-pinglun1:before {
+  content: '\e60f';
+}
+
+.icon-kafei:before {
+  content: '\e60b';
+}
+
+.icon-ziyuan:before {
+  content: '\e620';
+}
+
+.icon-tiaosepan:before {
+  content: '\e62f';
+}
+
+.icon-like:before {
+  content: '\e62e';
+}
+
+.icon-share:before {
+  content: '\e68b';
+}
+
+.icon-shoucang:before {
+  content: '\e699';
+}
+
+.icon-MV:before {
+  content: '\e62c';
+}
+
+.icon-add:before {
+  content: '\e6da';
 }
 
 .icon-aixin:before {
-  content: "\e6c8";
+  content: '\e6c8';
 }
 
-.icon-add:before{
-  content: "\e6da";
+.icon-erji:before {
+  content: '\e60a';
 }
-.icon-mv:before{
-  content:"\e62c"
-}
-.icon-like:before{
-  content:"\e62e"
-}
-.icon-collect:before{
-  content:"\e699"
-}
-.icon-share:before{
-  content:"\e68b"
-}
-.icon-pinglun2:before{
-  content:"\e607"
-}
-.icon-pinglun1:before{
-  content:"\e60f"
-}
-.icon-dianzan:before{
-  content:"\e870"
+
+.icon-bofang:before {
+  content: '\e624';
 }
