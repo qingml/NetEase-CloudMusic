@@ -15,8 +15,11 @@
             <div class="recommend-song__block--item-title">
               {{ item.name }}
             </div>
-            <div class="recommend-song__block--item-name">
-              {{ item.song.artists.map((it) => it.name).join(' / ') }}
+            <div
+              class="recommend-song__block--item-name ellipsis-two"
+              :title="item.song.artists.map((it) => it.name).join(' / ')"
+            >
+              {{ item.song.artists.map((it) => it.name).join(" / ") }}
             </div>
           </div>
           <div class="recommend-song__block--item-time">
@@ -29,9 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-import { IRecommendSongItem } from './type';
-import { formatDurationPlay, formatSecond } from '@/utils/number';
+import { PropType } from "vue";
+import { IRecommendSongItem } from "./type";
+import { formatDurationPlay, formatSecond } from "@/utils/number";
 
 defineProps({
   data: {
@@ -40,10 +43,10 @@ defineProps({
   },
 });
 
-const emit = defineEmits(['click']);
+const emit = defineEmits(["click"]);
 
 const handleClick = (item: IRecommendSongItem) => {
-  emit('click', item);
+  emit("click", item);
 };
 </script>
 
