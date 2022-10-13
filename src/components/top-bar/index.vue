@@ -7,21 +7,30 @@
           {{ item.name }}
         </RouterLink>
       </nav>
-      <div class="top-bar__login">
-        <span v-if="!loginStore.loginStatus" @click="handleLogin">登录</span>
-        <div v-else class="top-bar__user-info">
-          <span>{{ loginStore.userInfo?.nickname }}</span>
-          <img :src="loginStore.userInfo?.avatarUrl" />
+      <div class="top-bar__right-block">
+        <div class="top-bar__search" @click="handleSearchClick">
+          <i class="iconfont icon-search" />
+        </div>
+        <div class="top-bar__login">
+          <span v-if="!loginStore.loginStatus" @click="handleLogin">登录</span>
+          <div v-else class="top-bar__user-info">
+            <img :src="loginStore.userInfo?.avatarUrl" />
+            <span>{{ loginStore.userInfo?.nickname }}</span>
+          </div>
         </div>
       </div>
     </div>
   </header>
+  <OverLay v-model:visible="searchOverlayVisible" @close="handleClose">
+    <div>search area</div>
+  </OverLay>
 </template>
 
 <script setup lang="ts">
 import { RouterLink, useRoute, useRouter } from "vue-router";
-import { onMounted, PropType } from "vue";
+import { onMounted, PropType, ref } from "vue";
 import { useLoginStore } from "@/stores/login";
+import OverLay from "@/components/base/overlay/index.vue";
 
 interface IMenuItem {
   path: string;
@@ -34,6 +43,14 @@ defineProps({
     default: () => [],
   },
 });
+
+const searchOverlayVisible = ref(false);
+
+const handleSearchClick = () => {
+  searchOverlayVisible.value = true;
+};
+
+const handleClose = () => {};
 
 const router = useRouter();
 const { path } = useRoute();
@@ -60,6 +77,7 @@ header {
   max-width: 1280px;
   width: 100%;
   margin: 0 auto;
+  top: 0;
 }
 
 .top-bar {
@@ -100,6 +118,18 @@ header {
     }
   }
 
+  &__right-block {
+    display: flex;
+    align-items: center;
+  }
+
+  &__search {
+    i {
+      font-size: 24px;
+      cursor: pointer;
+    }
+  }
+
   &__login {
     cursor: pointer;
     line-height: 68px;
@@ -112,9 +142,9 @@ header {
     align-items: center;
 
     img {
-      height: 48px;
-      margin-left: 12px;
-      width: 48px;
+      margin: 0 12px 0 24px;
+      height: 36px;
+      width: 36px;
       border-radius: 50%;
     }
   }

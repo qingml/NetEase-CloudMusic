@@ -23,12 +23,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { PropType } from "vue";
-import { useRouter } from "vue-router";
+import { PropType, ref } from "vue";
 import { IRecommendSingersItem } from "./type";
-
-
-const router = useRouter();
 
 defineProps({
   data: {
@@ -36,10 +32,6 @@ defineProps({
     default: () => [],
   },
 });
-
-const handleJumpSingerDeatil = (id: number | string) => {
-  router.replace(`/singerlist-detail/${id}`);
-};
 </script>
 
 <style lang="less">

@@ -1,97 +1,101 @@
 @font-face {
-  font-family: 'iconfont'; /* Project id 3595695 */
-  src: url('//at.alicdn.com/t/c/font_3595695_ubgs5bj5mfl.woff2?t=1664898514221')
-      format('woff2'),
-    url('//at.alicdn.com/t/c/font_3595695_ubgs5bj5mfl.woff?t=1664898514221')
-      format('woff'),
-    url('//at.alicdn.com/t/c/font_3595695_ubgs5bj5mfl.ttf?t=1664898514221')
-      format('truetype');
+  font-family: "iconfont"; /* Project id 3595695 */
+  src: url("//at.alicdn.com/t/c/font_3595695_e4v7g7jd4di.woff2?t=1665678454182")
+      format("woff2"),
+    url("//at.alicdn.com/t/c/font_3595695_e4v7g7jd4di.woff?t=1665678454182")
+      format("woff"),
+    url("//at.alicdn.com/t/c/font_3595695_e4v7g7jd4di.ttf?t=1665678454182")
+      format("truetype");
 }
 
 .iconfont {
-  font-family: 'iconfont' !important;
+  font-family: "iconfont" !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-search:before {
+  content: "\e741";
+}
+
 .icon-xiayishou:before {
-  content: '\e6ae';
+  content: "\e6ae";
 }
 
 .icon-bofang1:before {
-  content: '\e6af';
+  content: "\e6af";
 }
 
 .icon-zanting:before {
-  content: '\e6b0';
+  content: "\e6b0";
 }
 
 .icon-shangyishouge:before {
-  content: '\e6bf';
+  content: "\e6bf";
 }
 
 .icon-xunhuanbofang:before {
-  content: '\e6c0';
+  content: "\e6c0";
 }
 
 .icon-gedan:before {
-  content: '\e6c1';
+  content: "\e6c1";
 }
 
 .icon-pinglun:before {
-  content: '\e607';
+  content: "\e607";
 }
 
 .icon-zan:before {
-  content: '\e870';
+  content: "\e870";
 }
 
 .icon-pinglun1:before {
-  content: '\e60f';
+  content: "\e60f";
 }
 
 .icon-kafei:before {
-  content: '\e60b';
+  content: "\e60b";
 }
 
 .icon-ziyuan:before {
-  content: '\e620';
+  content: "\e620";
 }
 
 .icon-tiaosepan:before {
-  content: '\e62f';
+  content: "\e62f";
 }
 
 .icon-like:before {
-  content: '\e62e';
+  content: "\e62e";
 }
 
 .icon-share:before {
-  content: '\e68b';
+  content: "\e68b";
 }
 
 .icon-shoucang:before {
-  content: '\e699';
+  content: "\e699";
 }
 
 .icon-MV:before {
-  content: '\e62c';
+  content: "\e62c";
 }
 
 .icon-add:before {
-  content: '\e6da';
+  content: "\e6da";
 }
 
 .icon-aixin:before {
-  content: '\e6c8';
+  content: "\e6c8";
 }
 
 .icon-erji:before {
-  content: '\e60a';
+  content: "\e60a";
 }
 
 .icon-bofang:before {
-  content: '\e624';
+  content: "\e624";
 }
