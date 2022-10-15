@@ -1,18 +1,21 @@
 <template>
   <div class="playlist-detail-info__container">
     <div class="playlist-detail-info__img mr-32">
-      <img :src="data.coverImgUrl" />
+      <ElImage :src="data.coverImgUrl" lazy />
     </div>
     <div class="playlist-detail-info__content">
       <div class="playlist-detail-info__content-title">{{ data.name }}</div>
       <div class="playlist-detail-info__content-creater">
-        <img
+        <ElImage
           class="playlist-detail-info__content-avator mr-16"
           :src="data?.creator?.avatarUrl"
+          lazy
         />
-        <span  v-if="isRed" class="mr-32" style="color:red"> {{ data?.creator?.nickname }} </span>
-        <span  v-else class="mr-32" >{{ data?.creator?.nickname }}</span>
-       
+        <span v-if="isRed" class="mr-32" style="color: red">
+          {{ data?.creator?.nickname }}
+        </span>
+        <span v-else class="mr-32">{{ data?.creator?.nickname }}</span>
+
         <span class="playlist-detail-info__content-createtime">
           {{ dayjs(data.createTime).format("YYYY-MM-DD") }} 创建
         </span>
@@ -37,6 +40,7 @@
 </template>
 <script setup>
 import dayjs from "dayjs";
+import { ElImage } from "element-plus";
 
 defineProps({
   data: {
@@ -51,31 +55,30 @@ defineProps({
     type: Boolean,
     default: false,
   },
-  isRed:{
+  isRed: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 </script>
 
 <style lang="less">
-  .isRed{
-    color: red;
-  }
-   .publish-company{
-    color: #4a4a4a;
-    font-size:14px;
-    font-weight: 400;
-    padding-bottom: 15px;
-  }
+.isRed {
+  color: red;
+}
+.publish-company {
+  color: #4a4a4a;
+  font-size: 14px;
+  font-weight: 400;
+  padding-bottom: 15px;
+}
 .playlist-detail-info {
   &__container {
     background-color: #fff;
     display: flex;
     padding: 0 15px;
-    
   }
- 
+
   &__img {
     width: 212px;
     height: 212px;

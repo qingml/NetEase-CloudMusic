@@ -56,7 +56,7 @@ const props = defineProps({
 });
 
 const handleJumpMvDetail = (id) => {
-  router.replace(`/mv-detail/${id}`);
+  router.push(`/mv-detail/${id}`);
 };
 </script>
 

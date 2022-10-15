@@ -12,7 +12,12 @@
           <i class="iconfont icon-search" />
         </div>
         <div class="top-bar__login">
-          <span v-if="!loginStore.loginStatus" @click="handleLogin">登录</span>
+          <span
+            class="top-bar__login-text"
+            v-if="!loginStore.loginStatus"
+            @click="handleLogin"
+            >登录</span
+          >
           <div v-else class="top-bar__user-info">
             <img :src="loginStore.userInfo?.avatarUrl" />
             <span>{{ loginStore.userInfo?.nickname }}</span>
@@ -21,16 +26,14 @@
       </div>
     </div>
   </header>
-  <OverLay v-model:visible="searchOverlayVisible" @close="handleClose">
-    <div>search area</div>
-  </OverLay>
+  <SearchOverLay v-model:visible="searchOverlayVisible" />
 </template>
 
 <script setup lang="ts">
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { onMounted, PropType, ref } from "vue";
 import { useLoginStore } from "@/stores/login";
-import OverLay from "@/components/base/overlay/index.vue";
+import SearchOverLay from "@/components/base/search-overlay/index.vue";
 
 interface IMenuItem {
   path: string;
@@ -127,6 +130,7 @@ header {
     i {
       font-size: 24px;
       cursor: pointer;
+      margin-right: 24px;
     }
   }
 
@@ -142,7 +146,7 @@ header {
     align-items: center;
 
     img {
-      margin: 0 12px 0 24px;
+      margin: 0 12px 0 0;
       height: 36px;
       width: 36px;
       border-radius: 50%;

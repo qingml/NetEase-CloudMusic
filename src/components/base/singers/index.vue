@@ -6,7 +6,11 @@
       class="recommend-singers__block--item"
       @click="() => handleJumpSingerDeatil(item.id)"
     >
-      <img class="recommend-singers__block--item-img" :src="item.img1v1Url" />
+      <ElImage
+        class="recommend-singers__block--item-img"
+        :src="item.img1v1Url"
+        lazy
+      />
       <div class="recommend-singers__block--item-info">
         <div
           class="recommend-singers__block--item-name ellipsis"
@@ -25,6 +29,10 @@
 <script setup lang="ts">
 import { PropType, ref } from "vue";
 import { IRecommendSingersItem } from "./type";
+import { useRouter } from "vue-router";
+import { ElImage } from "element-plus";
+
+const router = useRouter();
 
 defineProps({
   data: {
@@ -32,6 +40,10 @@ defineProps({
     default: () => [],
   },
 });
+
+const handleJumpSingerDeatil = (id: number | string) => {
+  router.replace(`/singerlist-detail/${id}`);
+};
 </script>
 
 <style lang="less">

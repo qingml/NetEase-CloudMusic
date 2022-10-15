@@ -9,7 +9,7 @@
         class="recommend-play-list__block--item-wrap"
         @click="() => handleJumpDetail(item.id)"
       >
-        <img :src="item.picUrl" />
+        <ElImage :src="item.picUrl" lazy />
         <div class="recommend-play-list__block--item-bottom">
           <span class="recommend-play-list__block--item-count">
             <i class="iconfont icon-erji"></i>
@@ -28,6 +28,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import { useRouter } from "vue-router";
+import { ElImage } from "element-plus";
 
 import { formatNumber } from "@/utils/number";
 import { IRecommendPlayItem } from "./type";
@@ -42,7 +43,7 @@ defineProps({
 });
 
 const handleJumpDetail = (id: number | string) => {
-  router.replace(`/playlist-detail/${id}`);
+  router.push(`/playlist-detail/${id}`);
 };
 </script>
 
@@ -62,7 +63,7 @@ const handleJumpDetail = (id: number | string) => {
 
       img {
         border-radius: 8px;
-        height: 100%;
+        height: 136px;
       }
 
       &-wrap {

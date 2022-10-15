@@ -29,7 +29,7 @@
           <span>{{ paddingZero(index + 1, 2) }}</span>
         </span>
         <span class="playlist-content__item-song">
-          <img :src="item.coverImg" />
+          <ElImage :src="item.picUrl" lazy />
           <span class="ellipsis" :title="item.name">{{ item.name }}</span>
         </span>
         <span class="playlist-content__item-singer ellipsis">{{
@@ -39,7 +39,7 @@
           {{ item.album }}
         </span>
         <span class="playlist-content__item-time">{{
-          formatDurationPlay(formatSecond(item.dt))
+          formatDurationPlay(item.duration)
         }}</span>
       </div>
     </div>
@@ -47,10 +47,11 @@
 </template>
 
 <script setup>
-import { toRefs } from 'vue';
-import { ElButton } from 'element-plus';
-import { formatDurationPlay, formatSecond, paddingZero } from '@/utils/number';
-import { usePlayerStore } from '../../../stores/player';
+import { toRefs } from "vue";
+import { ElButton } from "element-plus";
+import { formatDurationPlay, formatSecond, paddingZero } from "@/utils/number";
+import { usePlayerStore } from "../../../stores/player";
+import { ElImage } from "element-plus";
 
 const playerStore = usePlayerStore();
 
@@ -143,6 +144,9 @@ const handlePlayCurrent = (current) => {
         width: 40%;
         display: flex;
         align-items: center;
+        span {
+          flex: 1;
+        }
 
         img {
           width: 35px;

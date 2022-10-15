@@ -7,9 +7,10 @@
         :key="index"
         class="comments-detail__block--item"
       >
-        <img
+        <ElImage
           :src="item.user.avatarUrl"
           class="comments-detail__block--item-img"
+          lazy
         />
         <div class="comments-detail__block--item-info-whole">
           <div class="comments-detail__block--item-info">
@@ -35,6 +36,7 @@
 </template>
 <script setup>
 import TopTitle from "@/components/base/top-title/index.vue";
+import { ElImage } from "element-plus";
 import { dateDifference } from "@/utils/number";
 
 defineProps({
@@ -109,7 +111,7 @@ defineProps({
           border-radius: 5px;
           color: #666;
         }
-        
+
         &-whole {
           flex: 1;
         }

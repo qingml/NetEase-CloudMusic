@@ -21,14 +21,7 @@
       <div style="padding-left: 10px">
         {{ formatDurationPlay(currentPlayTime) }}
         /
-        {{
-          formatDurationPlay(
-            formatSecond(
-              playerStore?.currentSong?.song?.duration! ||
-                playerStore?.currentSong?.dt!
-            )
-          )
-        }}
+        {{ formatDurationPlay(playerStore?.currentSong?.duration!) }}
       </div>
 
       <div class="player-slider">
@@ -57,7 +50,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { usePlayerStore } from "../../../stores/player";
-import { formatDurationPlay, formatSecond } from "@/utils/number";
+import { formatDurationPlay } from "@/utils/number";
 
 const audioRef = ref<HTMLAudioElement>();
 const currentPlayTime = ref(0);
@@ -81,15 +74,8 @@ const handleUpdateTime = () => {
   currentPlayTime.value = audioRef.value?.currentTime || 0;
 
   playProgressValue.value = Math.floor(
-    (audioRef.value?.currentTime! /
-      formatSecond(
-        playerStore?.currentSong?.song?.duration! ||
-          playerStore?.currentSong?.dt!
-      )) *
-      100
+    (audioRef.value?.currentTime! / playerStore?.currentSong?.duration!) * 100
   );
-
-  console.log("playProgressValue.value", playProgressValue.value);
 
   if (playProgressValue.value === 100) {
     playerStore.toNext();
@@ -99,10 +85,7 @@ const handleUpdateTime = () => {
 const handleChange = (value: number) => {
   playProgressValue.value = value;
   audioRef.value!.currentTime =
-    formatSecond(
-      playerStore?.currentSong?.song?.duration! || playerStore?.currentSong?.dt!
-    ) *
-    (value / 100);
+    playerStore?.currentSong?.duration! * (value / 100);
 };
 </script>
 

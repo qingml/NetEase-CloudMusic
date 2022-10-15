@@ -27,6 +27,7 @@ import Playlist from "@/components/base/playlist/index.vue";
 import PlaylistDetailSubscribers from "@/components/playlist-detail-subscribers/index.vue";
 import PlaylistRelatedRecommend from "@/components/playlist-related-recommend/index.vue";
 import PlaylistDetailComments from "@/components/comments-detail/index.vue";
+import { formatSong } from "@/utils/song";
 
 const { currentRoute } = useRouter();
 
@@ -64,14 +65,7 @@ const queryPlayListData = async (playId: string) => {
 
   const playListRes = await getPlayList(ids);
 
-  playListData.value =
-    playListRes?.songs?.map((songItem: any) => ({
-      ...songItem,
-      name: songItem.name,
-      coverImg: songItem.al.picUrl,
-      singer: songItem.ar.map((arItem: any) => arItem.name).join(" / "),
-      album: songItem.al.name,
-    })) || [];
+  playListData.value = playListRes?.songs?.map(formatSong) || [];
 };
 
 onMounted(() => queryPlayListData(playListId));

@@ -3,7 +3,7 @@
     <TopTitle v-if="isMvDescri" :showLine="true" title="视频简介" />
     <TopTitle v-else :showLine="true" title="喜欢这个歌单的人" />
     <div v-if="isMvDescri" class="mv-descri">
-      <p>{{mvDescriData}} </p>
+      <p>{{ mvDescriData }}</p>
     </div>
     <div v-else class="playlist-detail-subscribers__block">
       <div
@@ -15,7 +15,7 @@
           class="playlist-detail-subscribers__block--item-img"
           :title="item.nickname"
         >
-          <img :src="item.avatarUrl" />
+          <ElImage :src="item.avatarUrl" lazy />
         </div>
       </div>
     </div>
@@ -23,6 +23,7 @@
 </template>
 <script setup>
 import TopTitle from "@/components/base/top-title/index.vue";
+import { ElImage } from "element-plus";
 
 defineProps({
   data: {
@@ -40,8 +41,6 @@ defineProps({
 });
 </script>
 <style lang="less">
-
-
 .playlist-detail-subscribers {
   &__container {
     background-color: #fff;
@@ -52,13 +51,13 @@ defineProps({
     margin-bottom: 20px;
     border-radius: 10px;
 
-    .mv-descri{
-    p {
+    .mv-descri {
+      p {
         font-size: 14px;
         color: #4a4a4a;
         padding-bottom: 5px;
       }
-  }
+    }
   }
 
   &__block {
@@ -82,7 +81,6 @@ defineProps({
           border-radius: 5px;
         }
       }
-      
     }
   }
 }

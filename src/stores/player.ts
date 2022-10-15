@@ -13,7 +13,7 @@ enum ModeEnum {
 
 interface IPlayerState {
   /** 播放列表 */
-  playSongList: IRecommendSongItem[];
+  playSongList: any[];
   /** 当前播放歌曲下标 */
   currentPlayIndex: number;
   /** 模式 */
@@ -72,7 +72,6 @@ export const usePlayerStore = defineStore({
 
     setCurrentPlayIndex(index: number) {
       this.currentPlayIndex = index;
-      console.log('setCurrentPlayIndex', index);
 
       if (this.currentSongData.length > index) {
         this.getSongDetailUrl(this.currentSongData[index].id);

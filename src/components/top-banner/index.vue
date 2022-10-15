@@ -24,7 +24,7 @@
     >
       <SwiperSlide v-for="(item, idx) in data" :key="idx">
         <div class="banner-item">
-          <img :src="item.imageUrl" />
+          <ElImage :src="item.imageUrl" lazy />
           <span class="banner-item__type">{{ item.typeTitle }}</span>
         </div>
       </SwiperSlide>
@@ -36,6 +36,7 @@
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { EffectCoverflow, Pagination, Autoplay, EffectFade } from "swiper";
 import { type PropType } from "vue";
+import { ElImage } from "element-plus";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";

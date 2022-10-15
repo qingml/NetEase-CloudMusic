@@ -9,40 +9,41 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from "vue";
 import {
   getBanner,
   getRecommendPlaylist,
   getNewSongs,
   getHotSingers,
-} from '@/api/home';
-import RecommendPlayList from '@/components/recommend-play-list/index.vue';
-import TopBanner, { IBannerItem } from '@/components/top-banner/index.vue';
-import RecommendSingers from '@/components/recommend-singers/index.vue';
-import TopTitle from '@/components/base/top-title/index.vue';
-import SongList from '@/components/base/song-list/index.vue';
+} from "@/api/home";
+import RecommendPlayList from "@/components/recommend-play-list/index.vue";
+import TopBanner, { IBannerItem } from "@/components/top-banner/index.vue";
+import RecommendSingers from "@/components/recommend-singers/index.vue";
+import TopTitle from "@/components/base/top-title/index.vue";
+import SongList from "@/components/base/song-list/index.vue";
+import { formatSong } from "@/utils/song";
 
-import { IRecommendSongItem } from '@/components/base/song-list/type';
-import { IRecommendPlayItem } from '@/components/base/curate-playlist/type';
-import { IRecommendSingersItem } from '@/components/base/singers/type';
+import { IRecommendSongItem } from "@/components/base/song-list/type";
+import { IRecommendPlayItem } from "@/components/base/curate-playlist/type";
+import { IRecommendSingersItem } from "@/components/base/singers/type";
 
-import { usePlayerStore } from '@/stores/player';
+import { usePlayerStore } from "@/stores/player";
 
 const recommendData = ref<IRecommendPlayItem[]>([]);
 const bannerData = ref<IBannerItem[]>([]);
-const songsData = ref<IRecommendSongItem[]>([]);
+const songsData = ref<any[]>([]);
 const singersData = ref<IRecommendSingersItem[]>([]);
 
 onMounted(async () => {
   const [bannerRes, playlistRes, newSongsRes, hotSingerRes] = await Promise.all(
-    [getBanner(), getRecommendPlaylist(), getNewSongs(9), getHotSingers()],
+    [getBanner(), getRecommendPlaylist(), getNewSongs(9), getHotSingers()]
   );
 
   bannerData.value = bannerRes.banners;
 
   recommendData.value = playlistRes.result;
 
-  songsData.value = newSongsRes.result;
+  songsData.value = newSongsRes.result.map(formatSong);
 
   singersData.value = hotSingerRes.artists;
 });
@@ -50,6 +51,7 @@ onMounted(async () => {
 const playerStore = usePlayerStore();
 
 const handleSongClick = (el: IRecommendSongItem) => {
+  console.log("el", el);
   playerStore.setCurrentPlaySongList(el);
 };
 </script>

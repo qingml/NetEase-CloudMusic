@@ -1,6 +1,6 @@
 <template>
   <div class="playlist-related-recommend__container">
-    <TopTitle v-if=" isHotAlbum" :showLine="true" title="热门专辑" />
+    <TopTitle v-if="isHotAlbum" :showLine="true" title="热门专辑" />
     <TopTitle v-else :showLine="true" title="相关推荐" />
 
     <div class="playlist-related-recommend__block">
@@ -10,9 +10,10 @@
         class="playlist-related-recommend__block--item"
         @click="() => handleJumpDetail(item.id)"
       >
-        <img
+        <ElImage
           :src="item.coverImgUrl"
           class="playlist-related-recommend__block--item-img"
+          lazy
         />
         <div class="playlist-related-recommend__block--item-content">
           <div
@@ -30,6 +31,7 @@
 </template>
 <script setup>
 import TopTitle from "@/components/base/top-title/index.vue";
+import { ElImage } from "element-plus";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -39,23 +41,22 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  isHotAlbum:{
+  isHotAlbum: {
     type: Boolean,
-    default:false
+    default: false,
   },
-  isMv:{
+  isMv: {
     type: Boolean,
-    default:false
-  }
+    default: false,
+  },
 });
 
 const handleJumpDetail = (id) => {
-  if(props.isHotAlbum) {
-    router.replace(`/album-detail/${id}`)
+  if (props.isHotAlbum) {
+    router.push(`/album-detail/${id}`);
   } else {
-    router.replace(`/playlist-detail/${id}`);
+    router.push(`/playlist-detail/${id}`);
   }
- 
 };
 </script>
 

@@ -9,7 +9,7 @@
         class="recommend-song__block--item-box"
         @click="() => handleClick(item)"
       >
-        <img :src="item.picUrl" class="recommend-song__block--item-pic" />
+        <ElImage :src="item.picUrl" class="recommend-song__block--item-pic" lazy />
         <div class="recommend-song__block--item-content">
           <div class="recommend-song__block--item-info">
             <div class="recommend-song__block--item-title">
@@ -17,13 +17,13 @@
             </div>
             <div
               class="recommend-song__block--item-name ellipsis-two"
-              :title="item.song.artists.map((it) => it.name).join(' / ')"
+              :title="item.singer"
             >
-              {{ item.song.artists.map((it) => it.name).join(" / ") }}
+              {{ item.singer }}
             </div>
           </div>
           <div class="recommend-song__block--item-time">
-            {{ formatDurationPlay(formatSecond(item.song.duration)) }}
+            {{ formatDurationPlay(item.duration) }}
           </div>
         </div>
       </div>
@@ -33,19 +33,20 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { IRecommendSongItem } from "./type";
-import { formatDurationPlay, formatSecond } from "@/utils/number";
+import { ElImage } from "element-plus";
+
+import { formatDurationPlay } from "@/utils/number";
 
 defineProps({
   data: {
-    type: Array as PropType<IRecommendSongItem[]>,
+    type: Array as PropType<any[]>,
     default: () => [],
   },
 });
 
 const emit = defineEmits(["click"]);
 
-const handleClick = (item: IRecommendSongItem) => {
+const handleClick = (item: any) => {
   emit("click", item);
 };
 </script>
