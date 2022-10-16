@@ -1,11 +1,10 @@
+/* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+/* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
-  font-family: "iconfont"; /* Project id 3595695 */
-  src: url("//at.alicdn.com/t/c/font_3595695_e4v7g7jd4di.woff2?t=1665678454182")
-      format("woff2"),
-    url("//at.alicdn.com/t/c/font_3595695_e4v7g7jd4di.woff?t=1665678454182")
-      format("woff"),
-    url("//at.alicdn.com/t/c/font_3595695_e4v7g7jd4di.ttf?t=1665678454182")
-      format("truetype");
+  font-family: 'iconfont';  /* Project id 3595695 */
+  src: url('//at.alicdn.com/t/c/font_3595695_ylpl6iuds9n.woff2?t=1665922289823') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3595695_ylpl6iuds9n.woff?t=1665922289823') format('woff'),
+       url('//at.alicdn.com/t/c/font_3595695_ylpl6iuds9n.ttf?t=1665922289823') format('truetype');
 }
 
 .iconfont {
@@ -15,31 +14,47 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.icon-geci:before {
+  content: "\e727";
+}
 .icon-search:before {
   content: "\e741";
 }
 
 .icon-xiayishou:before {
-  content: "\e6ae";
+  content: "\e63e";
 }
 
 .icon-bofang1:before {
-  content: "\e6af";
+  content: "\e617";
 }
 
 .icon-zanting:before {
-  content: "\e6b0";
+  content: "\e611";
 }
 
 .icon-shangyishouge:before {
-  content: "\e6bf";
+  content: "\e63c";
 }
 
 .icon-xunhuanbofang:before {
-  content: "\e6c0";
+  content: "\e6a2";
 }
-
+.icon-danquxunhuan:before {
+  content: "\e66d";
+}
+.icon-suijibofang:before {
+  content: "\e6a0";
+}
+.icon-playlistMusic:before {
+  content: "\ea86";
+}
+.icon-yinliang:before {
+  content: "\eca6";
+}
+.icon-jingyin:before {
+  content: "\e608";
+}
 .icon-gedan:before {
   content: "\e6c1";
 }

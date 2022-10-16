@@ -32,4 +32,5 @@ export interface IRecommendSongItem {
   song: Song;
   playUrl?: string;
   dt?: number;
+  singer:string
 }

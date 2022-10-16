@@ -9,7 +9,7 @@ const useScrollUpdate = (props: UseScrollProps) => {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
-    if (scrollTop + clientHeight >= scrollHeight) {
+    if (scrollTop + clientHeight >= scrollHeight -1) {
       props.handleScollUpdate();
     }
   };

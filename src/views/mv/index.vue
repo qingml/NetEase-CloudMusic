@@ -9,6 +9,7 @@
     />
     <div class="mv-main">
       <MV :data="mvListData" />
+      <div>数据加载中，请稍等...</div>
     </div>
   </div>
 </template>
@@ -19,6 +20,7 @@ import { onMounted, onUnmounted, ref, watch } from "vue";
 
 import MVTagBar from "@/components/base/noPopover-tag-bar/index.vue";
 import MV from "@/components/base/mv/index.vue";
+import useScrollUpdate from "@/hooks/useScrollUpdate";
 
 import { getMvList } from "@/api/mv";
 
@@ -28,38 +30,45 @@ const mvOrderMenusList = ref(mvOrderMenus);
 const currentArea = ref("全部");
 const currentType = ref("全部");
 const currentOrder = ref("全部");
-const currentOffset = ref(0);
+const currentPage = ref(1);
 
 const mvListData = ref([]);
-const moreListData = ref([]);
-let readyForLoad = false;
-let scrollnum = 0
 
 watch(
-  [currentArea, currentType, currentOrder],
+  [currentArea, currentType, currentOrder, currentPage],
   ([newArea, newType, newOrder], []) => {
     queryMvListData(newArea, newType, newOrder);
   }
 );
 
-const queryMvListData = async (area, type, order, offset) => {
+const queryMvListData = async (area, type, order) => {
+  const offset = (currentPage.value - 1) * 12;
   const mvListRes = await getMvList({ area, type, order, offset });
-  mvListData.value = mvListRes?.data?.map((item) => ({
-    ...item,
+  // const requestData = mvListRes?.data?.map((item) => ({
+  //     ...item,
+  //     imgurl16v9: item.cover,
+  //   })),
+  mvListData.value = [...mvListData.value,...mvListRes?.data?.map((item) => ({
+   ...item,
     imgurl16v9: item.cover,
-  }));
+  }))]
+
 };
 
 onMounted(() => {
-  queryMvListData();
-  window.addEventListener("scroll", handleScroll, false);
+  queryMvListData(currentArea.value, currentType.value, currentOrder.value);
 });
 
-onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll, false);
-});
+useScrollUpdate({
+  handleScollUpdate: () => {
+    currentPage.value += 1;
+    console.log(currentPage.value)
+  },
+})
 
 const changeData = (type, val, data) => {
+  mvListData.value = []
+  currentPage.value = 1
   if (type === "area") {
     mvAreaMenusList.value = data;
     currentArea.value = val;
@@ -71,49 +80,12 @@ const changeData = (type, val, data) => {
     currentOrder.value = val;
   }
 };
-
-const handleScroll = () => {
-  const scrollHeight = document.body.scrollHeight
-  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop
-  // //窗口可视范围高度
-  const clientHeight = document.body.clientHeight
-  const distance = scrollHeight - scrollTop - clientHeight;
-    console.log(distance)
-  if (distance < - 145) {
-    console.log("加载更多内容");
-    readyForLoad = true;
-    currentOffset.value= (scrollnum += 1) *12
-    console.log(currentOffset.value)
-   // loadMore(currentOffset.value);
-  }
-  console.log("gun l");
-};
-
-const loadMore = (newOffset) => {
-  if (readyForLoad) {
-    readyForLoad = false;
-    queryMvListData(
-      currentArea.value,
-      currentType.value,
-      currentOrder.value,
-      currentOffset.value,
-      newOffset
-    ).then((res) => {
-      moreListData.value = res?.data?.map((item) => ({
-        ...item,
-        imgurl16v9: item.cover,
-      }));
-      mvListData.value.push(...moreListData.value);
-    });
-  }
-};
 </script>
 
 <style lang="less">
 .mv {
   overflow-y: auto;
   &-main {
-   
     width: 100%;
   }
 }
