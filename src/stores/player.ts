@@ -1,16 +1,22 @@
-import { getSongDetailLyric } from './../api/player';
-import { defineStore } from 'pinia';
-import { getSongDetailUrl } from '@/api/player';
-import { IRecommendSongItem } from '@/components/base/song-list/type';
+import { getSongDetailLyric } from "./../api/player";
+import { defineStore } from "pinia";
+import { getSongDetailUrl } from "@/api/player";
+import { IRecommendSongItem } from "@/components/base/song-list/type";
 
 enum ModeEnum {
   /** 顺序 */
-  'iconfont icon-xunhuanbofang' = 0,
+  ORDER = 1,
   /** 随机 */
-  'iconfont icon-suijibofang' = 1,
+  RANDOM = 2,
   /** 单曲 */
-  'iconfont icon-danquxunhuan' = 2,
+  SINGLE = 3,
 }
+
+const modeIconValues = {
+  [ModeEnum.ORDER]: "icon-xunhuanbofang",
+  [ModeEnum.RANDOM]: "icon-suijibofang",
+  [ModeEnum.SINGLE]: "icon-danquxunhuan",
+};
 
 interface IPlayerState {
   /** 播放列表 */
@@ -18,25 +24,25 @@ interface IPlayerState {
   /** 当前播放歌曲下标 */
   currentPlayIndex: number;
   /** 模式 */
-  mode: number;
+  mode: ModeEnum;
   /** 播放状态 */
   isPlaying?: boolean;
   /** 播放歌曲歌词 */
   lyric: string;
- /** 歌词页面状态 */
- openLyric: boolean;
+  /** 歌词页面状态 */
+  openLyric: boolean;
 }
 
 export const usePlayerStore = defineStore({
-  id: 'palyer',
+  id: "palyer",
 
   state: (): IPlayerState => ({
     playSongList: [],
     currentPlayIndex: 0,
     isPlaying: false,
-    mode:0,
-    lyric:"",
-    openLyric:false,
+    mode: ModeEnum.ORDER,
+    lyric: "",
+    openLyric: false,
   }),
 
   getters: {
@@ -44,9 +50,9 @@ export const usePlayerStore = defineStore({
     currentSong: (state): IRecommendSongItem =>
       state.playSongList[state.currentPlayIndex],
     playStatus: (state) => state.isPlaying,
-    modeValue:(state) => ModeEnum[state.mode] ,
-    lyricContent:(state) => state.lyric,
-    canOpenLyric:(state) => state.openLyric
+    iconValue: (state) => modeIconValues[state.mode],
+    lyricContent: (state) => state.lyric,
+    canOpenLyric: (state) => state.openLyric,
   },
 
   actions: {
@@ -58,27 +64,27 @@ export const usePlayerStore = defineStore({
           playUrl: it.id === id ? resp?.data?.[0].url : null,
         }));
         console.log(
-          'currentSong',
-          JSON.parse(JSON.stringify(this.currentSong)),
+          "currentSong",
+          JSON.parse(JSON.stringify(this.currentSong))
         );
         this.isPlaying = true;
       } catch (error) {
-        console.log('error', error);
+        console.log("error", error);
       }
     },
 
     async getSongDetailLyric(id: number) {
       try {
         const response = await getSongDetailLyric(id);
-        this.lyric = response?.romalrc?.lyric
+        this.lyric = response?.romalrc?.lyric;
       } catch (error) {
-        console.log('error', error);
+        console.log("error", error);
       }
     },
 
     async setCurrentPlaySongList(
       el: IRecommendSongItem | IRecommendSongItem[],
-      index = 0,
+      index = 0
     ) {
       if (Array.isArray(el)) {
         this.playSongList = el;
@@ -107,7 +113,7 @@ export const usePlayerStore = defineStore({
       if (nextIndex < this.currentSongData.length) {
         this.setCurrentPlayIndex(nextIndex);
       } else {
-        this.setCurrentPlayIndex(0)
+        this.setCurrentPlayIndex(0);
       }
     },
 
@@ -118,8 +124,18 @@ export const usePlayerStore = defineStore({
       }
     },
 
-    setModeVaule(){
-      this.mode = (this.mode + 1) % 3
-    }
+    setModeVaule() {
+      switch (this.mode) {
+        case ModeEnum.ORDER:
+          this.mode = ModeEnum.RANDOM;
+          break;
+        case ModeEnum.RANDOM:
+          this.mode = ModeEnum.SINGLE;
+          break;
+        case ModeEnum.SINGLE:
+          this.mode = ModeEnum.ORDER;
+          break;
+      }
+    },
   },
 });

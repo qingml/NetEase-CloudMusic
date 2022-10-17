@@ -10,18 +10,15 @@
           {{ songDeatail?.name }}
         </h3>
         <p>{{ songDeatail?.singer }} - {{ songDeatail?.name }}</p>
-        <div class="lyric">
-          
-        </div>
+        <div class="lyric"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { fromPairs } from 'lodash-es';
-import {onMounted,ref} from 'vue'
-
+import { fromPairs } from "lodash-es";
+import { onMounted, ref } from "vue";
 
 const props = defineProps({
   songDeatail: {
@@ -32,6 +29,15 @@ const props = defineProps({
 </script>
 
 <style lang="less">
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .play-page {
   z-index: 11;
   position: relative;
@@ -54,8 +60,8 @@ const props = defineProps({
       position: relative;
     }
 
-  .img-wrapper{
-    &::after {
+    .img-wrapper {
+      &::after {
         content: "";
         background-color: black;
         border-radius: 50%;
@@ -67,10 +73,9 @@ const props = defineProps({
         height: 400px;
         display: block;
         box-shadow: 5px 0 10px -5px #141414;
-        // transition: left 0.4s;
+        animation: spin 2s linear 1s infinite;
       }
-  }
-    
+    }
   }
 
   .page-right {

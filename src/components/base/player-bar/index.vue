@@ -16,7 +16,7 @@
         <div class="play-song-operator">
           <div class="play-song-operator-wrapper">
             <span @click="playerStore.setModeVaule()">
-              <i :class="playerStore.modeValue"></i>
+              <i :class="['iconfont', playerStore.iconValue]"></i>
             </span>
             <span @click="playerStore.toLast">
               <i class="iconfont icon-shangyishouge"></i>
@@ -95,7 +95,6 @@ const muted = ref(false);
 
 const playerStore = usePlayerStore();
 
-
 const handlePlay = () => {
   if (playerStore.playStatus) {
     audioRef?.value?.pause();
@@ -127,8 +126,8 @@ const handleChange = (value: number) => {
 };
 
 const handleLyric = () => {
-  playerStore.getSongDetailLyric(playerStore?.currentSong?.id)
-  playerStore.openLyric = !playerStore.canOpenLyric
+  playerStore.getSongDetailLyric(playerStore?.currentSong?.id);
+  playerStore.openLyric = !playerStore.canOpenLyric;
 };
 
 watch(playVolumeValue, (newValue: number) => {
@@ -149,6 +148,7 @@ watch(playVolumeValue, (newValue: number) => {
   height: 80px;
   width: 100%;
   padding: 10px 32px;
+  box-shadow: 12px 10px 8px 6px rgb(0 0 0 / 30%);
   z-index: 14;
 }
 
@@ -172,7 +172,7 @@ watch(playVolumeValue, (newValue: number) => {
 
 .player-song-info {
   display: flex;
-  flex-direction: row;
+  align-items: center;
   padding-top: 4px;
 
   img {
@@ -199,8 +199,8 @@ watch(playVolumeValue, (newValue: number) => {
   width: 60%;
 
   .play-song-operator {
-    text-align: center;
-    // display: inline-block;
+    justify-content: center;
+    display: flex;
     &-wrapper {
       display: flex;
       align-items: center;
