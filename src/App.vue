@@ -1,13 +1,16 @@
 <template>
   <div class="main">
     <TopBar :data="menus" />
-    <div class="mian-layout">
-      <RouterView />
+  
+    <div class="mian-layout" >
+      <PlaySongDetail :songDeatail="playerStore?.currentSong"  v-if="playerStore?.canOpenLyric"/>
+      <RouterView v-else/>
     </div>
     <canvas
       id="cas"
       style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 0.5"
     ></canvas>
+    
     <PlayerBar />
   </div>
 </template>
@@ -18,8 +21,14 @@ import { RouterView } from 'vue-router';
 import { menus } from '@/constants/menus';
 import TopBar from '@/components/top-bar/index.vue';
 import PlayerBar from '@/components/base/player-bar/index.vue';
+import { usePlayerStore } from "@/stores/player";
 
-import { onMounted } from 'vue';
+import PlaySongDetail from './components/base/play-song-detail/index.vue';
+
+const playerStore = usePlayerStore();
+
+
+
 
 // onMounted(() => {
 //   var canvas = document.getElementById("cas");

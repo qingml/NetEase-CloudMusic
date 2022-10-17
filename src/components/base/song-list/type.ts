@@ -25,6 +25,7 @@ export interface Song {
 }
 
 export interface IRecommendSongItem {
+duration: any;
   id: number;
   type: number;
   name: string;

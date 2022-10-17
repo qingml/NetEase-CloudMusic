@@ -14,22 +14,27 @@
       </div>
       <div class="play-song-control">
         <div class="play-song-operator">
-          <span>
-            <i class="iconfont icon-xunhuanbofang"></i>
-          </span>
-          <span @click="playerStore.toLast">
-            <i class="iconfont icon-shangyishouge"></i>
-          </span>
-          <span @click="handlePlay">
-            <i v-if="playerStore.playStatus" class="iconfont icon-zanting"></i>
-            <i v-else class="iconfont icon-bofang1"></i>
-          </span>
-          <span @click="playerStore.toNext">
-            <i class="iconfont icon-xiayishou"></i>
-          </span>
-          <span>
-            <i class="iconfont icon-geci"></i>
-          </span>
+          <div class="play-song-operator-wrapper">
+            <span @click="playerStore.setModeVaule()">
+              <i :class="playerStore.modeValue"></i>
+            </span>
+            <span @click="playerStore.toLast">
+              <i class="iconfont icon-shangyishouge"></i>
+            </span>
+            <span @click="handlePlay" class="bofang">
+              <i
+                v-if="playerStore.playStatus"
+                class="iconfont icon-zanting"
+              ></i>
+              <i v-else class="iconfont icon-bofang1"></i>
+            </span>
+            <span @click="playerStore.toNext">
+              <i class="iconfont icon-xiayishou"></i>
+            </span>
+            <span @click="handleLyric">
+              <i class="iconfont icon-geci"></i>
+            </span>
+          </div>
         </div>
         <div class="play-song-slider">
           <div class="song-currentTime">
@@ -49,8 +54,8 @@
       </div>
       <div class="play-other-control">
         <div class="volume-control">
-          <i  v-if="muted" class="iconfont icon-jingyin"></i>
-          <i  v-else class="iconfont icon-yinliang"></i>
+          <i v-if="muted" class="iconfont icon-jingyin"></i>
+          <i v-else class="iconfont icon-yinliang"></i>
           <el-slider
             :show-tooltip="false"
             v-model="playVolumeValue"
@@ -86,9 +91,10 @@ const audioRef = ref<HTMLAudioElement>();
 const currentPlayTime = ref(0);
 const playProgressValue = ref(0);
 const playVolumeValue = ref(2);
-const muted = ref(false)
+const muted = ref(false);
 
 const playerStore = usePlayerStore();
+
 
 const handlePlay = () => {
   if (playerStore.playStatus) {
@@ -120,19 +126,22 @@ const handleChange = (value: number) => {
     playerStore?.currentSong?.duration! * (value / 100);
 };
 
-watch(playVolumeValue, (newValue:number) => {
-  audioRef.value!.volume = newValue/100
-  if(newValue == 0) {
-    muted.value = true
+const handleLyric = () => {
+  playerStore.getSongDetailLyric(playerStore?.currentSong?.id)
+  playerStore.openLyric = !playerStore.canOpenLyric
+};
+
+watch(playVolumeValue, (newValue: number) => {
+  audioRef.value!.volume = newValue / 100;
+  if (newValue == 0) {
+    muted.value = true;
   } else {
-    muted.value = false
+    muted.value = false;
   }
 });
-
 </script>
 
 <style lang="less">
-
 .player-container {
   position: fixed;
   bottom: 0;
@@ -140,6 +149,7 @@ watch(playVolumeValue, (newValue:number) => {
   height: 80px;
   width: 100%;
   padding: 10px 32px;
+  z-index: 14;
 }
 
 .player-block {
@@ -153,6 +163,10 @@ watch(playVolumeValue, (newValue:number) => {
     --el-slider-height: 4px;
     --el-slider-button-size: 12px;
     padding: 0 8px 0 8px;
+  }
+
+  i {
+    font-size: larger;
   }
 }
 
@@ -186,12 +200,22 @@ watch(playVolumeValue, (newValue:number) => {
 
   .play-song-operator {
     text-align: center;
-    span {
-      margin-left: 16px;
-    }
+    // display: inline-block;
+    &-wrapper {
+      display: flex;
+      align-items: center;
 
-    i {
-      cursor: pointer;
+      span {
+        margin-left: 16px;
+      }
+
+      i {
+        cursor: pointer;
+      }
+
+      .bofang {
+        font-size: x-large;
+      }
     }
   }
 
@@ -199,7 +223,7 @@ watch(playVolumeValue, (newValue:number) => {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding-top: 5px;
+    margin-top: -5px;
   }
 }
 
@@ -209,6 +233,7 @@ watch(playVolumeValue, (newValue:number) => {
   .volume-control {
     display: flex;
     flex-direction: row;
+    align-items: center;
     .el-slider {
       width: 80px;
     }
