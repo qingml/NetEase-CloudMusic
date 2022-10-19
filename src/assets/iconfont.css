@@ -1,12 +1,10 @@
 /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
-/* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
   font-family: 'iconfont';  /* Project id 3595695 */
-  src: url('//at.alicdn.com/t/c/font_3595695_ylpl6iuds9n.woff2?t=1665922289823') format('woff2'),
-       url('//at.alicdn.com/t/c/font_3595695_ylpl6iuds9n.woff?t=1665922289823') format('woff'),
-       url('//at.alicdn.com/t/c/font_3595695_ylpl6iuds9n.ttf?t=1665922289823') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_3595695_dubmbczuw1w.woff2?t=1666107590614') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3595695_dubmbczuw1w.woff?t=1666107590614') format('woff'),
+       url('//at.alicdn.com/t/c/font_3595695_dubmbczuw1w.ttf?t=1666107590614') format('truetype');
 }
-
 .iconfont {
   font-family: "iconfont" !important;
   font-size: 16px;
@@ -113,4 +111,12 @@
 
 .icon-bofang:before {
   content: "\e624";
+}
+
+.icon-lishisousuo:before {
+  content: "\e677";
+}
+
+.icon-remensousuo:before {
+  content: "\e7c7";
 }

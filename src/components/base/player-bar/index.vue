@@ -1,10 +1,16 @@
 <template>
   <div class="player-container" v-if="playerStore.currentSongData.length">
+    <!-- <div class="lyric-container">
+      <PlaySongDetail
+        :songDeatail="playerStore?.currentSong"
+        v-if="playerStore?.canOpenLyric"
+      />
+    </div> -->
     <div class="player-block">
       <div class="player-song-info">
         <img :src="playerStore.currentSong.picUrl" />
         <div class="song-detail">
-          <div class="player-song-songName">
+          <div class="player-song-songName ellipsis" >
             {{ playerStore?.currentSong?.name }}
           </div>
           <div class="player-song-singer">
@@ -86,6 +92,7 @@
 import { ref, watch } from "vue";
 import { usePlayerStore } from "../../../stores/player";
 import { formatDurationPlay } from "@/utils/number";
+import PlaySongDetail from "@/components/base/play-song-detail/index.vue";
 
 const audioRef = ref<HTMLAudioElement>();
 const currentPlayTime = ref(0);
@@ -94,7 +101,6 @@ const playVolumeValue = ref(2);
 const muted = ref(false);
 
 const playerStore = usePlayerStore();
-
 const handlePlay = () => {
   if (playerStore.playStatus) {
     audioRef?.value?.pause();
@@ -142,17 +148,30 @@ watch(playVolumeValue, (newValue: number) => {
 
 <style lang="less">
 .player-container {
+  width: 100%;
+
+  .lyric-container {
+   position:fixed;
+   height: 100vh;
+   top:0;
+   width: 100%;
+   max-width: 1280px;
+   left: 0;
+   right: 0;
+   margin: auto;
+  }
+}
+
+.player-block {
   position: fixed;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: #ddd;
+  opacity: 0.9;
   height: 80px;
   width: 100%;
   padding: 10px 32px;
   box-shadow: 12px 10px 8px 6px rgb(0 0 0 / 30%);
   z-index: 14;
-}
-
-.player-block {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -174,6 +193,7 @@ watch(playVolumeValue, (newValue: number) => {
   display: flex;
   align-items: center;
   padding-top: 4px;
+  width: 180px;
 
   img {
     width: 60px;
@@ -182,6 +202,7 @@ watch(playVolumeValue, (newValue: number) => {
   }
 
   .song-detail {
+    width: 160px;
     display: flex;
     flex-direction: column;
 

@@ -59,7 +59,7 @@ const modules = [EffectCoverflow, Pagination, Autoplay, EffectFade];
 
 <style lang="less" scoped>
 .swiper {
-  z-index: 10;
+  z-index: 0;
   width: 100%;
   padding-top: 20px;
   padding-bottom: 50px;

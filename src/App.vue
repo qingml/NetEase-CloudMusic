@@ -3,8 +3,7 @@
     <TopBar :data="menus" />
   
     <div class="mian-layout" >
-      <PlaySongDetail :songDeatail="playerStore?.currentSong"  v-if="playerStore?.canOpenLyric"/>
-      <RouterView v-else/>
+      <RouterView />
     </div>
     <canvas
       id="cas"
@@ -21,11 +20,7 @@ import { RouterView } from 'vue-router';
 import { menus } from '@/constants/menus';
 import TopBar from '@/components/top-bar/index.vue';
 import PlayerBar from '@/components/base/player-bar/index.vue';
-import { usePlayerStore } from "@/stores/player";
 
-import PlaySongDetail from './components/base/play-song-detail/index.vue';
-
-const playerStore = usePlayerStore();
 
 
 

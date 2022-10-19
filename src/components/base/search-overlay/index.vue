@@ -7,26 +7,52 @@
           placeholder="请输入歌手、歌曲、专辑名搜索"
           :suffix-icon="Search"
           v-model="searchWord"
-          @change="handleChange"
+          @keyup="handleInput"
         />
       </div>
       <div class="search-area__tags">
-        <div class="history-tags">
-          <p>历史搜索</p>
+        <div class="history-tags" v-if="searchHistoryTag.length">
+          <div class="tagName">
+            <i class="iconfont icon-lishisousuo"></i>
+            <p>历史搜索</p>
+            <span @click="emptyHistory">清空</span>
+          </div>
+
+          <div class="tag-wrapper">
+            <ElTag
+              v-if="hotTags?.length"
+              v-for="(item, index) in searchHistoryTag"
+              :key="index"
+              :label="item"
+              type="info"
+              effect="light"
+              round
+              @click="handleJump(item)"
+            >
+              {{ item }}
+            </ElTag>
+          </div>
         </div>
         <div class="hot-tags">
-          <p>热门搜索</p>
-          <ElTag
-            v-if="hotTags?.length"
-            v-for="(item, key) in hotTags"
-            :key="key"
-            :label="item.first"
-            type="info"
-            effect="light"
-            round
-          >
-            {{ item.first }}
-          </ElTag>
+          <div class="tagName">
+            <i class="iconfont icon-remensousuo"></i>
+            <p>热门搜索</p>
+          </div>
+
+          <div class="tag-wrapper">
+            <ElTag
+              v-if="hotTags?.length"
+              v-for="(item, key) in hotTags"
+              :key="key"
+              :label="item.first"
+              type="info"
+              effect="light"
+              round
+              @click="handleJump(item.first)"
+            >
+              {{ item.first }}
+            </ElTag>
+          </div>
         </div>
       </div>
     </div>
@@ -38,6 +64,12 @@ import { onMounted, onUnmounted, ref, toRefs } from "vue";
 import { ElInput, ElTag } from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 import { querySearchHotTag } from "@/api/search";
+
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const searchHistoryTag = ref(JSON.parse(window.localStorage.searchHistory));
 
 interface HotTagItem {
   first: string;
@@ -87,8 +119,39 @@ onUnmounted(() => {
   document.removeEventListener("keyup", openOverlay);
 });
 
-const handleChange = (value: string) => {
-  console.log("value", value);
+// const handleChange = (value: string) => {
+//   console.log("value", value);
+// };
+
+const handleInput = (e: any) => {
+  if (e.code == "Enter") {
+    if (searchWord.value.length) {
+      if (!searchHistoryTag.value.includes(searchWord.value.trim())) {
+        searchHistoryTag.value.push(searchWord.value.trim());
+        window.localStorage.setItem(
+          "searchHistory",
+          JSON.stringify(searchHistoryTag.value)
+        );
+        console.log("enter", searchHistoryTag);
+      }
+      handleJump(searchWord.value);
+      searchWord.value = "";
+    }
+  }
+};
+
+const emptyHistory = () => {
+  console.log();
+  searchHistoryTag.value = [];
+  window.localStorage.setItem(
+    "searchHistory",
+    JSON.stringify([searchHistoryTag.value])
+  );
+};
+
+const handleJump = (keyword: string) => {
+  emit("update:visible", false)
+  router.push(`/search-result/keyword=${keyword}`);
 };
 </script>
 
@@ -115,6 +178,7 @@ const handleChange = (value: string) => {
         display: flex;
         align-items: center;
         justify-content: center;
+        background: transparent url(/img/searchBackgroud.jpg) center no-repeat;
 
         .el-input.el-input {
           width: 700px;
@@ -124,6 +188,28 @@ const handleChange = (value: string) => {
       &__tags {
         margin: 20px 50px;
 
+        .tagName {
+          display: flex;
+          flex-direction: row;
+          i {
+            color: var(--vt-c-text-light-2);
+            font-size: larger;
+          }
+
+          p {
+            margin-left: 8px;
+          }
+
+          span {
+            padding-left: 540px;
+            color: var(--vt-c-text-light-2);
+            cursor: pointer;
+          }
+        }
+
+        .tag-wrapper {
+          margin-top: 20px;
+        }
         .el-tag {
           margin: 0 20px 20px 0;
           cursor: pointer;

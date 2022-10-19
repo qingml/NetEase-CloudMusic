@@ -1,8 +1,8 @@
 <template>
   <div class="play-page">
-    <div class="wrapper">
-      <div class="page-left">
-        <div class="img-wrapper"></div>
+    <div class="wrapper" :class="isRotate">
+      <div class="page-left" >
+        <div class="img-wrapper" :class="isRotate"></div>
         <img :src="songDeatail?.picUrl" />
       </div>
       <div class="page-right">
@@ -19,6 +19,8 @@
 <script setup>
 import { fromPairs } from "lodash-es";
 import { onMounted, ref } from "vue";
+
+const isRotate = ref('rotate')
 
 const props = defineProps({
   songDeatail: {
@@ -39,7 +41,7 @@ const props = defineProps({
 }
 
 .play-page {
-  z-index: 11;
+  z-index: 10;
   position: relative;
   width: 100%;
   background-color: #fff;
@@ -63,7 +65,6 @@ const props = defineProps({
     .img-wrapper {
       &::after {
         content: "";
-        background-color: black;
         border-radius: 50%;
         left: 80px;
         z-index: -1;
@@ -73,9 +74,13 @@ const props = defineProps({
         height: 400px;
         display: block;
         box-shadow: 5px 0 10px -5px #141414;
-        animation: spin 2s linear 1s infinite;
+        // animation: spin 2s linear 1s infinite;
+        background: transparent url(/img/bofang.png) center no-repeat;
+        transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.8s 0.5s;
       }
+      
     }
+
   }
 
   .page-right {
