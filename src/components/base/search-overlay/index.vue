@@ -78,8 +78,11 @@ import { querySearchHotTag } from "@/api/search";
 import { useRouter } from "vue-router";
 import { useSearchStore } from "@/stores/search";
 
+const searchStore = useSearchStore()
+
 const router = useRouter();
-const searchStore = useSearchStore();
+
+const searchHistoryTag = ref([]);
 
 interface HotTagItem {
   first: string;

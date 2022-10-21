@@ -1,20 +1,15 @@
 <template>
-  <div class="player-container" v-if="playerStore?.currentSongData?.length">
-    <!-- <div class="lyric-container">
-      <PlaySongDetail
-        :songDeatail="playerStore?.currentSong"
-        v-if="playerStore?.canOpenLyric"
-      />
-    </div> -->
+  <div class="player-container" v-if="currentSongData.length">
+    <PlaySongDetail :currentTime="currentPlayTime" />
     <div class="player-block">
       <div class="player-song-info">
         <img :src="playerStore.currentSong.picUrl" />
         <div class="song-detail">
-          <div class="player-song-songName ellipsis" >
-            {{ playerStore?.currentSong?.name }}
+          <div class="player-song-songName ellipsis">
+            {{ currentSong?.name }}
           </div>
           <div class="player-song-singer">
-            {{ playerStore?.currentSong?.singer }}
+            {{ currentSong?.singer }}
           </div>
         </div>
       </div>
@@ -28,10 +23,7 @@
               <i class="iconfont icon-shangyishouge"></i>
             </span>
             <span @click="handlePlay" class="bofang">
-              <i
-                v-if="playerStore.playStatus"
-                class="iconfont icon-zanting"
-              ></i>
+              <i v-if="isPlaying" class="iconfont icon-zanting"></i>
               <i v-else class="iconfont icon-bofang1"></i>
             </span>
             <span @click="playerStore.toNext">
@@ -54,7 +46,7 @@
             @input="handleChange"
           />
           <div class="song-totolTime">
-            {{ formatDurationPlay(playerStore?.currentSong?.duration!) }}
+            {{ formatDurationPlay(currentSong?.duration!) }}
           </div>
         </div>
       </div>
@@ -74,14 +66,14 @@
         </div>
       </div>
 
-      <div v-if="playerStore.currentSong">
+      <div v-if="currentSong">
         <audio
           class="player-audio"
           ref="audioRef"
           @timeupdate="handleUpdateTime"
           autoplay
           controls
-          :src="playerStore?.currentSong?.playUrl"
+          :src="currentSong?.playUrl"
         />
       </div>
     </div>
@@ -92,6 +84,7 @@
 import { ref, watch } from "vue";
 import { usePlayerStore } from "../../../stores/player";
 import { formatDurationPlay } from "@/utils/number";
+import { storeToRefs } from "pinia";
 import PlaySongDetail from "@/components/base/play-song-detail/index.vue";
 
 const audioRef = ref<HTMLAudioElement>();
@@ -101,8 +94,12 @@ const playVolumeValue = ref(2);
 const muted = ref(false);
 
 const playerStore = usePlayerStore();
+
+const { isPlaying, openLyric, currentSong, currentSongData } =
+  storeToRefs(playerStore);
+
 const handlePlay = () => {
-  if (playerStore.playStatus) {
+  if (isPlaying?.value) {
     audioRef?.value?.pause();
   } else {
     audioRef?.value?.play();
@@ -117,23 +114,24 @@ const handleUpdateTime = () => {
   currentPlayTime.value = audioRef.value?.currentTime || 0;
 
   playProgressValue.value = Math.floor(
-    (audioRef.value?.currentTime! / playerStore?.currentSong?.duration!) * 100
+    (audioRef.value?.currentTime! / currentSong.value?.duration!) * 100
   );
 
   if (playProgressValue.value === 100) {
-    playerStore.toNext();
+    playerStore.toNext(true);
   }
 };
 
 const handleChange = (value: number) => {
   playProgressValue.value = value;
-  audioRef.value!.currentTime =
-    playerStore?.currentSong?.duration! * (value / 100);
+  audioRef.value!.currentTime = currentSong.value?.duration! * (value / 100);
 };
 
 const handleLyric = () => {
-  playerStore.getSongDetailLyric(playerStore?.currentSong?.id);
-  playerStore.openLyric = !playerStore.canOpenLyric;
+  openLyric.value = !openLyric.value;
+  if (openLyric.value) {
+    playerStore.getSongDetailLyric(currentSong.value?.id);
+  }
 };
 
 watch(playVolumeValue, (newValue: number) => {
@@ -149,17 +147,6 @@ watch(playVolumeValue, (newValue: number) => {
 <style lang="less">
 .player-container {
   width: 100%;
-
-  .lyric-container {
-   position:fixed;
-   height: 100vh;
-   top:0;
-   width: 100%;
-   max-width: 1280px;
-   left: 0;
-   right: 0;
-   margin: auto;
-  }
 }
 
 .player-block {
@@ -171,7 +158,7 @@ watch(playVolumeValue, (newValue: number) => {
   width: 100%;
   padding: 10px 32px;
   box-shadow: 12px 10px 8px 6px rgb(0 0 0 / 30%);
-  z-index: 14;
+  z-index: 9999;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -232,6 +219,7 @@ watch(playVolumeValue, (newValue: number) => {
 
       i {
         cursor: pointer;
+        font-size: 24px;
       }
 
       .bofang {

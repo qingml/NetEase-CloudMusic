@@ -21,10 +21,10 @@
             <Playlist :data="playListData" :hasCollect="false" />
           </el-tab-pane>
           <el-tab-pane label="歌手" name="singer">
-            <SimSingers :data="singerData" /> 
+            <SimSingers :data="singerData" />
           </el-tab-pane>
           <el-tab-pane label="专辑" name="ablum">
-            <Album :data='ablumData'/> 
+            <Album :data="ablumData" />
           </el-tab-pane>
           <el-tab-pane label="视频" name="vedio">
             <MV :data="vedioData" />
@@ -51,20 +51,20 @@ import Playlist from "@/components/base/playlist/index.vue";
 import SimSingers from "@/components/base/singers/index.vue";
 import MV from "@/components/base/mv/index.vue";
 import Album from "@/components/base/album/index.vue";
-import CuratePlaylist from "@/components/base/curate-playlist/index.vue";
-
 import { formatSong } from "@/utils/song";
 import { useSearchStore } from "@/stores/search";
-import { formatMv } from "@/utils/mv";
+
+
+const searchHistoryTag = ref([]);
 
 const { currentRoute } = useRouter();
 const router = useRouter()
 const activeName = ref("song");
-const playListData = ref([])
-const singerData = ref([])
-const ablumData = ref([])
-const vedioData = ref([])
-const songlistData = ref([])
+const playListData = ref([]);
+const singerData = ref([]);
+const ablumData = ref([]);
+const vedioData = ref([]);
+const songlistData = ref([]);
 // const searchKey = currentRoute?.value?.params?.keyword as string;
 const searchStore = useSearchStore();
 
@@ -72,18 +72,20 @@ const keyword = String(currentRoute?.value?.params?.keyword);
 const searchWord = ref(keyword);
 
 const querySearchResultData = async (keyword: any) => {
-   const [playListRes,singerRes,ablumRes,vedioRes,songlistRes] = await Promise.all([
-    getSearchSongDetail(keyword,1),
-    getSearchSongDetail(keyword,100),
-    getSearchSongDetail(keyword,10),
-    getSearchSongDetail(keyword,1014),
-    getSearchSongDetail(keyword,1000),
-   ])
-  playListData.value = playListRes?.result?.songs?.map(formatSong)
-  singerData.value = singerRes?.result?.artists
-  ablumData.value = ablumRes?.result?.albums
-  vedioData.value = vedioRes?.result?.videos?.map(formatMv)
-  songlistData.value = songlistRes?.result?.playlists?.map(formatSong)
+  const [playListRes, singerRes, ablumRes, vedioRes, songlistRes] =
+    await Promise.all([
+      getSearchSongDetail(keyword, 1),
+      getSearchSongDetail(keyword, 100),
+      getSearchSongDetail(keyword, 10),
+      getSearchSongDetail(keyword, 1014),
+      getSearchSongDetail(keyword, 1000),
+    ]);
+
+  playListData.value = playListRes?.result?.songs.map(formatSong);
+  singerData.value = singerRes?.result?.artists;
+  ablumData.value = ablumRes?.result?.albums;
+  vedioData.value = vedioRes?.result?.videos;
+  songlistData.value = songlistRes?.result?.playlists;
 };
 
 const handleInput = (e: any) => {
@@ -96,19 +98,16 @@ const handleInput = (e: any) => {
   }
 };
 
-onMounted(()=> querySearchResultData(keyword))
+onMounted(() => querySearchResultData(keyword));
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.keywors !== from.params.keyword) {
     querySearchResultData(String(to.params.keyword));
-    searchWord.value = String(to.params.keyword)
+    searchWord.value = String(to.params.keyword);
   }
 });
-
 </script>
 
 <style lang="less">
-
-
 .search-result-banner-container {
   width: 100%;
   height: 250px;
@@ -116,19 +115,19 @@ onBeforeRouteUpdate(async (to, from) => {
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
- 
+
   &::before {
     content: "";
     width: 100%;
     height: 100%;
-    background: #8A2387;
-    background: linear-gradient(to left, #F27121, #E94057, #8A2387);
+    background: #8a2387;
+    background: linear-gradient(to left, #f27121, #e94057, #8a2387);
     opacity: 0.3;
     display: block;
     position: absolute;
     top: 0;
     left: 0;
-}
+  }
 
   .search-area {
     height: 50px;
@@ -153,8 +152,8 @@ onBeforeRouteUpdate(async (to, from) => {
 
 .main-container {
   width: 100%;
- vertical-align: middle;
-  align-items:center;
+  vertical-align: middle;
+  align-items: center;
   margin-top: 30px;
 
   .span-wrapper {
@@ -166,28 +165,28 @@ onBeforeRouteUpdate(async (to, from) => {
     width: 100px;
   }
 
-  .search-detail-nav-title{
+  .search-detail-nav-title {
     .el-tabs__nav-wrap::after {
-        display: none;
+      display: none;
+    }
+
+    .el-tabs__nav {
+      width: 100%;
+      float: none;
+      display: flex;
+
+      .el-tabs__item.is-active {
+        color: var(--color-text-red);
       }
 
-      .el-tabs__nav {
-        width: 100%;
-        float: none;
-        display: flex;
-
-        .el-tabs__item.is-active {
-          color: var(--color-text-red);
-        }
-
-        .el-tabs__item:hover {
-          color: var(--color-text-red);
-        }
-
-        .el-tabs__active-bar {
-          background-color: var(--color-text-red);
-        }
+      .el-tabs__item:hover {
+        color: var(--color-text-red);
       }
+
+      .el-tabs__active-bar {
+        background-color: var(--color-text-red);
+      }
+    }
   }
 }
 </style>

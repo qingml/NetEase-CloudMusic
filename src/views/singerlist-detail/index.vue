@@ -43,6 +43,7 @@ import SimSingers from "@/components/base/singers/index.vue";
 import SingerIntro from "@/components/singers-introduction/index.vue";
 import MV from "@/components/base/mv/index.vue";
 import Album from "@/components/base/album/index.vue";
+import { formatSong } from "@/utils/song";
 
 const { currentRoute } = useRouter();
 const singerId = currentRoute?.value?.params?.id as string;
@@ -66,13 +67,7 @@ const queryPlayListData = async (singerId: string) => {
     ]);
 
   singerInfoData.value = singerInfoRes.artist;
-  singerPlaylistData.value = singerInfoRes.hotSongs.map((songItem: any) => ({
-    ...songItem,
-    name: songItem.name,
-    coverImg: songItem.al.picUrl,
-    singer: songItem.ar.map((arItem: any) => arItem.name).join(" / "),
-    album: songItem.al.name,
-  }));
+  singerPlaylistData.value = singerInfoRes.hotSongs.map(formatSong);
   activeName.value = "work";
   simSingerData.value = simSingerRes?.artists;
   singerIntroductionData.value = singerIntroductionRes;

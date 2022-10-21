@@ -26,7 +26,7 @@ interface IPlayerState {
   /** 模式 */
   mode: ModeEnum;
   /** 播放状态 */
-  isPlaying?: boolean;
+  isPlaying: boolean;
   /** 播放歌曲歌词 */
   lyric: string;
   /** 歌词页面状态 */
@@ -49,10 +49,7 @@ export const usePlayerStore = defineStore({
     currentSongData: (state) => state.playSongList,
     currentSong: (state): IRecommendSongItem =>
       state.playSongList[state.currentPlayIndex],
-    playStatus: (state) => state.isPlaying,
     iconValue: (state) => modeIconValues[state.mode],
-    lyricContent: (state) => state.lyric,
-    canOpenLyric: (state) => state.openLyric,
   },
 
   actions: {
@@ -63,10 +60,6 @@ export const usePlayerStore = defineStore({
           ...it,
           playUrl: it.id === id ? resp?.data?.[0].url : null,
         }));
-        console.log(
-          "currentSong",
-          JSON.parse(JSON.stringify(this.currentSong))
-        );
         this.isPlaying = true;
       } catch (error) {
         console.log("error", error);
@@ -76,7 +69,8 @@ export const usePlayerStore = defineStore({
     async getSongDetailLyric(id: number) {
       try {
         const response = await getSongDetailLyric(id);
-        this.lyric = response?.romalrc?.lyric;
+        this.lyric = response?.lrc;
+        console.log("lyric", this.lyric);
       } catch (error) {
         console.log("error", error);
       }
@@ -97,10 +91,15 @@ export const usePlayerStore = defineStore({
     },
 
     setCurrentPlayIndex(index: number) {
+      if (this.currentPlayIndex && index === this.currentPlayIndex) return;
       this.currentPlayIndex = index;
 
       if (this.currentSongData.length > index) {
         this.getSongDetailUrl(this.currentSongData[index].id);
+      }
+
+      if (this.openLyric) {
+        this.getSongDetailLyric(this.currentSongData[index].id);
       }
     },
 
@@ -108,7 +107,10 @@ export const usePlayerStore = defineStore({
       this.isPlaying = !this.isPlaying;
     },
 
-    toNext() {
+    toNext(isAutoNext: boolean) {
+      if (isAutoNext && this.mode == ModeEnum.SINGLE) {
+        this.setCurrentPlayIndex(this.currentPlayIndex);
+      }
       const nextIndex = this.currentPlayIndex + 1;
       if (nextIndex < this.currentSongData.length) {
         this.setCurrentPlayIndex(nextIndex);
@@ -119,7 +121,7 @@ export const usePlayerStore = defineStore({
 
     toLast() {
       const lastIndex = this.currentPlayIndex - 1;
-      if (lastIndex > 0) {
+      if (lastIndex > -1) {
         this.setCurrentPlayIndex(lastIndex);
       }
     },
