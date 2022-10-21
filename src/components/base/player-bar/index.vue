@@ -1,5 +1,5 @@
 <template>
-  <div class="player-container" v-if="playerStore.currentSongData.length">
+  <div class="player-container" v-if="playerStore?.currentSongData?.length">
     <!-- <div class="lyric-container">
       <PlaySongDetail
         :songDeatail="playerStore?.currentSong"

@@ -2,7 +2,7 @@
   <div class="mv__block">
     <div class="mv__block--item" v-for="(item, index) in data" :key="index">
       <div class="mv__block--item-wrap">
-        <img :src="item.imgurl16v9" />
+        <img :src="item.imgurl16v9 " />
         <div class="mv__block--item-top">
           <span class="mv__block--item-count">
             <i class="iconfont icon-bofang"></i>
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="mv__block--item-title ellipsis">
-        {{ item.name }}
+        {{ item.name || item.title }}
       </div>
     </div>
   </div>

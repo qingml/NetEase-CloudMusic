@@ -9,7 +9,7 @@
       <ElImage
         class="recommend-singers__block--item-img"
         :src="item.img1v1Url"
-        lazy
+         lazy
       />
       <div class="recommend-singers__block--item-info">
         <div
@@ -18,7 +18,7 @@
         >
           {{ item.name }}
         </div>
-        <div class="recommend-singers__block--item-count">
+        <div class="recommend-singers__block--item-count" v-if="item.musicSize">
           单曲数
           {{ item.musicSize }}
         </div>
@@ -42,7 +42,8 @@ defineProps({
 });
 
 const handleJumpSingerDeatil = (id: number | string) => {
-  router.replace(`/singerlist-detail/${id}`);
+  console.log('jump')
+  router.push(`/singerlist-detail/${id}`);
 };
 </script>
 

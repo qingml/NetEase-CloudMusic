@@ -64,7 +64,6 @@ const queryPlayListData = async (playId: string) => {
   ) as string[];
 
   const playListRes = await getPlayList(ids);
-
   playListData.value = playListRes?.songs?.map(formatSong) || [];
 };
 

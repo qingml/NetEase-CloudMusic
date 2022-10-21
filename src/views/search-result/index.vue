@@ -30,7 +30,7 @@
             <MV :data="vedioData" />
           </el-tab-pane>
           <el-tab-pane label="歌单" name="songlist">
-            <!-- <SimSingers :data="" /> -->
+            <CuratePlaylist :data="songlistData" />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -51,11 +51,14 @@ import Playlist from "@/components/base/playlist/index.vue";
 import SimSingers from "@/components/base/singers/index.vue";
 import MV from "@/components/base/mv/index.vue";
 import Album from "@/components/base/album/index.vue";
-import { formatSong } from "@/utils/song";
+import CuratePlaylist from "@/components/base/curate-playlist/index.vue";
 
-const searchHistoryTag = ref(JSON.parse(window.localStorage.searchHistory));
+import { formatSong } from "@/utils/song";
+import { useSearchStore } from "@/stores/search";
+import { formatMv } from "@/utils/mv";
 
 const { currentRoute } = useRouter();
+const router = useRouter()
 const activeName = ref("song");
 const playListData = ref([])
 const singerData = ref([])
@@ -63,6 +66,7 @@ const ablumData = ref([])
 const vedioData = ref([])
 const songlistData = ref([])
 // const searchKey = currentRoute?.value?.params?.keyword as string;
+const searchStore = useSearchStore();
 
 const keyword = String(currentRoute?.value?.params?.keyword);
 const searchWord = ref(keyword);
@@ -75,25 +79,18 @@ const querySearchResultData = async (keyword: any) => {
     getSearchSongDetail(keyword,1014),
     getSearchSongDetail(keyword,1000),
    ])
-
-  playListData.value = playListRes?.result?.songs.map(formatSong)
+  playListData.value = playListRes?.result?.songs?.map(formatSong)
   singerData.value = singerRes?.result?.artists
   ablumData.value = ablumRes?.result?.albums
-  vedioData.value = vedioRes?.result?.videos
-  songlistData.value = songlistRes?.result?.playlists
+  vedioData.value = vedioRes?.result?.videos?.map(formatMv)
+  songlistData.value = songlistRes?.result?.playlists?.map(formatSong)
 };
 
 const handleInput = (e: any) => {
   if (e.code == "Enter") {
     if (searchWord.value.length) {
-      if (!searchHistoryTag.value.includes(searchWord.value.trim())) {
-        searchHistoryTag.value.push(searchWord.value.trim());
-        window.localStorage.setItem(
-          "searchHistory",
-          JSON.stringify(searchHistoryTag.value)
-        );
-        console.log("enter", searchHistoryTag);
-      }
+      searchStore?.setcurrentSearchHistoryTag(searchWord.value.trim())
+      router.push(`/search-result/keyword=${searchWord.value}`);
       searchWord.value = "";
     }
   }

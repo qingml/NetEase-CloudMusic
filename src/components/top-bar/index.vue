@@ -20,7 +20,23 @@
           >
           <div v-else class="top-bar__user-info">
             <img :src="loginStore.userInfo?.avatarUrl" />
-            <span>{{ loginStore.userInfo?.nickname }}</span>
+            <div class="user-nickname" @click="showPopover">
+              <span>{{ loginStore.userInfo?.nickname }}</span>
+              <i class="iconfont icon-jiantouxia" />
+            </div>
+            <div class="user-info-popover" v-if="showUserPopover">
+              <div class="wrapper">
+                <div>
+                  <i class="iconfont icon-gerenzhuye" />
+                  <span>个人主页</span>
+                </div>
+                <div>
+                  <i class="iconfont icon-gerenshezhi" />
+                  <span>个人设置</span> 
+                </div>
+              </div>
+                
+            </div>
           </div>
         </div>
       </div>
@@ -48,7 +64,7 @@ defineProps({
 });
 
 const searchOverlayVisible = ref(false);
-
+const showUserPopover = ref(false)
 const handleSearchClick = () => {
   searchOverlayVisible.value = true;
 };
@@ -72,6 +88,10 @@ const handleLogin = () => {
     },
   });
 };
+
+const showPopover = () => {
+  showUserPopover.value = !showUserPopover.value
+}
 </script>
 
 <style scoped lang="less">
@@ -144,12 +164,50 @@ header {
     font-size: 14px;
     display: flex;
     align-items: center;
+    position: relative;
 
     img {
       margin: 0 12px 0 0;
       height: 36px;
       width: 36px;
       border-radius: 50%;
+    }
+
+    i{
+      margin-left: 6px;
+      font-size: small;
+    }
+
+    .user-info-popover {
+      width: 136px;
+      border-radius: 10px;
+      position: absolute;
+      top:60px;
+      left:40px;
+      background-color: #fff;
+      z-index: 102;
+
+      .wrapper{
+        display: flex;
+        flex-direction: column;
+
+        div{
+           display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          height: 40px;
+
+          span{
+            padding-left: 8px;
+            line-height: 36px;
+          }
+
+          i{
+            font-size: larger;
+          }
+        }
+      }
     }
   }
 }

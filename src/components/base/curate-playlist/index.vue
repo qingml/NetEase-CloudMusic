@@ -9,7 +9,7 @@
         class="recommend-play-list__block--item-wrap"
         @click="() => handleJumpDetail(item.id)"
       >
-        <ElImage :src="item.picUrl" lazy />
+        <ElImage :src="item.picUrl"  />
         <div class="recommend-play-list__block--item-bottom">
           <span class="recommend-play-list__block--item-count">
             <i class="iconfont icon-erji"></i>

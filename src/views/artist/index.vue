@@ -61,7 +61,6 @@ onMounted(() => {
 useScrollUpdate({
   handleScollUpdate: () => {
     currentPage.value += 1;
-    console.log(currentPage.value)
   },
 });
 
