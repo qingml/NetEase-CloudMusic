@@ -12,17 +12,17 @@ export const formatSinger = (singers: any) => {
 export const formatSong = (musicData: any) => {
   return {
     id: musicData.id,
-    name: musicData.name,
+    name: musicData.name|| musicData?.song?.name,
     singer: formatSinger(
-      musicData?.song?.artists || musicData?.ar || musicData?.artists
+      musicData?.song?.artists || musicData?.ar || musicData?.artists || musicData?.song?.ar
     ),
     album: musicData?.song
-      ? musicData?.song?.album?.name
+      ? musicData?.song.album?musicData?.song.album?.name:musicData?.song.al.name
       : musicData?.al?.name || musicData?.album?.name,
     duration: formatSecond(
-      musicData?.song?.duration || musicData?.dt || musicData?.duration
+      musicData?.song?.duration || musicData?.dt || musicData?.duration||musicData?.song?.dt 
     ),
-    picUrl: musicData.coverImgUrl || musicData?.al?.picUrl || musicData?.picUrl,
+    picUrl: musicData.coverImgUrl || musicData?.al?.picUrl || musicData?.picUrl||musicData?.song?.picUrl,
     playCount: musicData?.playCount || "",
     score: musicData?.score || "",
   };

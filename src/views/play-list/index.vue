@@ -109,7 +109,7 @@ const handleClick = (tagName) => {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .playlist {
   width: 100%;
   display: flex;

@@ -9,3 +9,7 @@ export const getSearchSongDetail = (keywords: string,type:number,offset=0,limit=
 export const getPlayList = (keywords: string[]) => {
   return getAjax("/search/suggest", { params: { keywords } });
 };
+
+export const getPlayListDetail = () => {
+  return postAjax(`/song/detail?timestamp=${new Date().getTime()}`);
+};

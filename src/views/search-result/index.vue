@@ -16,7 +16,11 @@
     <div class="main-container">
       <span class="span-wrapper">搜索结果</span>
       <div class="wrapper">
-        <el-tabs v-model="activeName" class="search-detail-nav-title">
+        <el-tabs
+          v-model="activeName"
+          class="search-detail-nav-title"
+          @click="requestOtherData"
+        >
           <el-tab-pane label="单曲" name="song">
             <Playlist :data="playListData" :hasCollect="false" />
           </el-tab-pane>
@@ -45,20 +49,20 @@ import { useRouter, onBeforeRouteUpdate } from "vue-router";
 import { ElInput } from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 
-import { getSearchSongDetail } from "@/api/search-result";
+import { getPlayListDetail, getSearchSongDetail } from "@/api/search-result";
 
 import Playlist from "@/components/base/playlist/index.vue";
 import SimSingers from "@/components/base/singers/index.vue";
 import MV from "@/components/base/mv/index.vue";
 import Album from "@/components/base/album/index.vue";
+import CuratePlaylist from "@/components/base/curate-playlist/index.vue";
+
 import { formatSong } from "@/utils/song";
 import { useSearchStore } from "@/stores/search";
-
-
-const searchHistoryTag = ref([]);
+import { formatMv } from "@/utils/mv";
 
 const { currentRoute } = useRouter();
-const router = useRouter()
+const router = useRouter();
 const activeName = ref("song");
 const playListData = ref([]);
 const singerData = ref([]);
@@ -72,26 +76,36 @@ const keyword = String(currentRoute?.value?.params?.keyword);
 const searchWord = ref(keyword);
 
 const querySearchResultData = async (keyword: any) => {
-  const [playListRes, singerRes, ablumRes, vedioRes, songlistRes] =
-    await Promise.all([
-      getSearchSongDetail(keyword, 1),
-      getSearchSongDetail(keyword, 100),
-      getSearchSongDetail(keyword, 10),
-      getSearchSongDetail(keyword, 1014),
-      getSearchSongDetail(keyword, 1000),
-    ]);
+  const playListRes = await getSearchSongDetail(keyword, 1);
 
-  playListData.value = playListRes?.result?.songs.map(formatSong);
+  const playListDetailRes = await getPlayListDetail();
+
+};
+
+const querySearchSingerData = async (keyword: any) => {
+  const singerRes = await getSearchSongDetail(keyword, 100);
   singerData.value = singerRes?.result?.artists;
+};
+
+const querySearchAlbumData = async (keyword: any) => {
+  const ablumRes = await getSearchSongDetail(keyword, 10);
   ablumData.value = ablumRes?.result?.albums;
-  vedioData.value = vedioRes?.result?.videos;
-  songlistData.value = songlistRes?.result?.playlists;
+};
+
+const querySearchVedioData = async (keyword: any) => {
+  const vedioRes = await getSearchSongDetail(keyword, 1014);
+  vedioData.value = vedioRes?.result?.videos?.map(formatMv);
+};
+
+const querySearchSonglistData = async (keyword: any) => {
+  const songlistRes = await getSearchSongDetail(keyword, 1000);
+  songlistData.value = songlistRes?.result?.playlists?.map(formatSong);
 };
 
 const handleInput = (e: any) => {
   if (e.code == "Enter") {
     if (searchWord.value.length) {
-      searchStore?.setcurrentSearchHistoryTag(searchWord.value.trim())
+      searchStore?.setcurrentSearchHistoryTag(searchWord.value.trim());
       router.push(`/search-result/keyword=${searchWord.value}`);
       searchWord.value = "";
     }
@@ -99,20 +113,36 @@ const handleInput = (e: any) => {
 };
 
 onMounted(() => querySearchResultData(keyword));
+
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.keywors !== from.params.keyword) {
     querySearchResultData(String(to.params.keyword));
     searchWord.value = String(to.params.keyword);
   }
 });
+
+const requestOtherData = () => {
+  switch (activeName.value) {
+    case "singer":
+      querySearchSingerData(keyword);
+      break;
+    case "ablum":
+      querySearchAlbumData(keyword);
+      break;
+    case "vedio":
+      querySearchVedioData(keyword);
+      break;
+    case "songlist":
+      querySearchSonglistData(keyword);
+      break;
+  }
+};
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .search-result-banner-container {
-  width: 100%;
   height: 250px;
   background: url(/img/searchResultBg.jpg);
-  background-position: center;
   background-size: cover;
   background-attachment: fixed;
 

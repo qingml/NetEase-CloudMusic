@@ -1,10 +1,6 @@
 
 import { formatSecond } from "./number";
 
-/** 格式化歌手 */
-// export const formatSinger = (singers: any) => {
-//   return singers.map((item: any) => item.name).join(" / ");
-// };
 
 /** 格式化歌曲 */
 export const formatMv = (mvData: any) => {

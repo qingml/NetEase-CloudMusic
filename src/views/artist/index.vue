@@ -81,9 +81,10 @@ const changeData = (type, val, data) => {
 </script>
 
 <style scoped lang="less">
-.artist {
-  &-main {
+
+  .artistList-main {
     width: 100%;
+    z-index:99;
   }
-}
+
 </style>

@@ -47,7 +47,7 @@ const handleJumpDetail = (id: number | string) => {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "@/assets/base.css";
 
 .recommend-play-list {

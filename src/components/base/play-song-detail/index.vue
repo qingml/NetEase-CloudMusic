@@ -5,14 +5,15 @@
     :show-close="false"
     class="song-detail__dialog"
   >
-    <div class="wrapper" :class="isRotate">
+    <div class="wrapper">
       <div class="page-left">
-        <div class="img-wrapper" :class="isRotate"></div>
+        <div :class="[isPlaying ? 'playing' : 'stop', 'img-wrapper']"></div>
         <img :src="currentSong?.picUrl" />
       </div>
       <div class="page-right">
         <h3>
           {{ currentSong?.name }}
+          <i class="iconfont icon-jiantouxia"></i>
         </h3>
         <p>{{ currentSong?.singer }} - {{ currentSong?.name }}</p>
         <div>
@@ -56,9 +57,7 @@ interface LyricInfo {
 
 const playerStore = usePlayerStore();
 
-const { openLyric, currentSong, lyric } = storeToRefs(playerStore);
-
-const isRotate = ref("rotate");
+const { openLyric, currentSong, lyric, isPlaying } = storeToRefs(playerStore);
 
 const props = defineProps({
   currentTime: {
@@ -205,6 +204,12 @@ watch(
       background: transparent url(/img/bofang.png) center no-repeat;
       transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.8s 0.5s;
     }
+
+    &.stop {
+      &::after {
+        animation: none;
+      }
+    }
   }
 }
 
@@ -214,6 +219,11 @@ watch(
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
+
+    i{
+      float: right;
+      font-size: x-large;
+    }
   }
 
   p {
@@ -232,6 +242,9 @@ watch(
     transition: all 1.5s ease-in-out;
   }
 
+  ::-webkit-scrollbar {
+  display: none;
+}
   .lyrics {
     font-size: 0;
     transform: translateY(0);

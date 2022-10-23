@@ -26,13 +26,17 @@
             </div>
             <div class="user-info-popover" v-if="showUserPopover">
               <div class="wrapper">
-                <div>
+                <div @click="handleJump">
                   <i class="iconfont icon-gerenzhuye" />
                   <span>个人主页</span>
                 </div>
                 <div>
                   <i class="iconfont icon-gerenshezhi" />
                   <span>个人设置</span> 
+                </div>
+                <div @click="signOut">
+                  <i class="iconfont icon-gerenshezhi" />
+                  <span>退出登录</span> 
                 </div>
               </div>
                 
@@ -69,13 +73,12 @@ const handleSearchClick = () => {
   searchOverlayVisible.value = true;
 };
 
-const handleClose = () => {};
+
 
 const router = useRouter();
 const { path } = useRoute();
 
 const loginStore = useLoginStore();
-
 onMounted(async () => {
   loginStore.queryUserInfo();
 });
@@ -91,6 +94,15 @@ const handleLogin = () => {
 
 const showPopover = () => {
   showUserPopover.value = !showUserPopover.value
+}
+
+const signOut = () => {
+
+}
+
+const handleJump = ()=>{
+  showUserPopover.value = false
+  router.push(`/personal-info`);
 }
 </script>
 
@@ -179,13 +191,14 @@ header {
     }
 
     .user-info-popover {
-      width: 136px;
+      width: 110px;
       border-radius: 10px;
       position: absolute;
       top:60px;
-      left:40px;
+      left:46px;
       background-color: #fff;
-      z-index: 102;
+      z-index:9999;
+      box-shadow: 5px 0 12px -6px #141414;
 
       .wrapper{
         display: flex;
@@ -198,8 +211,12 @@ header {
           align-items: center;
           height: 40px;
 
+          &:hover{
+            color:  var(--vt-c-text-light-2);
+          }
+
           span{
-            padding-left: 8px;
+           padding-left: 8px;
             line-height: 36px;
           }
 

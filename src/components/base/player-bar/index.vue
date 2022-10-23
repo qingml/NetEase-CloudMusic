@@ -3,7 +3,7 @@
     <PlaySongDetail :currentTime="currentPlayTime" />
     <div class="player-block">
       <div class="player-song-info">
-        <img :src="playerStore.currentSong.picUrl" />
+        <img :src="currentSong.picUrl" />
         <div class="song-detail">
           <div class="player-song-songName ellipsis">
             {{ currentSong?.name }}
@@ -52,22 +52,46 @@
       </div>
       <div class="play-other-control">
         <div class="volume-control">
-          <i v-if="muted" class="iconfont icon-jingyin"></i>
-          <i v-else class="iconfont icon-yinliang"></i>
+          <div @click="changeMuted" div="volume-wrapper">
+            <i v-if="muted" class="iconfont icon-jingyin"></i>
+            <i v-else class="iconfont icon-yinliang"></i>
+          </div>
           <el-slider
-            :show-tooltip="false"
-            v-model="playVolumeValue"
+            :model-value="playVolumeValue"
             size="small"
             input-size="small"
+            @input="handleVolumeChange"
           />
         </div>
         <div class="playlist">
-          <i class="iconfont icon-playlistMusic"></i>
+          <i class="iconfont icon-playlistMusic" @click="showPopover"></i>
+          <div class="playlist-popover" v-if="showPlaylistPopover">
+            <div class="wrapper">
+              <div class="playlist-title">
+                <span>播放列表</span>
+              </div>
+            </div>
+            <div class="playlist-content">
+              <div
+                v-for="(item, index) in currentSongData"
+                :key="index"
+                :class="['playlist-item',index == playingIndex ? 'highlight':'' ]"
+              >
+                <span class="playlist-content__item-index">
+                  <i class="iconfont icon-bofang"></i>
+                  <span>{{ paddingZero(index + 1, 2) }}</span>
+                </span>
+                <span clas="item-name ellipsis">{{ item.name }}</span>
+                <span class="item-singer ellipsis">{{ item.singer }}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div v-if="currentSong">
         <audio
+          id="myAudio"
           class="player-audio"
           ref="audioRef"
           @timeupdate="handleUpdateTime"
@@ -81,22 +105,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { usePlayerStore } from "../../../stores/player";
 import { formatDurationPlay } from "@/utils/number";
 import { storeToRefs } from "pinia";
 import PlaySongDetail from "@/components/base/play-song-detail/index.vue";
+import { paddingZero } from "@/utils/number";
 
 const audioRef = ref<HTMLAudioElement>();
 const currentPlayTime = ref(0);
 const playProgressValue = ref(0);
-const playVolumeValue = ref(2);
+const playVolumeValue = ref(0);
 const muted = ref(false);
+const showPlaylistPopover = ref(false);
 
 const playerStore = usePlayerStore();
 
-const { isPlaying, openLyric, currentSong, currentSongData } =
-  storeToRefs(playerStore);
+const {
+  isPlaying,
+  openLyric,
+  currentSong,
+  currentSongData,
+  playingIndex,
+} = storeToRefs(playerStore);
 
 const handlePlay = () => {
   if (isPlaying?.value) {
@@ -127,6 +158,16 @@ const handleChange = (value: number) => {
   audioRef.value!.currentTime = currentSong.value?.duration! * (value / 100);
 };
 
+const handleVolumeChange = (value: number) => {
+  playVolumeValue.value = value;
+  audioRef.value!.volume = value / 100;
+  if (value == 0) {
+    muted.value = true;
+  } else {
+    muted.value = false;
+  }
+};
+
 const handleLyric = () => {
   openLyric.value = !openLyric.value;
   if (openLyric.value) {
@@ -134,21 +175,35 @@ const handleLyric = () => {
   }
 };
 
-watch(playVolumeValue, (newValue: number) => {
-  audioRef.value!.volume = newValue / 100;
-  if (newValue == 0) {
-    muted.value = true;
-  } else {
-    muted.value = false;
-  }
+onMounted(() => {
+  playVolumeValue.value = audioRef.value?.volume! * 100;
 });
+
+const changeMuted = () => {
+  muted.value = !muted.value;
+  if (muted.value) {
+    audioRef.value!.muted = true;
+    playVolumeValue.value = 0;
+  } else {
+    audioRef.value!.muted = false;
+    playVolumeValue.value = audioRef.value!.volume * 100;
+  }
+};
+
+const showPopover = () => {
+  showPlaylistPopover.value = !showPlaylistPopover.value;
+};
 </script>
 
 <style lang="less">
 .player-container {
   width: 100%;
+  position: relative;
 }
 
+i {
+  cursor: pointer;
+}
 .player-block {
   position: fixed;
   bottom: 0;
@@ -158,7 +213,7 @@ watch(playVolumeValue, (newValue: number) => {
   width: 100%;
   padding: 10px 32px;
   box-shadow: 12px 10px 8px 6px rgb(0 0 0 / 30%);
-  z-index: 9999;
+  z-index: 999;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -219,7 +274,6 @@ watch(playVolumeValue, (newValue: number) => {
 
       i {
         cursor: pointer;
-        font-size: 24px;
       }
 
       .bofang {
@@ -243,8 +297,88 @@ watch(playVolumeValue, (newValue: number) => {
     display: flex;
     flex-direction: row;
     align-items: center;
+
     .el-slider {
-      width: 80px;
+      margin-left: 8px;
+      width: 100px;
+    }
+  }
+
+  .playlist {
+    // position: relative;
+
+    i {
+      margin-left: 8px;
+    }
+
+    &-popover {
+      height: 100vh - 20px;
+      width: 400px;
+      position: absolute;
+      bottom: 40px;
+      background-color: white;
+      right: -108px;
+      box-shadow: 5px 0 12px -6px #141414;
+      padding: 20px 10px 0 10px;
+
+      .playlist-title {
+        padding: 0 0 30px 10px;
+
+        span {
+          font-weight: 500;
+          font-size: 16px;
+        }
+      }
+
+      .playlist-content {
+        width: 100%;
+        max-height: calc(100% - 120px);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        overflow-y: auto;
+        padding: 20px 0 16px 0;
+
+        &::-webkit-scrollbar{
+          width: 4px;
+        }
+
+
+        .playlist-item {
+          font-size: 14px;
+          color: #4a4a4a;
+          display: flex;
+          cursor: pointer;
+          height: 40px;
+
+          &.highlight{
+            color: red;
+          }
+
+          span {
+            line-height: 40px;
+          }
+        }
+
+        &__item-index {
+          width: 10%;
+          .icon-bofang {
+            display: none;
+          }
+        }
+        .item-name {
+          width: 60%;
+          display: flex;
+          padding-left:10px;
+          span{
+            flex: 1;
+          }
+         
+        }
+        .item-singer {
+          width: 30%;
+        }
+      }
     }
   }
 }

@@ -60,6 +60,11 @@ const router = createRouter({
       name: "search-result",
       component: () => import("../views/search-result/index.vue"),
     },
+    {
+      path: "/personal-info/" ,
+      name: "personal-info",
+      component: () => import("../views/personal/index.vue"),
+    },
   ],
 });
 

@@ -31,6 +31,7 @@ interface IPlayerState {
   lyric: string;
   /** 歌词页面状态 */
   openLyric: boolean;
+
 }
 
 export const usePlayerStore = defineStore({
@@ -50,6 +51,7 @@ export const usePlayerStore = defineStore({
     currentSong: (state): IRecommendSongItem =>
       state.playSongList[state.currentPlayIndex],
     iconValue: (state) => modeIconValues[state.mode],
+    playingIndex:(state) => state.currentPlayIndex
   },
 
   actions: {
@@ -84,8 +86,9 @@ export const usePlayerStore = defineStore({
         this.playSongList = el;
         this.setCurrentPlayIndex(index);
       } else if (el) {
+        const addNum = this.currentPlayIndex
         // todo
-        this.playSongList = [el];
+        this.playSongList = this.playSongList.splice(addNum,0,el);
         this.setCurrentPlayIndex(index);
       }
     },
