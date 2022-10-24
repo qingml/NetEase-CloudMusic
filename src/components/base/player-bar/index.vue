@@ -66,22 +66,22 @@
         <div class="playlist">
           <i class="iconfont icon-playlistMusic" @click="showPopover"></i>
           <div class="playlist-popover" v-if="showPlaylistPopover">
-            <div class="wrapper">
-              <div class="playlist-title">
-                <span>播放列表</span>
-              </div>
-            </div>
+            <div class="playlist-title">播放列表</div>
             <div class="playlist-content">
               <div
                 v-for="(item, index) in currentSongData"
                 :key="index"
-                :class="['playlist-item',index == playingIndex ? 'highlight':'' ]"
+                :class="[
+                  'playlist-item',
+                  index == playingIndex ? 'highlight' : '',
+                ]"
+                @click="() => playerStore.setCurrentPlayIndex(index)"
               >
                 <span class="playlist-content__item-index">
                   <i class="iconfont icon-bofang"></i>
                   <span>{{ paddingZero(index + 1, 2) }}</span>
                 </span>
-                <span clas="item-name ellipsis">{{ item.name }}</span>
+                <span class="item-name ellipsis">{{ item.name }}</span>
                 <span class="item-singer ellipsis">{{ item.singer }}</span>
               </div>
             </div>
@@ -111,6 +111,7 @@ import { formatDurationPlay } from "@/utils/number";
 import { storeToRefs } from "pinia";
 import PlaySongDetail from "@/components/base/play-song-detail/index.vue";
 import { paddingZero } from "@/utils/number";
+import { ElSlider } from "element-plus";
 
 const audioRef = ref<HTMLAudioElement>();
 const currentPlayTime = ref(0);
@@ -121,13 +122,8 @@ const showPlaylistPopover = ref(false);
 
 const playerStore = usePlayerStore();
 
-const {
-  isPlaying,
-  openLyric,
-  currentSong,
-  currentSongData,
-  playingIndex,
-} = storeToRefs(playerStore);
+const { isPlaying, openLyric, currentSong, currentSongData, playingIndex } =
+  storeToRefs(playerStore);
 
 const handlePlay = () => {
   if (isPlaying?.value) {
@@ -175,8 +171,11 @@ const handleLyric = () => {
   }
 };
 
-onMounted(() => {
-  playVolumeValue.value = audioRef.value?.volume! * 100;
+watch([currentSong], (newSong) => {
+  if (newSong && audioRef.value && !playVolumeValue.value) {
+    audioRef.value.volume = 0.6;
+    playVolumeValue.value = 60;
+  }
 });
 
 const changeMuted = () => {
@@ -195,7 +194,10 @@ const showPopover = () => {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+.iconfont {
+  user-select: none;
+}
 .player-container {
   width: 100%;
   position: relative;
@@ -213,7 +215,7 @@ i {
   width: 100%;
   padding: 10px 32px;
   box-shadow: 12px 10px 8px 6px rgb(0 0 0 / 30%);
-  z-index: 999;
+  z-index: 1001;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -312,51 +314,51 @@ i {
     }
 
     &-popover {
-      height: 100vh - 20px;
+      height: 560px;
       width: 400px;
-      position: absolute;
-      bottom: 40px;
+      position: fixed;
+      bottom: 68px;
       background-color: white;
-      right: -108px;
+      right: 108px;
       box-shadow: 5px 0 12px -6px #141414;
-      padding: 20px 10px 0 10px;
+      padding: 20px 10px;
+      overflow: hidden;
+      user-select: none;
 
       .playlist-title {
-        padding: 0 0 30px 10px;
+        padding: 0 0 10px 10px;
+        user-select: none;
 
-        span {
-          font-weight: 500;
-          font-size: 16px;
-        }
+        font-weight: 500;
+        font-size: 16px;
       }
 
       .playlist-content {
-        width: 100%;
-        max-height: calc(100% - 120px);
         display: flex;
         flex-direction: column;
-        overflow: hidden;
         overflow-y: auto;
-        padding: 20px 0 16px 0;
-
-        &::-webkit-scrollbar{
-          width: 4px;
-        }
-
+        height: 480px;
+        user-select: none;
 
         .playlist-item {
           font-size: 14px;
           color: #4a4a4a;
           display: flex;
           cursor: pointer;
-          height: 40px;
+          line-height: 40px;
+          justify-content: space-between;
 
-          &.highlight{
+          &.highlight {
             color: red;
           }
 
-          span {
-            line-height: 40px;
+          .item-name {
+            flex: 1;
+            padding-left: 15px;
+          }
+
+          .item-singer {
+            width: 30%;
           }
         }
 
@@ -365,18 +367,6 @@ i {
           .icon-bofang {
             display: none;
           }
-        }
-        .item-name {
-          width: 60%;
-          display: flex;
-          padding-left:10px;
-          span{
-            flex: 1;
-          }
-         
-        }
-        .item-singer {
-          width: 30%;
         }
       }
     }

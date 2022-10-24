@@ -61,7 +61,7 @@ const handleJumpDetail = (id: number | string) => {
       width: 12.5%;
       cursor: pointer;
 
-      img {
+      .el-image {
         border-radius: 8px;
         height: 136px;
       }

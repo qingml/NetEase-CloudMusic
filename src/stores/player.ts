@@ -31,7 +31,6 @@ interface IPlayerState {
   lyric: string;
   /** 歌词页面状态 */
   openLyric: boolean;
-
 }
 
 export const usePlayerStore = defineStore({
@@ -51,7 +50,7 @@ export const usePlayerStore = defineStore({
     currentSong: (state): IRecommendSongItem =>
       state.playSongList[state.currentPlayIndex],
     iconValue: (state) => modeIconValues[state.mode],
-    playingIndex:(state) => state.currentPlayIndex
+    playingIndex: (state) => state.currentPlayIndex,
   },
 
   actions: {
@@ -86,10 +85,16 @@ export const usePlayerStore = defineStore({
         this.playSongList = el;
         this.setCurrentPlayIndex(index);
       } else if (el) {
-        const addNum = this.currentPlayIndex
-        // todo
-        this.playSongList = this.playSongList.splice(addNum,0,el);
-        this.setCurrentPlayIndex(index);
+        if (this.playSongList.length > 0) {
+          let clonePlaySongList = this.playSongList;
+          clonePlaySongList.splice(this.currentPlayIndex + 1, 0, el);
+          console.log("currentPlayIndex", this.currentPlayIndex);
+          this.playSongList = clonePlaySongList;
+          this.setCurrentPlayIndex(this.currentPlayIndex + 1);
+        } else {
+          this.playSongList = [el];
+          this.setCurrentPlayIndex(index);
+        }
       }
     },
 

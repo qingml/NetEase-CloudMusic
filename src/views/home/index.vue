@@ -51,7 +51,6 @@ onMounted(async () => {
 const playerStore = usePlayerStore();
 
 const handleSongClick = (el: IRecommendSongItem) => {
-  console.log("el", el);
   playerStore.setCurrentPlaySongList(el);
 };
 </script>

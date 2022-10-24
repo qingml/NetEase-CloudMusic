@@ -13,7 +13,7 @@
       <div class="page-right">
         <h3>
           {{ currentSong?.name }}
-          <i class="iconfont icon-jiantouxia"></i>
+          <i class="iconfont icon-jiantouxia" @click="openLyric = false"></i>
         </h3>
         <p>{{ currentSong?.singer }} - {{ currentSong?.name }}</p>
         <div>

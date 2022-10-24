@@ -4,27 +4,30 @@
       loop
       grabCursor
       centeredSlides
-      :effect="'coverflow'"
-      :initialSlide="3"
-      :slidesPerView="2"
       :autoplay="{
         delay: 3000,
         disableOnInteraction: false, //用户操作之后是否停止自动轮播默认true
       }"
+      :effect="'coverflow'"
+      :initialSlide="3"
+      :slidesPerView="2"
       :coverflowEffect="{
-        rotate: 30,
+        rotate: 26,
         stretch: 0,
-        depth: 80,
+        depth: 60,
         modifier: 1,
         slideShadows: true,
       }"
-      :pagination="{ clickable: true }"
+      :pagination="{
+        clickable: true,
+        bulletActiveClass: 'swiper-pagination-active',
+      }"
       :modules="modules"
       class="swiper-container"
     >
       <SwiperSlide v-for="(item, idx) in data" :key="idx">
         <div class="banner-item">
-          <ElImage :src="item.imageUrl" lazy />
+          <ElImage :src="item.imageUrl" />
           <span class="banner-item__type">{{ item.typeTitle }}</span>
         </div>
       </SwiperSlide>
@@ -54,7 +57,7 @@ defineProps({
   },
 });
 
-const modules = [EffectCoverflow, Pagination, Autoplay, EffectFade];
+const modules = [EffectFade, EffectCoverflow, Pagination, Autoplay];
 </script>
 
 <style lang="less" scoped>
@@ -69,14 +72,19 @@ const modules = [EffectCoverflow, Pagination, Autoplay, EffectFade];
   background-position: center;
   background-size: cover;
   width: 550px;
-  height: 200px;
+  height: 100%;
+
+  .el-image {
+    display: block;
+    border-radius: 8px;
+  }
 }
 
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 220px;
-  border-radius: 8px;
+.swiper-container {
+  :deep(.swiper-pagination-active) {
+    background-color: var(--color-text-red);
+    opacity: 1;
+  }
 }
 
 .banner-item {

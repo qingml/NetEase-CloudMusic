@@ -77,7 +77,7 @@ const handlePlayCurrent = (current) => {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .playlist {
   &__container {
     background-color: #fff;
@@ -148,7 +148,7 @@ const handlePlayCurrent = (current) => {
           flex: 1;
         }
 
-        img {
+        .el-image {
           width: 35px;
           height: 35px;
           border-radius: 5px;
