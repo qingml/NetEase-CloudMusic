@@ -114,7 +114,6 @@ const getHotSearchTags = async () => {
   try {
     const resp = await querySearchHotTag();
     if (resp.code === 200) {
-      console.log("resp.result, ", resp.result);
       hotTags.value = resp.result?.hots;
     }
   } catch (error) {

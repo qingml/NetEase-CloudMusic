@@ -7,9 +7,8 @@ export const getPlaylistDetail = (id: string, s = 100) => {
 
 /** 获取歌单详情列表 */
 export const getPlayList = (ids: string[]) => {
-  return postAjax(`/song/detail?timestamp=${new Date().getTime()}`, {
-    // @ts-ignore
-    ids: ids.join(","),
+  return postAjax(`/song/detail`, {
+    data: { ids: ids.join(","), timestamp: new Date().getTime() },
   });
 };
 /** 获取歌单详订阅者 */

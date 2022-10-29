@@ -49,7 +49,7 @@ import { useRouter, onBeforeRouteUpdate } from "vue-router";
 import { ElInput, ElTabPane, ElTabs } from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 
-import { getSearchSongDetail, getSongPlayList } from "@/api/search-result";
+import { getSearchSongDetail } from "@/api/search-result";
 
 import Playlist from "@/components/base/playlist/index.vue";
 import SimSingers from "@/components/base/singers/index.vue";
@@ -60,6 +60,7 @@ import CuratePlaylist from "@/components/base/curate-playlist/index.vue";
 import { formatSong } from "@/utils/song";
 import { useSearchStore } from "@/stores/search";
 import { formatMv } from "@/utils/mv";
+import { getPlayList } from "@/api/playlist-detail";
 
 const { currentRoute } = useRouter();
 const router = useRouter();
@@ -79,7 +80,7 @@ const querySearchResultData = async (keyword: any) => {
   const playListRes = await getSearchSongDetail(keyword, 1);
   const ids = new Array();
   playListRes?.result?.songs.map((it: any) => ids.push(it.id));
-  const songPlaylistRes = await getSongPlayList(ids);
+  const songPlaylistRes = await getPlayList(ids);
   playListData.value = songPlaylistRes?.songs.map(formatSong);
 };
 

@@ -1,12 +1,12 @@
 <template>
   <div class="mv-detail-info__container">
-    <div class="mv-detail-info-vedio">
+    <div class="mv-detail-info-video">
       <video
         autoplay="autoplay"
         :src="infoData.url"
         controls="controls"
         controlslist="nodownload"
-        class="vedio"
+        class="video"
       ></video>
     </div>
     <div class="mv-detail-info-descri">
@@ -130,19 +130,19 @@ defineProps({
     }
   }
 
-  &-vedio {
+  &-video {
     position: relative;
-    height: 450px;
+    height: 505px;
     width: 100%;
 
-    .vedio {
-      object-fit: fill;
+    .video {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background-color: #000;
+      object-fit: contain;
     }
   }
 

@@ -9,7 +9,6 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-instance.defaults.responseType = "json";
 instance.defaults.withCredentials = true;
 instance.defaults.transformRequest = [
   (data) => {
@@ -79,15 +78,10 @@ export const getAjax = async <T = any>(
 // todo 处理全局请求loading
 export const postAjax = async <T = any>(
   url: string,
-  config: IAjaxConfig
+  config?: IAjaxConfig
 ): Promise<T> => {
   try {
-    const resp = await instance.post(url, {
-      ...config,
-      headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-      },
-    });
+    const resp = await instance.post(url, config?.data);
     return resp as unknown as T;
   } catch (error) {
     // todo

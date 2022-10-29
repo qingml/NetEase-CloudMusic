@@ -8,7 +8,7 @@
     >
       <ElImage
         class="recommend-singers__block--item-img"
-        :src="item.img1v1Url + '?param=200y200'"
+        :src="item.img1v1Url + '?param=100y100'"
         lazy
       />
       <div class="recommend-singers__block--item-info">

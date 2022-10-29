@@ -20,7 +20,10 @@
           >
           <div v-else class="top-bar__user-info">
             <img :src="loginStore.userInfo?.avatarUrl" />
-            <div class="user-nickname" @click="showPopover">
+            <div
+              class="user-nickname"
+              @click="showUserPopover = !showUserPopover"
+            >
               <span>{{ loginStore.userInfo?.nickname }}</span>
               <i class="iconfont icon-jiantouxia" />
             </div>
@@ -30,16 +33,11 @@
                   <i class="iconfont icon-gerenzhuye" />
                   <span>个人主页</span>
                 </div>
-                <div>
-                  <i class="iconfont icon-gerenshezhi" />
-                  <span>个人设置</span> 
-                </div>
-                <div @click="signOut">
+                <div @click="handleSignOut">
                   <i class="iconfont icon-tuichudenglu" />
-                  <span>退出登录</span> 
+                  <span>退出登录</span>
                 </div>
               </div>
-                
             </div>
           </div>
         </div>
@@ -54,6 +52,7 @@ import { RouterLink, useRoute, useRouter } from "vue-router";
 import { onMounted, PropType, ref } from "vue";
 import { useLoginStore } from "@/stores/login";
 import SearchOverLay from "@/components/base/search-overlay/index.vue";
+import { logout } from "@/api/login";
 
 interface IMenuItem {
   path: string;
@@ -67,18 +66,17 @@ defineProps({
   },
 });
 
+const loginStore = useLoginStore();
+const router = useRouter();
+const { path } = useRoute();
+
 const searchOverlayVisible = ref(false);
-const showUserPopover = ref(false)
+const showUserPopover = ref(false);
+
 const handleSearchClick = () => {
   searchOverlayVisible.value = true;
 };
 
-
-
-const router = useRouter();
-const { path } = useRoute();
-
-const loginStore = useLoginStore();
 onMounted(async () => {
   loginStore.queryUserInfo();
 });
@@ -92,18 +90,18 @@ const handleLogin = () => {
   });
 };
 
-const showPopover = () => {
-  showUserPopover.value = !showUserPopover.value
-}
+const handleSignOut = () => {
+  logout();
+  loginStore.setLoginStatus(false);
 
-const signOut = () => {
+  // document.cookie =
+  //   "MUSIC_U=''; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+};
 
-}
-
-const handleJump = ()=>{
-  showUserPopover.value = false
+const handleJump = () => {
+  showUserPopover.value = false;
   router.push(`/personal-info/${loginStore?.userInfo?.userId}`);
-}
+};
 </script>
 
 <style scoped lang="less">
@@ -185,7 +183,7 @@ header {
       border-radius: 50%;
     }
 
-    i{
+    i {
       margin-left: 6px;
       font-size: small;
     }
@@ -194,33 +192,33 @@ header {
       width: 110px;
       border-radius: 10px;
       position: absolute;
-      top:60px;
-      left:46px;
+      top: 60px;
+      left: 46px;
       background-color: #fff;
-      z-index:9999;
+      z-index: 9999;
       box-shadow: 5px 0 12px -6px #141414;
 
-      .wrapper{
+      .wrapper {
         display: flex;
         flex-direction: column;
 
-        div{
-           display: flex;
+        div {
+          display: flex;
           flex-direction: row;
           justify-content: center;
           align-items: center;
           height: 40px;
 
-          &:hover{
-            color:  var(--vt-c-text-light-2);
+          &:hover {
+            color: var(--vt-c-text-light-2);
           }
 
-          span{
-           padding-left: 8px;
+          span {
+            padding-left: 8px;
             line-height: 36px;
           }
 
-          i{
+          i {
             font-size: larger;
           }
         }

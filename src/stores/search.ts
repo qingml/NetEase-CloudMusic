@@ -5,7 +5,6 @@ interface ISearchState {
   searchHistoryTag: any[];
   /** 当前搜索关键词 */
   searchWord: string;
-
 }
 
 export const useSearchStore = defineStore({
@@ -13,40 +12,42 @@ export const useSearchStore = defineStore({
 
   state: (): ISearchState => ({
     searchHistoryTag: JSON.parse(JSON.stringify([])),
-    searchWord: '',
+    searchWord: "",
   }),
 
   getters: {
-    currentSearchHistoryTagData: (state:any) =>state.searchHistoryTag,
+    currentSearchHistoryTagData: (state: any) => state.searchHistoryTag,
     currentSearchWord: (state) => state.searchWord,
   },
 
   actions: {
-    async getcurrentSearchHistoryTag(){
-      if(window.localStorage.searchHistory) {
-       this.searchHistoryTag= JSON.parse(window.localStorage.searchHistory)    
-      } 
+    async getcurrentSearchHistoryTag() {
+      if (window.localStorage.searchHistory) {
+        this.searchHistoryTag = JSON.parse(window.localStorage.searchHistory);
+      }
     },
-    
 
-    setcurrentSearchHistoryTag (keyword:string) {
+    setcurrentSearchHistoryTag(keyword: string) {
       if (!this.searchHistoryTag.includes(keyword)) {
-          this.searchHistoryTag.push(keyword)
-        if(window.localStorage.searchHistory) {
-          localStorage.searchHistory = JSON.stringify(this.searchHistoryTag)
+        this.searchHistoryTag.push(keyword);
+        if (window.localStorage.searchHistory) {
+          localStorage.searchHistory = JSON.stringify(this.searchHistoryTag);
         } else {
-          window.localStorage.setItem('searchHistory',JSON.stringify(this.searchHistoryTag))
+          window.localStorage.setItem(
+            "searchHistory",
+            JSON.stringify(this.searchHistoryTag)
+          );
         }
       }
     },
 
-     setcurrentSearchword(keyword:string) {
-      this.searchWord = keyword
+    setcurrentSearchword(keyword: string) {
+      this.searchWord = keyword;
     },
-     clearSearchHistoryTag () {
+
+    clearSearchHistoryTag() {
       this.searchHistoryTag = [];
-      window.localStorage.setItem("searchHistory",JSON.stringify([])
-  );
+      window.localStorage.setItem("searchHistory", JSON.stringify([]));
     },
-  } 
-})
+  },
+});

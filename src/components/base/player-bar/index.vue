@@ -2,8 +2,8 @@
   <div class="player-container" v-if="currentSongData.length">
     <PlaySongDetail :currentTime="currentPlayTime" />
     <div class="player-block">
-      <div class="player-song-info">
-        <img :src="currentSong.picUrl" />
+      <div class="player-song-info" @click="handleLyric">
+        <img :src="currentSong.picUrl + '?param=300y300'" />
         <div class="song-detail">
           <div class="player-song-songName ellipsis">
             {{ currentSong?.name }}
@@ -16,7 +16,7 @@
       <div class="play-song-control">
         <div class="play-song-operator">
           <div class="play-song-operator-wrapper">
-            <span @click="playerStore.setModeVaule()">
+            <span @click="playerStore.setModeVaule">
               <i :class="['iconfont', playerStore.iconValue]"></i>
             </span>
             <span @click="playerStore.toLast">
@@ -38,12 +38,13 @@
           <div class="song-currentTime">
             {{ formatDurationPlay(currentPlayTime) }}
           </div>
-          <el-slider
-            :show-tooltip="false"
-            :model-value="playProgressValue"
+          <ElSlider
             size="small"
             input-size="small"
-            @input="handleChange"
+            :show-tooltip="false"
+            v-model="playProgressValue"
+            @change="handleChangePlayTime"
+            @input="manualControl = true"
           />
           <div class="song-totolTime">
             {{ formatDurationPlay(currentSong?.duration!) }}
@@ -56,7 +57,7 @@
             <i v-if="muted" class="iconfont icon-jingyin"></i>
             <i v-else class="iconfont icon-yinliang"></i>
           </div>
-          <el-slider
+          <ElSlider
             :model-value="playVolumeValue"
             size="small"
             input-size="small"
@@ -103,6 +104,7 @@
           class="player-audio"
           ref="audioRef"
           @timeupdate="handleUpdateTime"
+          @play="handleAudioPlay"
           autoplay
           controls
           :src="currentSong?.playUrl"
@@ -120,6 +122,7 @@ import { storeToRefs } from "pinia";
 import PlaySongDetail from "@/components/base/play-song-detail/index.vue";
 import { paddingZero } from "@/utils/number";
 import { ElSlider } from "element-plus";
+import { Arrayable } from "element-plus/es/utils";
 
 const audioRef = ref<HTMLAudioElement>();
 const currentPlayTime = ref(0);
@@ -127,6 +130,7 @@ const playProgressValue = ref(0);
 const playVolumeValue = ref(0);
 const muted = ref(false);
 const showPlaylistPopover = ref(false);
+const manualControl = ref(false);
 
 const playerStore = usePlayerStore();
 
@@ -148,24 +152,27 @@ const handlePlay = () => {
 
 const handleUpdateTime = () => {
   currentPlayTime.value = audioRef.value?.currentTime || 0;
+  if (!manualControl.value) {
+    playProgressValue.value = Math.floor(
+      (audioRef.value?.currentTime! / currentSong.value?.duration!) * 100
+    );
 
-  playProgressValue.value = Math.floor(
-    (audioRef.value?.currentTime! / currentSong.value?.duration!) * 100
-  );
-
-  if (playProgressValue.value === 100) {
-    playerStore.toNext(true);
+    if (playProgressValue.value === 100) {
+      playerStore.toNext(true);
+    }
   }
 };
 
-const handleChange = (value: any) => {
-  playProgressValue.value = value;
-  audioRef.value!.currentTime = currentSong.value?.duration! * (value / 100);
+const handleChangePlayTime = (value: Arrayable<number>) => {
+  playProgressValue.value = value as number;
+  audioRef.value!.currentTime =
+    currentSong.value?.duration! * ((value as number) / 100);
+  manualControl.value = false;
 };
 
-const handleVolumeChange = (value: any) => {
-  playVolumeValue.value = value;
-  audioRef.value!.volume = value / 100;
+const handleVolumeChange = (value: Arrayable<number>) => {
+  playVolumeValue.value = value as number;
+  audioRef.value!.volume = (value as number) / 100;
   if (value == 0) {
     muted.value = true;
   } else {
@@ -182,7 +189,7 @@ const handleLyric = () => {
 
 watch([currentSong], (newSong) => {
   if (newSong && audioRef.value && !playVolumeValue.value) {
-    audioRef.value.volume = 0.4;
+    audioRef.value.volume = 0.36;
     playVolumeValue.value = 40;
   }
 });
@@ -202,15 +209,20 @@ const showPopover = () => {
   showPlaylistPopover.value = !showPlaylistPopover.value;
 };
 
-onMounted(async () => {
+onMounted(() => {
   playerStore?.getPlayList();
-  audioRef.value?.pause();
 });
 
 const handleResetPlayList = () => {
   playerStore?.setCurrentPlaySongList([]);
+  showPlaylistPopover.value = false;
 };
 
+const handleAudioPlay = () => {
+  if (!isPlaying.value) {
+    audioRef.value?.pause();
+  }
+};
 </script>
 
 <style lang="less" scoped>
@@ -234,7 +246,7 @@ i {
   width: 100%;
   padding: 10px 32px;
   box-shadow: 12px 10px 8px 6px rgb(0 0 0 / 30%);
-  z-index: 1001;
+  z-index: 9999;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -257,6 +269,7 @@ i {
   align-items: center;
   padding-top: 4px;
   width: 180px;
+  cursor: pointer;
 
   img {
     width: 60px;

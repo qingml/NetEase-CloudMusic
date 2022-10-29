@@ -10,10 +10,13 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@types/js-cookie": "^3.0.2",
     "@types/qs": "^6.9.7",
     "axios": "^0.27.2",
     "dayjs": "^1.11.5",
     "element-plus": "^2.2.13",
+    "js-cookie": "^3.0.1",
+    "lodash": "^4.17.21",
     "pinia": "^2.0.17",
     "qs": "^6.11.0",
     "sass": "^1.54.9",
@@ -23,6 +26,7 @@
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
+    "@types/js-cookie": "^3.0.1",
     "@types/lyric-parser": "^1.0.2",
     "@types/node": "^16.11.47",
     "@vitejs/plugin-vue": "^3.0.1",

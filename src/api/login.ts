@@ -1,4 +1,4 @@
-import { getAjax } from "./index";
+import { getAjax, postAjax } from "./index";
 
 interface LoginCellphone {
   phone: string;
@@ -7,7 +7,9 @@ interface LoginCellphone {
 
 /** 手机密码登陆 */
 export const loginCellphone = (params: LoginCellphone) => {
-  return getAjax("/login/cellphone", { params });
+  return postAjax("/login/cellphone", {
+    data: { ...params },
+  });
 };
 
 export const getUserInfo = () => {
@@ -16,4 +18,8 @@ export const getUserInfo = () => {
       timestamp: new Date().getTime(),
     },
   });
+};
+
+export const logout = () => {
+  return postAjax("/logout");
 };

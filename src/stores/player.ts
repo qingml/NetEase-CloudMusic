@@ -1,6 +1,5 @@
-import { getSongDetailLyric } from "./../api/player";
 import { defineStore } from "pinia";
-import { getSongDetailUrl } from "@/api/player";
+import { getSongDetailUrl, getSongDetailLyric } from "@/api/player";
 import { IRecommendSongItem } from "@/components/base/song-list/type";
 
 enum ModeEnum {
@@ -56,10 +55,10 @@ export const usePlayerStore = defineStore({
   actions: {
     async getSongDetailUrl(id: number) {
       try {
-        const resp = await getSongDetailUrl(id);
+        const { data } = await getSongDetailUrl(id);
         this.playSongList = this.currentSongData.map((it) => ({
           ...it,
-          playUrl: it.id === id ? resp?.data?.[0].url : null,
+          playUrl: it.id === id ? data?.[0].url : null,
         }));
 
         window.localStorage.setItem(
@@ -95,6 +94,7 @@ export const usePlayerStore = defineStore({
     ) {
       if (Array.isArray(el)) {
         this.playSongList = el;
+
         this.setCurrentPlayIndex(index);
       } else if (el) {
         if (this.playSongList.length > 0) {
@@ -110,15 +110,19 @@ export const usePlayerStore = defineStore({
     },
 
     setCurrentPlayIndex(index: number) {
-      if (this.currentPlayIndex && index === this.currentPlayIndex) return;
+      if (this.currentPlayIndex !== 0 && index === this.currentPlayIndex) {
+        return;
+      }
+
       this.currentPlayIndex = index;
+
       if (this.currentSong.playUrl) {
         this.isPlaying = true;
+        return;
       }
 
       if (this.currentSongData.length > index) {
         this.getSongDetailUrl(this.currentSongData[index].id);
-       
       }
 
       if (this.openLyric) {
@@ -135,7 +139,6 @@ export const usePlayerStore = defineStore({
     },
 
     toNext(isAutoNext: boolean) {
-      console.log("this.mode",this.mode)
       if (isAutoNext && this.mode == ModeEnum.SINGLE) {
         this.setCurrentPlayIndex(this.currentPlayIndex);
       }

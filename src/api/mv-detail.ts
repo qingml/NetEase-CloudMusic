@@ -1,4 +1,4 @@
-import { getAjax, postAjax } from ".";
+import { getAjax } from ".";
 
 /** 获取mv详情和资源 */
 export const getMVDetailInfo = (id: string) => {
