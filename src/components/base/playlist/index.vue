@@ -29,7 +29,7 @@
           <span>{{ paddingZero(index + 1, 2) }}</span>
         </span>
         <span class="playlist-content__item-song">
-          <ElImage :src="item.picUrl" lazy />
+          <ElImage :src="item.picUrl + '?param=80y80'" lazy />
           <span class="ellipsis" :title="item.name">{{ item.name }}</span>
         </span>
         <span class="playlist-content__item-singer ellipsis">{{

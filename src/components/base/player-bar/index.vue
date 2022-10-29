@@ -68,7 +68,10 @@
           <div class="playlist-popover" v-if="showPlaylistPopover">
             <div class="playlist-title">
               播放列表
-              <i class="iconfont icon-qingkong" @click="emptyPlaylist"></i>
+              <i
+                class="iconfont icon-qingkong"
+                @click="handleResetPlayList"
+              ></i>
             </div>
             <div class="playlist-content">
               <el-scrollbar>
@@ -110,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import { usePlayerStore } from "../../../stores/player";
 import { formatDurationPlay } from "@/utils/number";
 import { storeToRefs } from "pinia";
@@ -130,15 +133,16 @@ const playerStore = usePlayerStore();
 const { isPlaying, openLyric, currentSong, currentSongData, playingIndex } =
   storeToRefs(playerStore);
 
-const handlePlay = () => {
-  if (isPlaying?.value) {
+watch(isPlaying, (newVal) => {
+  if (!newVal) {
     audioRef?.value?.pause();
   } else {
     audioRef?.value?.play();
   }
+});
 
+const handlePlay = () => {
   playerStore.setPlayStatus();
-
   currentPlayTime.value = audioRef.value?.currentTime || 0;
 };
 
@@ -154,12 +158,12 @@ const handleUpdateTime = () => {
   }
 };
 
-const handleChange = (value: number) => {
+const handleChange = (value: any) => {
   playProgressValue.value = value;
   audioRef.value!.currentTime = currentSong.value?.duration! * (value / 100);
 };
 
-const handleVolumeChange = (value: number) => {
+const handleVolumeChange = (value: any) => {
   playVolumeValue.value = value;
   audioRef.value!.volume = value / 100;
   if (value == 0) {
@@ -200,12 +204,13 @@ const showPopover = () => {
 
 onMounted(async () => {
   playerStore?.getPlayList();
-
+  audioRef.value?.pause();
 });
 
-const emptyPlaylist = () => {
-  playerStore?.setCurrentPlaySongList(null)
+const handleResetPlayList = () => {
+  playerStore?.setCurrentPlaySongList([]);
 };
+
 </script>
 
 <style lang="less" scoped>
@@ -362,13 +367,16 @@ i {
           display: flex;
           cursor: pointer;
           line-height: 40px;
+          height: 40px;
           justify-content: space-between;
 
           &:hover {
             .item-index {
               .icon-bofang {
                 display: inline-block;
+                margin: 0;
               }
+
               span {
                 display: none;
               }

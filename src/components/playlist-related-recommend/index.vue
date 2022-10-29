@@ -11,7 +11,7 @@
         @click="() => handleJumpDetail(item.id)"
       >
         <ElImage
-          :src="item.coverImgUrl"
+          :src="item.coverImgUrl + '?param=100y100'"
           class="playlist-related-recommend__block--item-img"
           lazy
         />

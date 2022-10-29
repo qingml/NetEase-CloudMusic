@@ -61,15 +61,21 @@ export const usePlayerStore = defineStore({
           ...it,
           playUrl: it.id === id ? resp?.data?.[0].url : null,
         }));
+
+        window.localStorage.setItem(
+          "playList",
+          JSON.stringify(this.playSongList)
+        );
+
         this.isPlaying = true;
       } catch (error) {
         console.log("error", error);
       }
     },
 
-     getPlayList() {
-      if(window.localStorage.playList) {
-        this.playSongList = JSON.parse(window.localStorage.playList)
+    getPlayList() {
+      if (window.localStorage.playList) {
+        this.playSongList = JSON.parse(window.localStorage.playList);
       }
     },
 
@@ -87,9 +93,6 @@ export const usePlayerStore = defineStore({
       el: IRecommendSongItem | IRecommendSongItem[],
       index = 0
     ) {
-      if(el == null) {
-        this.playSongList = []
-      }
       if (Array.isArray(el)) {
         this.playSongList = el;
         this.setCurrentPlayIndex(index);
@@ -97,7 +100,6 @@ export const usePlayerStore = defineStore({
         if (this.playSongList.length > 0) {
           let clonePlaySongList = this.playSongList;
           clonePlaySongList.splice(this.currentPlayIndex + 1, 0, el);
-          console.log("currentPlayIndex", this.currentPlayIndex);
           this.playSongList = clonePlaySongList;
           this.setCurrentPlayIndex(this.currentPlayIndex + 1);
         } else {
@@ -105,12 +107,14 @@ export const usePlayerStore = defineStore({
           this.setCurrentPlayIndex(index);
         }
       }
-      window.localStorage.setItem('playList',JSON.stringify(this.playSongList))
     },
 
     setCurrentPlayIndex(index: number) {
       if (this.currentPlayIndex && index === this.currentPlayIndex) return;
       this.currentPlayIndex = index;
+      if (this.currentSong.playUrl) {
+        this.isPlaying = true;
+      }
 
       if (this.currentSongData.length > index) {
         this.getSongDetailUrl(this.currentSongData[index].id);
@@ -122,7 +126,11 @@ export const usePlayerStore = defineStore({
     },
 
     setPlayStatus() {
-      this.isPlaying = !this.isPlaying;
+      if (this.isPlaying) {
+        this.isPlaying = false;
+      } else {
+        this.setCurrentPlayIndex(this.currentPlayIndex || 0);
+      }
     },
 
     toNext(isAutoNext: boolean) {

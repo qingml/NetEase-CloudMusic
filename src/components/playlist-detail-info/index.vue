@@ -1,14 +1,14 @@
 <template>
   <div class="playlist-detail-info__container">
     <div class="playlist-detail-info__img mr-32">
-      <ElImage :src="data.coverImgUrl" lazy />
+      <ElImage :src="data.coverImgUrl + '?param=260y260'" lazy />
     </div>
     <div class="playlist-detail-info__content">
       <div class="playlist-detail-info__content-title">{{ data.name }}</div>
       <div class="playlist-detail-info__content-creater">
         <ElImage
           class="playlist-detail-info__content-avator mr-16"
-          :src="data?.creator?.avatarUrl"
+          :src="data?.creator?.avatarUrl + '?param=100y100'"
           lazy
         />
         <span v-if="isRed" class="mr-32" style="color: red">

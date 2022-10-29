@@ -8,8 +8,8 @@
     >
       <ElImage
         class="recommend-singers__block--item-img"
-        :src="item.img1v1Url"
-         lazy
+        :src="item.img1v1Url + '?param=200y200'"
+        lazy
       />
       <div class="recommend-singers__block--item-info">
         <div
@@ -42,7 +42,7 @@ defineProps({
 });
 
 const handleJumpSingerDeatil = (id: number | string) => {
-  console.log('jump')
+  console.log("jump");
   router.push(`/singerlist-detail/${id}`);
 };
 </script>

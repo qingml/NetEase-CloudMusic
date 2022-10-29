@@ -9,7 +9,7 @@
       >
         <div class="paly">
           <img
-            :src="item.cover"
+            :src="item.cover + '?param=150y150'"
             class="playlist-related-recommend__block--item-img"
           />
           <div class="middle">

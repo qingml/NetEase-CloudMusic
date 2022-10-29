@@ -15,7 +15,7 @@
           class="playlist-detail-subscribers__block--item-img"
           :title="item.nickname"
         >
-          <ElImage :src="item.avatarUrl" lazy />
+          <ElImage :src="item.avatarUrl + '?param=100y100'" lazy />
         </div>
       </div>
     </div>

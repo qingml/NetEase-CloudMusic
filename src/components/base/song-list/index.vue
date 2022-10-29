@@ -9,7 +9,7 @@
         class="recommend-song__block--item-box"
         @click="() => handleClick(item)"
       >
-        <ElImage :src="item.picUrl" class="recommend-song__block--item-pic" lazy />
+        <ElImage :src="item.picUrl + '?param=200y200'" class="recommend-song__block--item-pic" lazy />
         <div class="recommend-song__block--item-content">
           <div class="recommend-song__block--item-info">
             <div class="recommend-song__block--item-title">

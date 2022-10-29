@@ -7,7 +7,7 @@
       @click="handleJumpDetail(item.id)"
     >
       <div class="album__block--item-wrap">
-        <img :src="item.blurPicUrl" />
+        <img :src="item.blurPicUrl + '?param=300y300'" />
         <div class="album__block--item-top">
           <i class="iconfont icon-bofang"></i>
           <span> {{ item.subType }}</span>

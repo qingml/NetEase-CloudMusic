@@ -8,7 +8,7 @@
         class="comments-detail__block--item"
       >
         <ElImage
-          :src="item.user.avatarUrl"
+          :src="item.user.avatarUrl + '?param=100y100'"
           class="comments-detail__block--item-img"
           lazy
         />
