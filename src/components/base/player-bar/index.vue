@@ -66,24 +66,29 @@
         <div class="playlist">
           <i class="iconfont icon-playlistMusic" @click="showPopover"></i>
           <div class="playlist-popover" v-if="showPlaylistPopover">
-            <div class="playlist-title">播放列表</div>
+            <div class="playlist-title">
+              播放列表
+              <i class="iconfont icon-qingkong" @click="emptyPlaylist"></i>
+            </div>
             <div class="playlist-content">
-              <div
-                v-for="(item, index) in currentSongData"
-                :key="index"
-                :class="[
-                  'playlist-item',
-                  index == playingIndex ? 'highlight' : '',
-                ]"
-                @click="() => playerStore.setCurrentPlayIndex(index)"
-              >
-                <span class="playlist-content__item-index">
-                  <i class="iconfont icon-bofang"></i>
-                  <span>{{ paddingZero(index + 1, 2) }}</span>
-                </span>
-                <span class="item-name ellipsis">{{ item.name }}</span>
-                <span class="item-singer ellipsis">{{ item.singer }}</span>
-              </div>
+              <el-scrollbar>
+                <div
+                  v-for="(item, index) in currentSongData"
+                  :key="index"
+                  :class="[
+                    'playlist-item',
+                    index == playingIndex ? 'highlight' : '',
+                  ]"
+                  @click="() => playerStore.setCurrentPlayIndex(index)"
+                >
+                  <span class="item-index">
+                    <i class="iconfont icon-bofang"></i>
+                    <span class="index">{{ paddingZero(index + 1, 2) }}</span>
+                  </span>
+                  <span class="item-name ellipsis">{{ item.name }}</span>
+                  <span class="item-singer ellipsis">{{ item.singer }}</span>
+                </div>
+              </el-scrollbar>
             </div>
           </div>
         </div>
@@ -173,8 +178,8 @@ const handleLyric = () => {
 
 watch([currentSong], (newSong) => {
   if (newSong && audioRef.value && !playVolumeValue.value) {
-    audioRef.value.volume = 0.6;
-    playVolumeValue.value = 60;
+    audioRef.value.volume = 0.4;
+    playVolumeValue.value = 40;
   }
 });
 
@@ -191,6 +196,15 @@ const changeMuted = () => {
 
 const showPopover = () => {
   showPlaylistPopover.value = !showPlaylistPopover.value;
+};
+
+onMounted(async () => {
+  playerStore?.getPlayList();
+
+});
+
+const emptyPlaylist = () => {
+  playerStore?.setCurrentPlaySongList(null)
 };
 </script>
 
@@ -317,28 +331,30 @@ i {
       height: 560px;
       width: 400px;
       position: fixed;
-      bottom: 68px;
+      bottom: 58px;
       background-color: white;
-      right: 108px;
+      right: 0px;
       box-shadow: 5px 0 12px -6px #141414;
-      padding: 20px 10px;
+      padding: 10px 10px;
       overflow: hidden;
       user-select: none;
 
       .playlist-title {
-        padding: 0 0 10px 10px;
+        padding: 0 0 20px 10px;
         user-select: none;
-
         font-weight: 500;
         font-size: 16px;
+
+        i {
+          float: right;
+          margin-right: 10px;
+        }
       }
 
       .playlist-content {
         display: flex;
         flex-direction: column;
-        overflow-y: auto;
         height: 480px;
-        user-select: none;
 
         .playlist-item {
           font-size: 14px;
@@ -348,8 +364,19 @@ i {
           line-height: 40px;
           justify-content: space-between;
 
+          &:hover {
+            .item-index {
+              .icon-bofang {
+                display: inline-block;
+              }
+              span {
+                display: none;
+              }
+            }
+          }
+
           &.highlight {
-            color: red;
+            color: var(--vt-c-text-light-2);
           }
 
           .item-name {
@@ -360,12 +387,14 @@ i {
           .item-singer {
             width: 30%;
           }
-        }
 
-        &__item-index {
-          width: 10%;
-          .icon-bofang {
-            display: none;
+          .item-index {
+            width: 10%;
+            text-align: center;
+
+            .icon-bofang {
+              display: none;
+            }
           }
         }
       }

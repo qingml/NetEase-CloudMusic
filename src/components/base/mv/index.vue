@@ -41,6 +41,7 @@ defineProps({
 });
 
 const handleJumpDetail = (id) => {
+
   router.push(`/mv-detail/${id}`);
 };
 </script>

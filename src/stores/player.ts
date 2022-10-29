@@ -67,6 +67,12 @@ export const usePlayerStore = defineStore({
       }
     },
 
+     getPlayList() {
+      if(window.localStorage.playList) {
+        this.playSongList = JSON.parse(window.localStorage.playList)
+      }
+    },
+
     async getSongDetailLyric(id: number) {
       try {
         const response = await getSongDetailLyric(id);
@@ -81,6 +87,9 @@ export const usePlayerStore = defineStore({
       el: IRecommendSongItem | IRecommendSongItem[],
       index = 0
     ) {
+      if(el == null) {
+        this.playSongList = []
+      }
       if (Array.isArray(el)) {
         this.playSongList = el;
         this.setCurrentPlayIndex(index);
@@ -96,6 +105,7 @@ export const usePlayerStore = defineStore({
           this.setCurrentPlayIndex(index);
         }
       }
+      window.localStorage.setItem('playList',JSON.stringify(this.playSongList))
     },
 
     setCurrentPlayIndex(index: number) {

@@ -46,10 +46,10 @@
 import { onMounted, ref } from "vue";
 import { useRouter, onBeforeRouteUpdate } from "vue-router";
 
-import { ElInput } from "element-plus";
+import { ElInput, ElTabPane, ElTabs } from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 
-import { getPlayListDetail, getSearchSongDetail } from "@/api/search-result";
+import { getSearchSongDetail, getSongPlayList } from "@/api/search-result";
 
 import Playlist from "@/components/base/playlist/index.vue";
 import SimSingers from "@/components/base/singers/index.vue";
@@ -77,9 +77,10 @@ const searchWord = ref(keyword);
 
 const querySearchResultData = async (keyword: any) => {
   const playListRes = await getSearchSongDetail(keyword, 1);
-
-  const playListDetailRes = await getPlayListDetail();
-
+  const ids = new Array();
+  playListRes?.result?.songs.map((it: any) => ids.push(it.id));
+  const songPlaylistRes = await getSongPlayList(ids);
+  playListData.value = songPlaylistRes?.songs.map(formatSong);
 };
 
 const querySearchSingerData = async (keyword: any) => {
@@ -140,6 +141,27 @@ const requestOtherData = () => {
 </script>
 
 <style lang="less" scoped>
+:deep(.el-tabs__nav-wrap::after) {
+  display: none;
+}
+
+:deep(.el-tabs__nav) {
+  width: 100%;
+  float: none;
+  display: flex;
+
+  .el-tabs__item.is-active {
+    color: var(--color-text-red);
+  }
+
+  .el-tabs__item:hover {
+    color: var(--color-text-red);
+  }
+
+  .el-tabs__active-bar {
+    background-color: var(--color-text-red);
+  }
+}
 .search-result-banner-container {
   height: 250px;
   background: url(/img/searchResultBg.jpg);
@@ -196,27 +218,6 @@ const requestOtherData = () => {
   }
 
   .search-detail-nav-title {
-    .el-tabs__nav-wrap::after {
-      display: none;
-    }
-
-    .el-tabs__nav {
-      width: 100%;
-      float: none;
-      display: flex;
-
-      .el-tabs__item.is-active {
-        color: var(--color-text-red);
-      }
-
-      .el-tabs__item:hover {
-        color: var(--color-text-red);
-      }
-
-      .el-tabs__active-bar {
-        background-color: var(--color-text-red);
-      }
-    }
   }
 }
 </style>

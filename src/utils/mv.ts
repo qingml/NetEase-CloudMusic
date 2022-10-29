@@ -11,7 +11,7 @@ export const formatMv = (mvData: any) => {
     singer:mvData?.song?.artists || mvData?.ar||mvData?.artists||'',
     album:  mvData?.song ? mvData?.song?.album?.name : mvData?.al?.name ||mvData?.album?.name  ,
     duration:mvData?.durationms|| formatSecond(mvData?.song?.duration || mvData?.dt||mvData?.duration),
-    imgurl16v9: mvData?.coverUrl ,
+    imgurl16v9: mvData?.coverUrl+"?param=325y197",
     playCount: mvData?.playTime || "",
     score: mvData?.score || "",
   };

@@ -93,7 +93,7 @@ const queryMVDetailData = async (mvId: string) => {
   mvDescriData.value = mvDescriRes?.data;
   mvRelatedCountData.value = mvRelatedCountRes;
 
-  mvBriefDescriData.value = mvDescriRes?.data.briefDesc.length
+  mvBriefDescriData.value = mvDescriRes?.data.briefDesc?.length
     ? mvDescriRes.data.briefDesc
     : "视频暂无简介";
   mvRecommendData.value = mvRecommendRes?.mvs;
