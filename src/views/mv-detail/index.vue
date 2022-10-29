@@ -14,6 +14,7 @@
           :showLine="false"
         />
         <CommentsDetail
+          title="最新评论"
           :isMv="true"
           :data="mvLatestCommentData"
           :showLine="false"
@@ -37,10 +38,17 @@
       </div>
     </div>
     <div class="mv-detail-right">
-      <playlistDetailSubcibers
-        :isMvDescri="true"
-        :mvDescriData="mvBriefDescriData"
-      />
+      <div class="mv-description">
+        <TopTitle :showLine="true" title="视频简介" />
+        <div class="mv-description-user" v-if="mvDescriData?.creator">
+          <img :src="mvDescriData?.creator.avatarUrl" />
+          <span>{{ mvDescriData?.creator.nickname }}</span>
+        </div>
+        <p v-if="mvDescriData?.description?.length">
+          {{ mvDescriData.description }}
+        </p>
+        <p v-else>该视频暂无简介</p>
+      </div>
       <MvRecommend :data="mvRecommendData" />
     </div>
   </div>
@@ -59,9 +67,15 @@ import {
 } from "@/api/mv-detail";
 
 import MvDetailInfo from "../../components/mv-detail-info/index.vue";
-import playlistDetailSubcibers from "@/components/playlist-detail-subscribers/index.vue";
 import MvRecommend from "../../components/mv-recommend/index.vue";
 import CommentsDetail from "@/components/comments-detail/index.vue";
+import TopTitle from "@/components/base/top-title/index.vue";
+import {
+  formatMvDescriData,
+  formatMvInfoData,
+  formatMvRecommendData,
+} from "@/utils/mv-detail";
+import { ElPagination } from "element-plus";
 
 const currentPage1 = ref(1);
 const small = ref(false);
@@ -75,7 +89,6 @@ const commentCount = ref(0);
 const mvDetailData = ref({});
 const mvDescriData = ref({});
 const mvRelatedCountData = ref({});
-const mvBriefDescriData = ref("");
 const mvRecommendData = ref([]);
 const mvHotCommentData = ref([]);
 const mvLatestCommentData = ref([]);
@@ -89,14 +102,14 @@ const queryMVDetailData = async (mvId: string) => {
       getMVRecommend(mvId),
     ]);
 
-  mvDetailData.value = mvDetailDataRes?.data;
-  mvDescriData.value = mvDescriRes?.data;
+  mvDetailData.value = formatMvInfoData(mvDetailDataRes);
+  if (mvDescriRes?.data?.shareCount == 0) {
+    mvDescriRes.data.shareCount = mvRelatedCountRes?.shareCount;
+  }
+  mvDescriData.value = formatMvDescriData(mvDescriRes);
   mvRelatedCountData.value = mvRelatedCountRes;
-
-  mvBriefDescriData.value = mvDescriRes?.data.briefDesc?.length
-    ? mvDescriRes.data.briefDesc
-    : "视频暂无简介";
-  mvRecommendData.value = mvRecommendRes?.mvs;
+  mvRecommendData.value =
+    mvRecommendRes?.mvs || mvRecommendRes?.data.map(formatMvRecommendData);
 };
 
 const queryCommentData = async (mvId: string, offset: number = 0) => {
@@ -104,7 +117,11 @@ const queryCommentData = async (mvId: string, offset: number = 0) => {
   commentCount.value = mvCommentRes?.total;
   mvHotCommentData.value = mvCommentRes?.hotComments;
   mvLatestCommentData.value = mvCommentRes?.comments;
-  hasHotCom.value = mvCommentRes?.hotComments ? true : false;
+  if (mvCommentRes?.hotComments && mvCommentRes?.hotComments.length > 0) {
+    hasHotCom.value = true;
+  } else {
+    hasHotCom.value = false;
+  }
 };
 const handleCurrentChange = (val: number) => {
   queryCommentData(mvId, (val - 1) * 20);
@@ -123,7 +140,7 @@ onBeforeRouteUpdate(async (to, from) => {
 });
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .mv-detail {
   &-whole {
     display: flex;
@@ -179,8 +196,37 @@ onBeforeRouteUpdate(async (to, from) => {
   }
   &-right {
     width: 320px;
-
+    display: flex;
     flex-direction: column;
+
+    .mv-description {
+      padding: 20px 0 4px 10px;
+      margin-bottom: 20px;
+
+      p {
+        padding: 4px 4px 0 0;
+        color: #4a4a4a;
+        font-size: 14px;
+      }
+
+      &-user {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+
+        img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
+
+        span {
+          color: #4a4a4a;
+          font-size: 14px;
+          padding-left: 20px;
+        }
+      }
+    }
   }
 }
 </style>

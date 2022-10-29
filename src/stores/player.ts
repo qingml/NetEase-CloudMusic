@@ -118,6 +118,7 @@ export const usePlayerStore = defineStore({
 
       if (this.currentSongData.length > index) {
         this.getSongDetailUrl(this.currentSongData[index].id);
+       
       }
 
       if (this.openLyric) {
@@ -134,6 +135,7 @@ export const usePlayerStore = defineStore({
     },
 
     toNext(isAutoNext: boolean) {
+      console.log("this.mode",this.mode)
       if (isAutoNext && this.mode == ModeEnum.SINGLE) {
         this.setCurrentPlayIndex(this.currentPlayIndex);
       }

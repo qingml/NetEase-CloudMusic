@@ -184,7 +184,7 @@ const closeSearch = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 99;
+    z-index: 999;
     backdrop-filter: blur(20px);
     .search-area {
       &__container {

@@ -8,8 +8,15 @@
         class="playlist-related-recommend__block--item"
       >
         <div class="paly">
+          <!-- + '?param=150y150' -->
           <img
-            :src="item.cover + '?param=150y150'"
+            v-if="isSearch"
+            :src="item.cover"
+            class="playlist-related-recommend__block--item-img"
+          />
+          <img
+            v-else
+            :src="item.cover"
             class="playlist-related-recommend__block--item-img"
           />
           <div class="middle">
@@ -22,7 +29,7 @@
 
         <div class="playlist-related-recommend__block--item-content">
           <div class="mv-name">
-            <i class="iconfont icon-mv"></i>
+            <i class="iconfont icon-MV"></i>
             <div
               class="playlist-related-recommend__block--item-content-name ellipsis"
             >
@@ -52,6 +59,10 @@ const props = defineProps({
   title: {
     type: String,
     default: "相关推荐",
+  },
+  isSearch: {
+    type: Boolean,
+    default: false,
   },
 });
 

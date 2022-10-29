@@ -2,7 +2,7 @@
 import { formatSecond } from "./number";
 
 
-/** 格式化歌曲 */
+/** 格式化mv */
 export const formatMv = (mvData: any) => {
   return {
     id: mvData.id||mvData.vid,

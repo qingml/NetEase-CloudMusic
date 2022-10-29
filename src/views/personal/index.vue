@@ -1,153 +1,284 @@
 <template>
   <div class="personal-container">
-    <div class="top-background"></div>
     <div class="personal-info">
-      <div class="info-left">
-        <div class="playlist-top-banner">
-          <div class="playlist-title">
-            <TopTitle title="听歌排行" :showLine="true" />
-            <div>
-              <span class="title">(累计听歌 </span>
-              <span class="songs-number"> {{ listenSongs }} </span>
-              <span class="title">首)</span>
+      <div class="user-ava">
+        <img :src="userInfoData?.profile?.avatarUrl" />
+      </div>
+      <div class="user-info">
+        <h2>{{ userInfoData?.profile?.nickname }}</h2>
+        <div class="info-specifi">
+          <div class="info-level">Lv{{ userInfoData.level }}</div>
+          <div class="info-gender">
+            <i
+              v-if="userInfoData?.profile?.gender == 1"
+              class="iconfont icon-nansheng"
+            />
+            <i v-else class="iconfont icon-nvsheng" />
+          </div>
+        </div>
+        <div class="info-dynamic">
+          <div>
+            <span>{{ userInfoData?.profile?.eventCount }}</span>
+            <span>动态</span>
+          </div>
+          <div class="fenge"></div>
+          <div>
+            <span>{{ userInfoData?.profile?.follows }}</span>
+            <span>关注</span>
+          </div>
+          <div class="fenge"></div>
+          <div>
+            <span>{{ userInfoData?.profile?.followeds }}</span>
+            <span>粉丝</span>
+          </div>
+        </div>
+        <div class="signature">
+          <span>个人介绍：</span> {{ userInfoData?.profile?.signature }}
+        </div>
+      </div>
+    </div>
+    <div class="user-playlist">
+      <el-tabs
+        v-model="activeName"
+        class="search-detail-nav-title"
+        @click="requestOtherData"
+      >
+        <el-tab-pane label="听歌排行" name="playlist">
+          <!-- <template> -->
+          <div class="playlist-top-banner">
+            <div class="playlist-title">
+              累计听歌 <span> {{ userInfoData?.listenSongs }} </span>首
+            </div>
+            <div class="playlist-tab">
+              <span class="title" name="week" @click="requestWeekPlaylist"
+                >最近一周</span
+              >
+              <span>|</span>
+              <span class="title" name="all" @click="requestAllPlaylist"
+                >所有时间</span
+              >
             </div>
           </div>
-          <div class="playlist-tab" @click="changePlaylistData">
-            <span class="title" name="week">最近一周</span>
-            <span>|</span>
-            <span class="title" name="all">所有时间</span>
-          </div>
-        </div>
-        <Playlist :data="userPlaylistData" :hasCollect="false" />
-      </div>
-      <div class="info-right">
-        <div class="user-info">
-          <div class="bg-pic">
-            <!-- <img :src=" backgroundUrl" > -->
-          </div>
-        </div>
-        <div class="creat-playlist">
-          <TopTitle title="我创建的歌单" :showLine="true" />
-          <songList :data="creatListData" /> 
-        </div>
-        
-      </div>
+          <!-- </template> -->
+          <Playlist :data="userPlaylistData" :hasCollect="false" />
+        </el-tab-pane>
+        <el-tab-pane label="创建的歌单" name="creatList">
+          <songList :data="creatListData" />
+        </el-tab-pane>
+        <el-tab-pane label="收藏的歌单" name="collectList">
+          <songList :data="collectListData" />
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import Playlist from "@/components/base/playlist/index.vue";
-import songList from "@/components/base/curate-playlist/index.vue"
-import { useLoginStore } from "@/stores/login";
-import TopTitle from "@/components/base/top-title/index.vue";
+import songList from "@/components/base/curate-playlist/index.vue";
 import { onMounted, ref } from "vue";
-import { getPersonalInfo, getPersonalPlaylist, getPersonalSonglist } from "@/api/personal";
+import {
+  getPersonalInfo,
+  getPersonalPlaylist,
+  getPersonalSonglist,
+} from "@/api/personal";
 import { formatSong } from "@/utils/song";
 import { useRouter } from "vue-router";
 
-
 const { currentRoute } = useRouter();
+const uID = currentRoute?.value?.params?.id as string;
 
-const loginStore = useLoginStore();
+const activeName = ref("playlist");
+
 const userPlaylistData = ref([]);
 const userInfoData = ref({});
-const creatListData  = ref([]);
-const collectListData = ref([])
+const creatListData = ref([]);
+const collectListData = ref([]);
 
-const listenSongs = ref(0);
-// const  backgroundUrl = ref('')
-const creatListNum = ref(0)
-
-
-const queryUserData = async (uid: number) => {
-  const [userPlaylistWeekRes, userInfoRes,userSonglistRes] = await Promise.all([
-    getPersonalPlaylist(uid, 1),
-    getPersonalInfo(uid),
-    getPersonalSonglist(uid)
-  ]);
-  userPlaylistData.value = userPlaylistWeekRes?.weekData?.map(formatSong);
-  userInfoData.value = userInfoRes?.profile,
-  creatListNum.value = userInfoRes?.profile?.playlistCount,
-  creatListData.value = userSonglistRes?.playlist?.slice(0,creatListNum.value).map(formatSong),
-  collectListData.value = userSonglistRes?.playlist?.slice(creatListNum.value),
-    
-  listenSongs.value = userInfoRes?.listenSongs;
-  // backgroundUrl.value = userInfoRes?.profile?.backgroundUrl
+const queryUserInfoData = async (uid: string) => {
+  const userInfoRes = await getPersonalInfo(uid);
+  userInfoData.value = userInfoRes;
 };
 
-const queryAllPlaylistData = async (uid: number) => {
-  const userPlaylistAllRes = await getPersonalPlaylist(uid,0)
-}
+const queryWeekSonglistData = async (uid: string) => {
+  const userPlaylistWeekRes = await getPersonalPlaylist(uid, 1);
+  userPlaylistData.value = userPlaylistWeekRes?.weekData?.map(formatSong);
+};
 
-onMounted(() => queryUserData(Number(loginStore?.userInfo?.userId)));
+const querySonglistData = async (uid: string) => {
+  const userSonglistRes = await getPersonalSonglist(uid);
+  const creatListNumber = userInfoData?.value?.profile?.playlistCount;
+  creatListData.value = userSonglistRes?.playlist
+    ?.slice(0, creatListNumber)
+    .map(formatSong);
+  collectListData.value = userSonglistRes?.playlist?.slice(creatListNumber).map(formatSong);;
+};
 
-const changePlaylistData = (e:any) =>{
-  console.log('e',e.target)
-}
+const queryAllPlaylistData = async (uid: string) => {
+  const userPlaylistAllRes = await getPersonalPlaylist(uid, 0);
+  userPlaylistData.value = userPlaylistAllRes?.allData?.map(formatSong);
+};
+
+onMounted(() => {
+  // console.log("currentRoute",currentRoute.value.params.id)
+  queryUserInfoData(uID);
+  queryWeekSonglistData(uID);
+});
+
+const requestWeekPlaylist = () => {
+  queryWeekSonglistData(uID);
+};
+
+const requestAllPlaylist = () => {
+  queryAllPlaylistData(uID);
+};
+
+const requestOtherData = () => {
+  if (activeName.value === "playlist") {
+    querySonglistData(uID);
+  } else {
+    querySonglistData(uID);
+  }
+};
 </script>
 <style scoped lang="less">
 .personal-container {
   width: 100%;
-  // display: flex;
-  // flex-direction: row;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px;
 
-  .top-background {
-    height: 350px;
-    background: url(/img/searchResultBg.jpg);
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
+  :deep(.el-tabs__nav-wrap::after) {
+    display: none;
+  }
 
-    &::before {
-      content: "";
+  :deep(.el-tabs__nav) {
+    width: 100%;
+    float: none;
+    display: flex;
+
+    .el-tabs__item.is-active {
+      color: var(--color-text-red);
+    }
+
+    .el-tabs__item:hover {
+      color: var(--color-text-red);
+    }
+
+    .el-tabs__active-bar {
+      background-color: var(--color-text-red);
+    }
+  }
+  .personal-info {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 1px dotted #666;
+    }
+
+    .user-info {
+      padding-left: 40px;
       width: 100%;
-      height: 100%;
-      background: #8a2387;
-      background: linear-gradient(to left, #f27121, #e94057, #8a2387);
-      opacity: 0.3;
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
+
+      h2 {
+        font-weight: bolder;
+      }
+      .info-specifi {
+        width: 100%;
+        padding: 10px 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border-bottom: 2px solid #f1f1f1;
+        .info-level {
+          font-size: 12px;
+          width: 40px;
+          height: 20px;
+          background-color: RGB(240, 240, 240);
+          line-height: 20px;
+          text-align: center;
+          border-radius: 10px;
+        }
+
+        .info-gender {
+          margin-left: 10px;
+
+          .icon-nansheng {
+            color: RGB(113, 194, 248);
+          }
+        }
+      }
+
+      .info-dynamic {
+        width: 270px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        div {
+          display: flex;
+          flex-direction: column;
+
+          span {
+            text-align: center;
+
+            &:first-child {
+              font-weight: 500;
+              font-size: 22px;
+            }
+
+            &:last-child {
+              font-size: 12px;
+            }
+          }
+        }
+        .fenge {
+          height: 40px;
+          width: 2px;
+          background-color: #f1f1f1;
+          margin-top: 10px;
+        }
+      }
+
+      .signature {
+        padding-top: 10px;
+        font-size: 14px;
+        font-weight: lighter;
+
+        span {
+          font-weight: 500;
+        }
+      }
     }
   }
 
-  .personal-info{
-    display: flex;
-    flex-direction: row;
-  }
-
-  .info-left {
-    width: 70%;
-    background-color: #fff;
-    padding: 10px 4px 10px 4px;
+  .user-playlist {
+    padding-top: 30px;
 
     .playlist-top-banner {
-      padding: 4px 20px 4px 14px;
+      padding: 4px 0 4px 0;
       width: 100%;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-
       flex: 1;
-      // align-items: center;
-
       .title {
-        font-weight: 200;
+        font-weight: 400;
         color: #666;
         font-size: 12px;
       }
-      .songs-number {
-        font-size: 12px;
-      }
-
       .playlist-title {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
+        text-align: center;
+        font-weight: 400;
+        color: #666;
+        font-size: 12px;
 
-        .title {
-          padding: 2px 0 0 4px;
+        span {
+          font-weight: 500;
         }
       }
 
@@ -157,30 +288,8 @@ const changePlaylistData = (e:any) =>{
         }
         .title {
           cursor: pointer;
-
-          &:active {
-            color: red;
-          }
         }
       }
-    }
-  }
-
-  .info-right{
-    width: 100%;
-    padding-left: 10px;
-    // background-color: red;
-
-    .user-info{
-      width: 100%;
-      // img{
-      //   width: 100%;
-      //   height: 50px;
-      // }
-    }
-
-    .creat-playlist{
-      width: 100%;
     }
   }
 }

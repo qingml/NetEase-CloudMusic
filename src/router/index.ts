@@ -61,7 +61,7 @@ const router = createRouter({
       component: () => import("../views/search-result/index.vue"),
     },
     {
-      path: "/personal-info/" ,
+      path: "/personal-info/:id" ,
       name: "personal-info",
       component: () => import("../views/personal/index.vue"),
     },

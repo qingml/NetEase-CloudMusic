@@ -1,7 +1,6 @@
 <template>
   <div class="playlist-detail-subscribers__container">
-    <TopTitle v-if="isMvDescri" :showLine="true" title="视频简介" />
-    <TopTitle v-else :showLine="true" title="喜欢这个歌单的人" />
+    <TopTitle  :showLine="true" title="喜欢这个歌单的人" />
     <div v-if="isMvDescri" class="mv-descri">
       <p>{{ mvDescriData }}</p>
     </div>

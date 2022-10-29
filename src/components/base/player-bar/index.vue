@@ -113,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { usePlayerStore } from "../../../stores/player";
 import { formatDurationPlay } from "@/utils/number";
 import { storeToRefs } from "pinia";

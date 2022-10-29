@@ -35,7 +35,7 @@
                   <span>个人设置</span> 
                 </div>
                 <div @click="signOut">
-                  <i class="iconfont icon-gerenshezhi" />
+                  <i class="iconfont icon-tuichudenglu" />
                   <span>退出登录</span> 
                 </div>
               </div>
@@ -102,7 +102,7 @@ const signOut = () => {
 
 const handleJump = ()=>{
   showUserPopover.value = false
-  router.push(`/personal-info`);
+  router.push(`/personal-info/${loginStore?.userInfo?.userId}`);
 }
 </script>
 
