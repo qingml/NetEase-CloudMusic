@@ -57,9 +57,12 @@ const handleJumpDetail = (id: number | string) => {
     flex-wrap: wrap;
 
     &--item {
-      padding: 0 12px 24px 0;
-      width: 12.5%;
+      padding: 0 27.42px 24px 0;
       cursor: pointer;
+
+      &:nth-child(8n) {
+        padding-right: 0;
+      }
 
       .el-image {
         border-radius: 8px;
@@ -68,7 +71,6 @@ const handleJumpDetail = (id: number | string) => {
 
       &-wrap {
         height: 136px;
-        width: 100%;
         position: relative;
       }
 

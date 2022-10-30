@@ -9,10 +9,14 @@
         class="recommend-song__block--item-box"
         @click="() => handleClick(item)"
       >
-        <ElImage :src="item.picUrl + '?param=200y200'" class="recommend-song__block--item-pic" lazy />
+        <ElImage
+          :src="item.picUrl + '?param=200y200'"
+          class="recommend-song__block--item-pic"
+          lazy
+        />
         <div class="recommend-song__block--item-content">
           <div class="recommend-song__block--item-info">
-            <div class="recommend-song__block--item-title">
+            <div class="recommend-song__block--item-title ellipsis-two">
               {{ item.name }}
             </div>
             <div
@@ -57,16 +61,16 @@ const handleClick = (item: any) => {
     display: flex;
     width: 100%;
     flex-wrap: wrap;
+    justify-content: space-between;
     cursor: pointer;
 
     &--item {
-      width: 33.33%;
+      width: 30%;
 
       &-box {
         border-top: 1px solid #f2f2f2;
         display: flex;
         padding: 12px 0;
-        margin-right: 24px;
       }
 
       &-pic {
@@ -94,6 +98,7 @@ const handleClick = (item: any) => {
 
       &-title {
         font-weight: 600;
+        width: 90%;
         color: #333;
       }
     }

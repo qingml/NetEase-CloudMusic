@@ -50,26 +50,35 @@ const handleJumpSingerDeatil = (id: number | string) => {
 <style lang="less">
 .recommend-singers {
   &__block {
+    overflow: hidden;
+
     &--item {
       float: left;
-      width: 128px;
-      padding: 16px;
-      padding-left: 0px;
+
+      padding: 16px 0;
+      margin-right: 31.1px;
       text-align: center;
       cursor: pointer;
 
+      &:nth-child(10n) {
+        margin-right: 0;
+      }
+
       &-info {
         padding-top: 12px;
+        width: 100px;
+        overflow: hidden;
       }
 
       &-img {
-        width: 96px;
-        height: 96px;
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
       }
 
       &-name {
         font-size: 14px;
+
         font-weight: bold;
       }
 

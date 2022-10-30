@@ -1,9 +1,7 @@
 <template>
   <div class="recommend-singers__container">
     <TopTitle title="推荐歌手" />
-    <div class="recommend-singers__block">
-      <SingerList :data="data" />
-    </div>
+    <SingerList :data="data" />
   </div>
 </template>
 
@@ -11,8 +9,7 @@
 import { PropType } from "vue";
 import TopTitle from "@/components/base/top-title/index.vue";
 import SingerList from "@/components/base/singers/index.vue";
-import {IRecommendSingersItem} from "@/components/base/singers/type";
-
+import { IRecommendSingersItem } from "@/components/base/singers/type";
 
 defineProps({
   data: {
@@ -26,9 +23,6 @@ defineProps({
 .recommend-singers {
   &__container {
     padding-top: 24px;
-    
   }
-  
-
 }
 </style>
