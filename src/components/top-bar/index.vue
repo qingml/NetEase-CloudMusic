@@ -1,6 +1,7 @@
 <template>
   <header>
     <div class="top-bar__logo" />
+    <div class="top-bar__name">momoMusic</div>
     <div class="top-bar__wrapper">
       <nav>
         <RouterLink v-for="(item, index) in data" :key="index" :to="item.path">
@@ -111,19 +112,29 @@ header {
   width: 100%;
   margin: 0 auto;
   top: 0;
+  align-items: center;
 }
 
 .top-bar {
   &__logo {
-    width: 42px;
-    height: 68px;
-    background: url(@/assets/topbar.png) no-repeat 0 9999px;
-    background-position: 0 0;
-    margin-right: 30px;
+    width: 54px;
+    height: 54px;
+    border-radius: 30px;
+    background: url(@/assets/logo5.png) no-repeat 0 9999px;
+    background-position: 0;
+    background-size: contain;
+    margin-right: 8px;
+    background-color: var(--color-text-red);
+  }
+
+  &__name {
+    font-family: fantasy;
+    font-size: 18px;
+    margin-right: 20px;
   }
 
   &__wrapper {
-    width: calc(100% - 42px);
+    width: calc(100% - 160px);
     display: flex;
     justify-content: space-between;
 
@@ -207,6 +218,7 @@ header {
           flex-direction: row;
           justify-content: center;
           align-items: center;
+          padding-right: 6px;
           height: 40px;
 
           &:hover {

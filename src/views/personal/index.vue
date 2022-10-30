@@ -8,7 +8,13 @@
         <h2>{{ userInfoData?.profile?.nickname }}</h2>
         <div class="info-specifi">
           <div class="info-level">Lv{{ userInfoData.level }}</div>
-          <div class="info-gender">
+          <div
+            :class="[
+              userInfoData?.profile?.gender == 1
+                ? 'male'
+                : 'female','info-gender'
+            ]"
+          >
             <i
               v-if="userInfoData?.profile?.gender == 1"
               class="iconfont icon-nansheng"
@@ -50,11 +56,15 @@
               累计听歌 <span> {{ userInfoData?.listenSongs }} </span>首
             </div>
             <div class="playlist-tab">
-              <span class="title" name="week" @click="requestWeekPlaylist"
+              <span
+                :class="[highLight == 'week' ? 'title-highlight' : 'title']"
+                @click.stop="requestWeekPlaylist"
                 >最近一周</span
               >
               <span>|</span>
-              <span class="title" name="all" @click="requestAllPlaylist"
+              <span
+                :class="[highLight == 'all' ? 'title-highlight' : 'title']"
+                @click.stop="requestAllPlaylist"
                 >所有时间</span
               >
             </div>
@@ -82,7 +92,8 @@ import {
   getPersonalSonglist,
 } from "@/api/personal";
 import { formatSong } from "@/utils/song";
-import { useRouter } from "vue-router";
+import { onBeforeRouteUpdate, useRouter } from "vue-router";
+import { ElTabs, ElTabPane } from "element-plus";
 
 const { currentRoute } = useRouter();
 const uID = currentRoute?.value?.params?.id as string;
@@ -93,6 +104,7 @@ const userPlaylistData = ref([]);
 const userInfoData = ref({});
 const creatListData = ref([]);
 const collectListData = ref([]);
+const highLight = ref("week");
 
 const queryUserInfoData = async (uid: string) => {
   const userInfoRes = await getPersonalInfo(uid);
@@ -110,7 +122,9 @@ const querySonglistData = async (uid: string) => {
   creatListData.value = userSonglistRes?.playlist
     ?.slice(0, creatListNumber)
     .map(formatSong);
-  collectListData.value = userSonglistRes?.playlist?.slice(creatListNumber).map(formatSong);;
+  collectListData.value = userSonglistRes?.playlist
+    ?.slice(creatListNumber)
+    .map(formatSong);
 };
 
 const queryAllPlaylistData = async (uid: string) => {
@@ -119,26 +133,39 @@ const queryAllPlaylistData = async (uid: string) => {
 };
 
 onMounted(() => {
-  // console.log("currentRoute",currentRoute.value.params.id)
   queryUserInfoData(uID);
   queryWeekSonglistData(uID);
 });
 
 const requestWeekPlaylist = () => {
-  queryWeekSonglistData(uID);
+  if (highLight.value !== "week") {
+    queryWeekSonglistData(uID);
+    highLight.value = "week";
+  }
 };
 
 const requestAllPlaylist = () => {
-  queryAllPlaylistData(uID);
+  if (highLight.value !== "all") {
+    queryAllPlaylistData(uID);
+    highLight.value = "all";
+  }
 };
 
-const requestOtherData = () => {
+const requestOtherData = (e: any) => {
   if (activeName.value === "playlist") {
     querySonglistData(uID);
   } else {
     querySonglistData(uID);
   }
 };
+
+onBeforeRouteUpdate(async (to, from) => {
+  // only fetch the user if the id changed as maybe only the query or the hash changed
+  if (to.params.id !== from.params.id) {
+    queryUserInfoData(uID);
+    queryWeekSonglistData(uID);
+  }
+});
 </script>
 <style scoped lang="less">
 .personal-container {
@@ -206,10 +233,25 @@ const requestOtherData = () => {
 
         .info-gender {
           margin-left: 10px;
-
-          .icon-nansheng {
-            color: RGB(113, 194, 248);
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          text-align: center;
+          vertical-align: center;
+          &.male{
+            background-color: RGB(191, 243, 255);
           }
+          &.female {
+            background-color: RGB(255, 204, 231);
+          }
+
+          .icon-nvsheng {
+            color: RGB(250, 175, 210);
+          }
+          .icon-nansheng {
+              color: RGB(113, 194, 248);
+            } 
+         
         }
       }
 
@@ -222,6 +264,7 @@ const requestOtherData = () => {
         div {
           display: flex;
           flex-direction: column;
+          cursor: pointer;
 
           span {
             text-align: center;
@@ -288,6 +331,12 @@ const requestOtherData = () => {
         }
         .title {
           cursor: pointer;
+
+          &-highlight {
+            color: var(--color-text-red);
+            cursor: pointer;
+            font-size: 12px;
+          }
         }
       }
     }

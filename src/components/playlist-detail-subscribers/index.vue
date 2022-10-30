@@ -9,6 +9,7 @@
         v-for="(item, index) in data"
         :key="index"
         class="playlist-detail-subscribers__block--item"
+        @click="handleJumpPesonal(item.userId)"
       >
         <div
           class="playlist-detail-subscribers__block--item-img"
@@ -22,7 +23,10 @@
 </template>
 <script setup>
 import TopTitle from "@/components/base/top-title/index.vue";
+import { useRouter } from "vue-router";
 import { ElImage } from "element-plus";
+
+const router = useRouter();
 
 defineProps({
   data: {
@@ -38,6 +42,11 @@ defineProps({
     default: () => "",
   },
 });
+
+
+const handleJumpPesonal =(id) =>{
+  router.push(`/personal-info/${id}`);
+}
 </script>
 <style lang="less">
 .playlist-detail-subscribers {
