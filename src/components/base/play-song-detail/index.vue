@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from "vue";
+import { computed, reactive,  watch } from "vue";
 import { ElDialog } from "element-plus";
 import { storeToRefs } from "pinia";
 import { usePlayerStore } from "../../../stores/player";

@@ -30,6 +30,7 @@ interface IPlayerState {
   lyric: string;
   /** 歌词页面状态 */
   openLyric: boolean;
+
 }
 
 export const usePlayerStore = defineStore({

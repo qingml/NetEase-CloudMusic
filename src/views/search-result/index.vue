@@ -84,26 +84,6 @@ const querySearchResultData = async (keyword: any) => {
   playListData.value = songPlaylistRes?.songs.map(formatSong);
 };
 
-const querySearchSingerData = async (keyword: any) => {
-  const singerRes = await getSearchSongDetail(keyword, 100);
-  singerData.value = singerRes?.result?.artists;
-};
-
-const querySearchAlbumData = async (keyword: any) => {
-  const ablumRes = await getSearchSongDetail(keyword, 10);
-  ablumData.value = ablumRes?.result?.albums;
-};
-
-const querySearchVedioData = async (keyword: any) => {
-  const vedioRes = await getSearchSongDetail(keyword, 1014);
-  vedioData.value = vedioRes?.result?.videos?.map(formatMv);
-};
-
-const querySearchSonglistData = async (keyword: any) => {
-  const songlistRes = await getSearchSongDetail(keyword, 1000);
-  songlistData.value = songlistRes?.result?.playlists?.map(formatSong);
-};
-
 const handleInput = (e: any) => {
   if (e.code == "Enter") {
     if (searchWord.value.length) {
@@ -123,22 +103,31 @@ onBeforeRouteUpdate(async (to, from) => {
   }
 });
 
-const requestOtherData = () => {
+const queryOtherData = async (keyword: any, type: string) => {
   switch (activeName.value) {
     case "singer":
-      querySearchSingerData(keyword);
+      const singerRes = await getSearchSongDetail(keyword, 100);
+      singerData.value = singerRes?.result?.artists;
       break;
     case "ablum":
-      querySearchAlbumData(keyword);
+      const ablumRes = await getSearchSongDetail(keyword, 10);
+      ablumData.value = ablumRes?.result?.albums;
       break;
     case "vedio":
-      querySearchVedioData(keyword);
+      const vedioRes = await getSearchSongDetail(keyword, 1014);
+      vedioData.value = vedioRes?.result?.videos?.map(formatMv);
       break;
     case "songlist":
-      querySearchSonglistData(keyword);
+      const songlistRes = await getSearchSongDetail(keyword, 1000);
+      songlistData.value = songlistRes?.result?.playlists?.map(formatSong);
       break;
   }
 };
+
+const requestOtherData = () => {
+  queryOtherData(keyword,activeName.value)
+}
+
 </script>
 
 <style lang="less" scoped>

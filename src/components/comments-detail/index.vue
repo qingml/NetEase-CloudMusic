@@ -2,7 +2,9 @@
   <div class="comments-detail__container">
     <TopTitle :showLine="showLine" :title="title" />
     <div class="comments-detail__block">
+      <div v-if="data.length == 0">暂无评论</div>
       <div
+        v-else
         v-for="(item, index) in data"
         :key="index"
         class="comments-detail__block--item"

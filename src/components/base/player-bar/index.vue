@@ -246,7 +246,7 @@ i {
   width: 100%;
   padding: 10px 32px;
   box-shadow: 12px 10px 8px 6px rgb(0 0 0 / 30%);
-  z-index: 9999;
+  z-index: 9997;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

@@ -69,7 +69,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" scoped>
 import { onMounted, onUnmounted, ref, toRefs, createApp } from "vue";
 import { ElInput, ElTag } from "element-plus";
 import { Search } from "@element-plus/icons-vue";

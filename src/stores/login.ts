@@ -19,6 +19,8 @@ interface LoginState {
   token: string;
   /** 用户信息 */
   userInfo: IUserInfo | null;
+   /** 打开登录页面 */
+   openLogin: boolean;
 }
 
 export const useLoginStore = defineStore("login", {
@@ -26,6 +28,7 @@ export const useLoginStore = defineStore("login", {
     loginStatus: false,
     token: "",
     userInfo: null,
+    openLogin:false,
   }),
 
   actions: {

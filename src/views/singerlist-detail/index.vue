@@ -4,17 +4,21 @@
       <SingerInfo :data="singerInfoData" />
     </div>
     <div class="singerlist-detail-bottom">
-      <el-tabs v-model="activeName" class="singer-detail-nav-title">
+      <el-tabs
+        v-model="activeName"
+        class="singer-detail-nav-title"
+        @click="requestData"
+      >
         <el-tab-pane label="作品" name="work">
           <Playlist :data="singerPlaylistData" :hasCollect="false" />
         </el-tab-pane>
-        <el-tab-pane label="专辑" name="album"> 
-         <Album :data='singerAlbumData'/> 
+        <el-tab-pane label="专辑" name="album">
+          <Album :data="singerAlbumData" />
         </el-tab-pane>
         <el-tab-pane label="MV" name="mv">
           <MV :data="singerMvData" />
         </el-tab-pane>
-        <el-tab-pane label="歌手详情" name="singerDetai">
+        <el-tab-pane label="歌手详情" name="singerDetail">
           <SingerIntro :data="singerIntroductionData" />
         </el-tab-pane>
         <el-tab-pane label="相似歌手" name="simSinger">
@@ -29,13 +33,12 @@
 import { onMounted, ref } from "vue";
 import { useRouter, onBeforeRouteUpdate } from "vue-router";
 
-
 import {
   getSingerDetailInfo,
   getSingerIntroduction,
   getSimSingerDetail,
   getSingerMV,
-  getSingerAlbum
+  getSingerAlbum,
 } from "@/api/singerlist-detail";
 import Playlist from "@/components/base/playlist/index.vue";
 import SingerInfo from "@/components/singer-detail-info/index.vue";
@@ -54,28 +57,37 @@ const singerPlaylistData = ref([]);
 const simSingerData = ref([]);
 const singerIntroductionData = ref({});
 const singerMvData = ref([]);
-const singerAlbumData = ref([])
+const singerAlbumData = ref([]);
 
 const queryPlayListData = async (singerId: string) => {
-  const [singerInfoRes, simSingerRes, singerIntroductionRes, singerMVRes,singerAlbumRes] =
-    await Promise.all([
-      getSingerDetailInfo(singerId),
-      getSimSingerDetail(singerId),
-      getSingerIntroduction(singerId),
-      getSingerMV(singerId),
-      getSingerAlbum(singerId)
-    ]);
-
+  const singerInfoRes = await getSingerDetailInfo(singerId);
   singerInfoData.value = singerInfoRes.artist;
   singerPlaylistData.value = singerInfoRes.hotSongs.map(formatSong);
-  activeName.value = "work";
-  simSingerData.value = simSingerRes?.artists;
-  singerIntroductionData.value = singerIntroductionRes;
-  singerMvData.value = singerMVRes.mvs;
-  singerAlbumData.value = singerAlbumRes.hotAlbums.flat(2);
 };
 
 onMounted(() => queryPlayListData(singerId));
+
+const queryotherData = async (singerId: string, type: string) => {
+  if (type == "simSinger") {
+    const simSingerRes = await getSimSingerDetail(singerId);
+    simSingerData.value = simSingerRes?.artists;
+  } else if (type == "album") {
+    const singerAlbumRes = await getSingerAlbum(singerId);
+    singerAlbumData.value = singerAlbumRes.hotAlbums.flat(2);
+  } else if (type == "mv") {
+    const singerMVRes = await getSingerMV(singerId);
+    singerMvData.value = singerMVRes.mvs;
+  } else if (type == "singerDetail") {
+    const singerIntroductionRes = await getSingerIntroduction(singerId);
+    singerIntroductionData.value = singerIntroductionRes;
+  } else {
+    queryPlayListData(singerId)
+  }
+};
+
+const requestData = () => {
+  queryotherData(singerId, activeName.value);
+};
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.id !== from.params.id) {

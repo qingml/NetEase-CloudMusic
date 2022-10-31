@@ -1,11 +1,14 @@
 <template>
   <div class="playlist-detail-subscribers__container">
-    <TopTitle  :showLine="true" title="喜欢这个歌单的人" />
+    <TopTitle :showLine="true" title="喜欢这个歌单的人" />
     <div v-if="isMvDescri" class="mv-descri">
-      <p>{{ mvDescriData }}</p>
+      <p v-if="mvDescriData.length == 0">暂无喜欢该歌单的人</p>
+      <p v-else>{{ mvDescriData }}</p>
     </div>
     <div v-else class="playlist-detail-subscribers__block">
+      <div class="prompt" v-if="data.length == 0">暂无喜欢该歌单的人</div>
       <div
+        v-else
         v-for="(item, index) in data"
         :key="index"
         class="playlist-detail-subscribers__block--item"
@@ -43,10 +46,9 @@ defineProps({
   },
 });
 
-
-const handleJumpPesonal =(id) =>{
+const handleJumpPesonal = (id) => {
   router.push(`/personal-info/${id}`);
-}
+};
 </script>
 <style lang="less">
 .playlist-detail-subscribers {
@@ -75,6 +77,11 @@ const handleJumpPesonal =(id) =>{
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
+  
+
+    .prompt {
+      font-weight: 400;
+    }
 
     &--item {
       width: 42px;

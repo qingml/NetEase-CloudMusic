@@ -9,7 +9,10 @@
     <div class="artistList-main">
       <Singers :data="artistListData" />
     </div>
-    <div>数据加载中，请稍等...</div>
+    <div class="loading-area">
+      <i class="iconfont icon-jiazai"></i>
+      <p>数据加载中，请稍等...</p>
+    </div>
   </div>
 </template>
 
@@ -65,8 +68,8 @@ useScrollUpdate({
 });
 
 const changeData = (type, val, data) => {
-  artistListData.value = []
-  currentPage.value = 1
+  artistListData.value = [];
+  currentPage.value = 1;
   if (type === "area") {
     artistAreaMenusList.value = data;
     currentArea.value = val;
@@ -81,10 +84,13 @@ const changeData = (type, val, data) => {
 </script>
 
 <style scoped lang="less">
-
-  .artistList-main {
-    width: 100%;
-    z-index:99;
-  }
-
+.artistList-main {
+  width: 100%;
+  z-index: 99;
+}
+.loading-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

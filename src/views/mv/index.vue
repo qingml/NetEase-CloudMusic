@@ -9,7 +9,10 @@
     />
     <div class="mv-main">
       <MV :data="mvListData" />
-      <div>数据加载中，请稍等...</div>
+      <div class="loading-area">
+        <i class="iconfont icon-jiazai" ></i>
+        <p> 数据加载中，请稍等...</p>
+       </div>
     </div>
   </div>
 </template>
@@ -87,6 +90,11 @@ const changeData = (type, val, data) => {
   overflow-y: auto;
   &-main {
     width: 100%;
+  }
+
+  .loading-area{
+    display: flex;
+    justify-content: center;
   }
 }
 </style>

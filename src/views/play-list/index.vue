@@ -45,7 +45,6 @@ const tagCatgoryList = ref([]);
 watch([currentPage, currentTag], ([newPage = 1, newTag = ""], [_, oldTag]) => {
   let offset = (newPage - 1) * 40;
   queryPlaylistData(newTag, offset);
-  
 });
 
 const queryHotTags = async () => {
@@ -129,12 +128,10 @@ const handleClick = (tagName) => {
       align-items: center;
     }
 
-    .el-page-total {
+    :deep(.el-page-total) {
       font-size: 13px;
     }
-    .el-pager li,
-    .el-pagination .btn-next,
-    .el-pagination .btn-prev {
+    :deep(.el-pager li, .el-pagination .btn-next, .el-pagination .btn-prev) {
       margin: 0 5px;
       background-color: #f4f4f5;
       color: #606266;
@@ -142,17 +139,18 @@ const handleClick = (tagName) => {
       border-radius: 2px;
     }
 
-    .el-pager li {
+    :deep(.el-pager li) {
       font-weight: 500;
       font-size: 12px;
 
       &:hover {
         color: var(--vt-c-text-light-2);
       }
-    }
-    .el-pager li.is-active {
-      background-color: var(--vt-c-text-light-2);
-      color: #fff;
+
+      &.is-active {
+        background-color: var(--vt-c-text-light-2);
+        color: #fff;
+      }
     }
   }
 }

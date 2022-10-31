@@ -54,6 +54,7 @@ import { onMounted, PropType, ref } from "vue";
 import { useLoginStore } from "@/stores/login";
 import SearchOverLay from "@/components/base/search-overlay/index.vue";
 import { logout } from "@/api/login";
+import { storeToRefs } from "pinia";
 
 interface IMenuItem {
   path: string;
@@ -68,12 +69,15 @@ defineProps({
 });
 
 const loginStore = useLoginStore();
+const {openLogin} = storeToRefs(loginStore)
+
 const router = useRouter();
 const { path } = useRoute();
+// console.log("path",path)
+// const query = {redirect:path}
 
 const searchOverlayVisible = ref(false);
 const showUserPopover = ref(false);
-
 const handleSearchClick = () => {
   searchOverlayVisible.value = true;
 };
@@ -99,6 +103,7 @@ const handleSignOut = () => {
   //   "MUSIC_U=''; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 };
 
+
 const handleJump = () => {
   showUserPopover.value = false;
   router.push(`/personal-info/${loginStore?.userInfo?.userId}`);
@@ -117,14 +122,15 @@ header {
 
 .top-bar {
   &__logo {
-    width: 54px;
-    height: 54px;
-    border-radius: 30px;
-    background: url(@/assets/logo5.png) no-repeat 0 9999px;
-    background-position: 0;
-    background-size: contain;
-    margin-right: 8px;
-    background-color: var(--color-text-red);
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: url(@/assets/logo22.png) no-repeat 0 9999px;
+    background-position: center;
+    background-size: 90% 90%;
+    margin-right: 4px;
+    // background-color: var(--color-text-red);
+    // background-color:violet;
   }
 
   &__name {
