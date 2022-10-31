@@ -89,7 +89,7 @@ const handleLogin = () => {
   router.push({
     path: "/login",
     query: {
-      redirect: router.currentRoute.value.href,
+      redirect: router.currentRoute.value.fullPath,
     },
   });
 };
