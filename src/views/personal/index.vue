@@ -172,7 +172,7 @@ onBeforeRouteUpdate(async (to, from) => {
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 20px 20px;
+  padding: 20px 0;
 
   :deep(.el-tabs__nav-wrap::after) {
     display: none;
