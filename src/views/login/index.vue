@@ -65,7 +65,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate(async (valid) => {
     if (valid) {
-      console.log("query", query);
       const { redirect = "/" } = query;
       loginStore.setLogin(loginForm.phone, loginForm.password, () => {
         router.push({ path: redirect as string });
