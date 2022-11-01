@@ -54,7 +54,6 @@ import { onMounted, PropType, ref } from "vue";
 import { useLoginStore } from "@/stores/login";
 import SearchOverLay from "@/components/base/search-overlay/index.vue";
 import { logout } from "@/api/login";
-import { storeToRefs } from "pinia";
 
 interface IMenuItem {
   path: string;
@@ -69,12 +68,10 @@ defineProps({
 });
 
 const loginStore = useLoginStore();
-const {openLogin} = storeToRefs(loginStore)
 
 const router = useRouter();
 const { path } = useRoute();
-// console.log("path",path)
-// const query = {redirect:path}
+
 
 const searchOverlayVisible = ref(false);
 const showUserPopover = ref(false);

@@ -1,5 +1,6 @@
 <template>
   <div class="personal-container">
+    <followList :data="followDetailData" :title="detailTitle" />
     <div class="personal-info">
       <div class="user-ava">
         <img :src="userInfoData?.profile?.avatarUrl" />
@@ -10,9 +11,8 @@
           <div class="info-level">Lv{{ userInfoData.level }}</div>
           <div
             :class="[
-              userInfoData?.profile?.gender == 1
-                ? 'male'
-                : 'female','info-gender'
+              userInfoData?.profile?.gender == 1 ? 'male' : 'female',
+              'info-gender',
             ]"
           >
             <i
@@ -29,12 +29,16 @@
           </div>
           <div class="fenge"></div>
           <div>
-            <span>{{ userInfoData?.profile?.follows }}</span>
+            <span @click="openFollowDetail">{{
+              userInfoData?.profile?.follows
+            }}</span>
             <span>关注</span>
           </div>
           <div class="fenge"></div>
           <div>
-            <span>{{ userInfoData?.profile?.followeds }}</span>
+            <span @click="openFollowerDetail">{{
+              userInfoData?.profile?.followeds
+            }}</span>
             <span>粉丝</span>
           </div>
         </div>
@@ -85,8 +89,11 @@
 <script setup lang="ts">
 import Playlist from "@/components/base/playlist/index.vue";
 import songList from "@/components/base/curate-playlist/index.vue";
+import followList from "@/components/follower-list/index.vue";
 import { onMounted, ref } from "vue";
 import {
+  getFollow,
+  getFollower,
   getPersonalInfo,
   getPersonalPlaylist,
   getPersonalSonglist,
@@ -94,10 +101,13 @@ import {
 import { formatSong } from "@/utils/song";
 import { onBeforeRouteUpdate, useRouter } from "vue-router";
 import { ElTabs, ElTabPane } from "element-plus";
+import { storeToRefs } from "pinia";
+import { useLoginStore } from "@/stores/login";
+import { watch } from "vue";
 
 const { currentRoute } = useRouter();
-const uID = currentRoute?.value?.params?.id as string;
 
+let uID = currentRoute?.value?.params?.id as string;
 const activeName = ref("playlist");
 
 const userPlaylistData = ref([]);
@@ -106,9 +116,16 @@ const creatListData = ref([]);
 const collectListData = ref([]);
 const highLight = ref("week");
 
+const loginStore = useLoginStore();
+const { openUserFollow } = storeToRefs(loginStore);
+let userName = "";
+const detailTitle = ref("");
+const followDetailData = ref([]);
+
 const queryUserInfoData = async (uid: string) => {
   const userInfoRes = await getPersonalInfo(uid);
   userInfoData.value = userInfoRes;
+  userName = userInfoRes?.profile?.nickname;
 };
 
 const queryWeekSonglistData = async (uid: string) => {
@@ -132,6 +149,15 @@ const queryAllPlaylistData = async (uid: string) => {
   userPlaylistData.value = userPlaylistAllRes?.allData?.map(formatSong);
 };
 
+const queryFollowListData = async (uid: string) => {
+  const followListRes = await getFollow(uid);
+  followDetailData.value = followListRes.follow;
+};
+
+const queryFollowerListData = async (uid: string) => {
+  const followerListRes = await getFollower(uid);
+  followDetailData.value = followerListRes.followeds;
+};
 onMounted(() => {
   queryUserInfoData(uID);
   queryWeekSonglistData(uID);
@@ -151,21 +177,39 @@ const requestAllPlaylist = () => {
   }
 };
 
-const requestOtherData = (e: any) => {
-  if (activeName.value === "playlist") {
+const requestOtherData = () => {
+  if (activeName.value != "playlist") {
     querySonglistData(uID);
   } else {
-    querySonglistData(uID);
+    queryWeekSonglistData(uID);
   }
 };
 
+
+
 onBeforeRouteUpdate(async (to, from) => {
-  // only fetch the user if the id changed as maybe only the query or the hash changed
+  
   if (to.params.id !== from.params.id) {
+    console.log('id',to.params.id,from.params.id,uID)
+    uID = String(to.params.id),
     queryUserInfoData(uID);
     queryWeekSonglistData(uID);
+    activeName.value = 'playlist'
   }
 });
+
+const openFollowDetail = () => {
+  openUserFollow.value = true;
+
+  detailTitle.value = userName + "的关注";
+  queryFollowListData(uID);
+};
+
+const openFollowerDetail = () => {
+  openUserFollow.value = true;
+  detailTitle.value = userName + "的粉丝";
+  queryFollowerListData(uID);
+};
 </script>
 <style scoped lang="less">
 .personal-container {
@@ -238,7 +282,7 @@ onBeforeRouteUpdate(async (to, from) => {
           border-radius: 50%;
           text-align: center;
           vertical-align: center;
-          &.male{
+          &.male {
             background-color: RGB(191, 243, 255);
           }
           &.female {
@@ -249,9 +293,8 @@ onBeforeRouteUpdate(async (to, from) => {
             color: RGB(250, 175, 210);
           }
           .icon-nansheng {
-              color: RGB(113, 194, 248);
-            } 
-         
+            color: RGB(113, 194, 248);
+          }
         }
       }
 

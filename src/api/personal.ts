@@ -12,3 +12,12 @@ export const getPersonalInfo = (uid: string) => {
 export const getPersonalSonglist = (uid: string) => {
   return getAjax("/user/playlist", { params: { uid } });
 };
+/** 获取关注列表 */
+export const getFollow = (uid: string) => {
+  return getAjax(`/user/follows?uid=${uid}`);
+};
+
+/** 获取粉丝列表 */
+export const getFollower = (uid: string) => {
+  return getAjax(`/user/followeds?uid=${uid}`);
+};

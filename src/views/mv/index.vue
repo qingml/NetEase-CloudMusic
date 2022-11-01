@@ -19,7 +19,7 @@
 
 <script setup>
 import { mvAreaMenus, mvTypeMenus, mvOrderMenus } from "@/constants/mvMenus";
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 import MVTagBar from "@/components/base/noPopover-tag-bar/index.vue";
 import MV from "@/components/base/mv/index.vue";
@@ -93,6 +93,7 @@ const changeData = (type, val, data) => {
   }
 
   .loading-area{
+    height: 100px;
     display: flex;
     justify-content: center;
   }

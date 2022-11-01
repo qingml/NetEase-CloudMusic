@@ -89,6 +89,7 @@ const changeData = (type, val, data) => {
   z-index: 99;
 }
 .loading-area {
+  height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
