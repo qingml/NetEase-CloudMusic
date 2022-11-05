@@ -1,4 +1,4 @@
-import { IRecommendSongItem } from "@/components/base/song-list/type";
+import { IRecommendSongItem } from "@/components/song-list/type";
 import { formatSecond } from "./number";
 
 /** 格式化歌手 */

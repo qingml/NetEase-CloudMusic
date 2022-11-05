@@ -135,7 +135,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         display: inline-block;
         width: 54px;
         height: 54px;
-        background: url(@/assets/logo22.png) no-repeat 0 9999px;
+        background: url(@/assets/img/logo.png) no-repeat 0 9999px;
         background-position: 0;
         background-size: contain;
       }

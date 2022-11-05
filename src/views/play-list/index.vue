@@ -30,8 +30,8 @@
 <script setup>
 import { getHotTag, getTagCatgoryList, getPlaylist } from "@/api/playlist";
 import { onMounted, ref, watch } from "vue";
-import TagBar from "@/components/base/tag-bar/index.vue";
-import CuratePlaylist from "@/components/base/curate-playlist/index.vue";
+import TagBar from "./components/tag-bar/index.vue";
+import CuratePlaylist from "@/components/curate-playlist/index.vue";
 
 const currentPage = ref(1);
 

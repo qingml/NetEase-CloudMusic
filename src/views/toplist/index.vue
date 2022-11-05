@@ -15,10 +15,10 @@
 <script setup lang="ts">
   import { onMounted, ref } from "vue";
   import {getRankTopList} from "@/api/rank-list"
-  import TopTitle from "@/components/base/top-title/index.vue";
-  import CuratePlaylist from  "@/components/base/curate-playlist/index.vue";
+  import TopTitle from "@/components/top-title/index.vue";
+  import CuratePlaylist from  "@/components/curate-playlist/index.vue";
 
-  import { IRecommendPlayItem} from  "@/components/base/curate-playlist/type";
+  import { IRecommendPlayItem} from  "@/components/curate-playlist/type";
 
   
   const FeaturedListData = ref<IRecommendPlayItem[]>([])

@@ -24,10 +24,10 @@ import {
 } from "@/constants/artistMenus";
 import { onMounted, ref, watch } from "vue";
 
-import ArtistTagBar from "@/components/base/noPopover-tag-bar/index.vue";
-import Singers from "@/components/base/singers/index.vue";
-import useScrollUpdate from "@/hooks/useScrollUpdate";
+import ArtistTagBar from "@/components/tag-bar-list/index.vue";
+import Singers from "@/components/singers-list/index.vue";
 
+import useScrollUpdate from "@/hooks/useScrollUpdate";
 import { getArtistList } from "@/api/artists";
 
 const artistAreaMenusList = ref(artistAreaMenus);
@@ -93,5 +93,8 @@ const changeData = (type, val, data) => {
   display: flex;
   justify-content: center;
   align-items: center;
+  p {
+    margin-left: 12px;
+  }
 }
 </style>

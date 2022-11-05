@@ -1,7 +1,7 @@
 <template>
   <div class="album-detail-whole">
     <div class="album-detail-left">
-      <PlayListDetailInfo
+      <PlayListIntroduction
         :data="AlbumDetailData"
         :hasTag="false"
         :hasPublishCompany="true"
@@ -10,7 +10,7 @@
       <Playlist :data="AlbumPlaylistData" :hasCollect="false" />
     </div>
     <div class="album-detail-right">
-      <PlaylistRelatedRecommend  :data="HotAlbumData" :isHotAlbum="true"/>
+      <PlaylistRelatedRecommend :data="HotAlbumData" :isHotAlbum="true" />
       <PlaylistDetailComments :data="HotCommentData" />
     </div>
   </div>
@@ -20,12 +20,12 @@
 import { onMounted, ref } from "vue";
 import { useRouter, onBeforeRouteUpdate } from "vue-router";
 
-import { getAlbumDetail, getHotAlbum,getHotComment } from "@/api/ablum-detail";
+import { getAlbumDetail, getHotAlbum, getHotComment } from "@/api/ablum-detail";
 
-import Playlist from "@/components/base/playlist/index.vue";
-import PlayListDetailInfo from "@/components/playlist-detail-info/index.vue";
-import PlaylistRelatedRecommend from "@/components/playlist-related-recommend/index.vue";
-import PlaylistDetailComments from "@/components/comments-detail/index.vue";
+import Playlist from "@/components/playlist/index.vue";
+import PlayListIntroduction from "@/components/playlist-introduction/index.vue";
+import PlaylistRelatedRecommend from "@/components/related-recommend-playlist/index.vue";
+import PlaylistDetailComments from "@/components/comments-list/index.vue";
 
 const { currentRoute } = useRouter();
 const AlbumId = currentRoute?.value?.params?.id as string;
@@ -36,7 +36,7 @@ const HotAlbumData = ref([]);
 const HotCommentData = ref([]);
 
 const queryAlbumDetailData = async (albumId: string) => {
-  const [AlbumDetailRes,HotCommentRes] = await Promise.all([
+  const [AlbumDetailRes, HotCommentRes] = await Promise.all([
     getAlbumDetail(albumId),
     getHotComment(albumId),
   ]);
@@ -56,16 +56,16 @@ const queryAlbumDetailData = async (albumId: string) => {
     album: songItem.al.name,
   }));
 
-  HotCommentData.value = HotCommentRes.hotComments
+  HotCommentData.value = HotCommentRes.hotComments;
   const hotAlbumId = AlbumDetailRes?.album?.artist.id;
-  const  HotAlbumRes = await getHotAlbum(hotAlbumId)
+  const HotAlbumRes = await getHotAlbum(hotAlbumId);
 
-  HotAlbumData.value = HotAlbumRes?.hotAlbums?.map((albumItem:any) => ({
+  HotAlbumData.value = HotAlbumRes?.hotAlbums?.map((albumItem: any) => ({
     ...albumItem,
-    name:albumItem.name,
-    coverImgUrl:albumItem.blurPicUrl,
-    creator:{nickname:albumItem.artist.name}
-  }))
+    name: albumItem.name,
+    coverImgUrl: albumItem.blurPicUrl,
+    creator: { nickname: albumItem.artist.name },
+  }));
 };
 onMounted(() => queryAlbumDetailData(AlbumId));
 onBeforeRouteUpdate(async (to, from) => {

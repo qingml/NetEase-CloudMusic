@@ -1,11 +1,17 @@
 <template>
   <TopBanner :data="bannerData" />
-  <RecommendPlayList :data="recommendData" />
-  <div class="recommend-song__container">
+  <div class="recommend-play-list__container mt-24">
+    <TopTitle title="歌单推荐" />
+    <CuratePlaylist :data="recommendData" />
+  </div>
+  <div class="recommend-song__container mt-24">
     <TopTitle title="新歌推荐" />
     <SongList @click="handleSongClick" :data="songsData" />
   </div>
-  <RecommendSingers :data="singersData" />
+  <div class="recommend-singers__container mt-24">
+    <TopTitle title="推荐歌手" />
+    <SingerList :data="singersData" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -16,16 +22,17 @@ import {
   getNewSongs,
   getHotSingers,
 } from "@/api/home";
-import RecommendPlayList from "@/components/recommend-play-list/index.vue";
-import TopBanner, { IBannerItem } from "@/components/top-banner/index.vue";
-import RecommendSingers from "@/components/recommend-singers/index.vue";
-import TopTitle from "@/components/base/top-title/index.vue";
-import SongList from "@/components/base/song-list/index.vue";
+import TopBanner, { IBannerItem } from "./components/top-banner/index.vue";
+import TopTitle from "@/components/top-title/index.vue";
+import SongList from "@/components/song-list/index.vue";
+import SingerList from "@/components/singers-list/index.vue";
+import CuratePlaylist from "@/components/curate-playlist/index.vue";
+
 import { formatSong } from "@/utils/song";
 
-import { IRecommendSongItem } from "@/components/base/song-list/type";
-import { IRecommendPlayItem } from "@/components/base/curate-playlist/type";
-import { IRecommendSingersItem } from "@/components/base/singers/type";
+import { IRecommendSongItem } from "@/components/song-list/type";
+import { IRecommendPlayItem } from "@/components/curate-playlist/type";
+import { IRecommendSingersItem } from "@/components/singers/type";
 
 import { usePlayerStore } from "@/stores/player";
 
@@ -55,4 +62,8 @@ const handleSongClick = (el: IRecommendSongItem) => {
 };
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.mt-24 {
+  margin-top: 24px;
+}
+</style>

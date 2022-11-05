@@ -16,7 +16,7 @@
           <Album :data="singerAlbumData" />
         </el-tab-pane>
         <el-tab-pane label="MV" name="mv">
-          <MV :data="singerMvData" />
+          <MVList :data="singerMvData" />
         </el-tab-pane>
         <el-tab-pane label="歌手详情" name="singerDetail">
           <SingerIntro :data="singerIntroductionData" />
@@ -40,13 +40,15 @@ import {
   getSingerMV,
   getSingerAlbum,
 } from "@/api/singerlist-detail";
-import Playlist from "@/components/base/playlist/index.vue";
-import SingerInfo from "@/components/singer-detail-info/index.vue";
-import SimSingers from "@/components/base/singers/index.vue";
-import SingerIntro from "@/components/singers-introduction/index.vue";
-import MV from "@/components/base/mv/index.vue";
-import Album from "@/components/base/album/index.vue";
 import { formatSong } from "@/utils/song";
+
+import Playlist from "@/components/playlist/index.vue";
+import SimSingers from "@/components/singers-list/index.vue";
+import MVList from "@/components/mv-list/index.vue";
+import Album from "@/components/album/index.vue";
+import SingerInfo from "./components/info/index.vue";
+import SingerIntro from "./components/introduction/index.vue";
+
 
 const { currentRoute } = useRouter();
 const singerId = currentRoute?.value?.params?.id as string;
@@ -101,7 +103,7 @@ onBeforeRouteUpdate(async (to, from) => {
   &-top {
     width: 1280px;
     height: 550px;
-    background: url(/img/top-bg.5c3d6989.jpg);
+    background: url(@/assets/img/top-bg.jpg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

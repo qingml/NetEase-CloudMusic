@@ -52,7 +52,7 @@
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { onMounted, PropType, ref, watch } from "vue";
 import { useLoginStore } from "@/stores/login";
-import SearchOverLay from "@/components/base/search-overlay/index.vue";
+import SearchOverLay from "./components/search-overlay/index.vue";
 import { logout } from "@/api/login";
 import { storeToRefs } from "pinia";
 
@@ -128,7 +128,7 @@ header {
     width: 42px;
     height: 42px;
     border-radius: 10px;
-    background: url(@/assets/logo22.png) no-repeat 0 9999px;
+    background: url(@/assets/img/logo.png) no-repeat 0 9999px;
     background-position: center;
     background-size: 90% 90%;
     margin-right: 4px;

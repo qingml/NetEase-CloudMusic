@@ -1,13 +1,16 @@
 <template>
   <div class="playlist-detail-whole">
     <div class="playlist-detail-left">
-      <PlayListDetailInfo :data="playlistdetailData" />
+      <PlayListIntroduction :data="playlistdetailData" />
       <Playlist :data="playListData" />
     </div>
     <div class="playlist-detail-right">
       <PlaylistDetailSubscribers :data="PlayListSubscriberData" />
       <PlaylistRelatedRecommend :data="playlistRelatedRecommendData" />
-      <PlaylistDetailComments :data="playlistDetailCommentsData" />
+      <PlaylistDetailComments
+        :data="playlistDetailCommentsData"
+        :hideScrollBar="true"
+      />
     </div>
   </div>
 </template>
@@ -15,7 +18,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRouter, onBeforeRouteUpdate } from "vue-router";
-import PlayListDetailInfo from "@/components/playlist-detail-info/index.vue";
+
+import PlayListIntroduction from "@/components/playlist-introduction/index.vue";
+import Playlist from "@/components/playlist/index.vue";
+import PlaylistDetailSubscribers from "./components/subscribers/index.vue";
+import PlaylistRelatedRecommend from "@/components/related-recommend-playlist/index.vue";
+import PlaylistDetailComments from "@/components/comments-list/index.vue";
+
 import {
   getPlaylistDetail,
   getPlayList,
@@ -23,10 +32,6 @@ import {
   getPlayListRelatedrecommend,
   getPlayListComments,
 } from "@/api/playlist-detail";
-import Playlist from "@/components/base/playlist/index.vue";
-import PlaylistDetailSubscribers from "@/components/playlist-detail-subscribers/index.vue";
-import PlaylistRelatedRecommend from "@/components/playlist-related-recommend/index.vue";
-import PlaylistDetailComments from "@/components/comments-detail/index.vue";
 import { formatSong } from "@/utils/song";
 
 const { currentRoute } = useRouter();

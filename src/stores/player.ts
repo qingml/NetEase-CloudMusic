@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { getSongDetailUrl, getSongDetailLyric } from "@/api/player";
-import { IRecommendSongItem } from "@/components/base/song-list/type";
+import { IRecommendSongItem } from "@/components/song-list/type";
 
 enum ModeEnum {
   /** 顺序 */
@@ -30,7 +30,6 @@ interface IPlayerState {
   lyric: string;
   /** 歌词页面状态 */
   openLyric: boolean;
-
 }
 
 export const usePlayerStore = defineStore({
@@ -116,6 +115,8 @@ export const usePlayerStore = defineStore({
       }
 
       this.currentPlayIndex = index;
+
+      if (!this.currentSong) return;
 
       if (this.currentSong.playUrl) {
         this.isPlaying = true;

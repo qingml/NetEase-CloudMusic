@@ -31,7 +31,7 @@
             <Album :data="ablumData" />
           </el-tab-pane>
           <el-tab-pane label="视频" name="vedio">
-            <MV :data="vedioData" />
+            <MVList :data="vedioData" />
           </el-tab-pane>
           <el-tab-pane label="歌单" name="songlist">
             <CuratePlaylist :data="songlistData" />
@@ -51,11 +51,11 @@ import { Search } from "@element-plus/icons-vue";
 
 import { getSearchSongDetail } from "@/api/search-result";
 
-import Playlist from "@/components/base/playlist/index.vue";
-import SimSingers from "@/components/base/singers/index.vue";
-import MV from "@/components/base/mv/index.vue";
-import Album from "@/components/base/album/index.vue";
-import CuratePlaylist from "@/components/base/curate-playlist/index.vue";
+import Playlist from "@/components/playlist/index.vue";
+import SimSingers from "@/components/singers/index.vue";
+import MVList from "@/components/mv-list/index.vue";
+import Album from "@/components/album/index.vue";
+import CuratePlaylist from "@/components/curate-playlist/index.vue";
 
 import { formatSong } from "@/utils/song";
 import { useSearchStore } from "@/stores/search";
@@ -154,7 +154,7 @@ const requestOtherData = () => {
 }
 .search-result-banner-container {
   height: 250px;
-  background: url(/img/searchResultBg.jpg);
+  background: url(@/assets/img/search-result-bg.jpg);
   background-size: cover;
   background-attachment: fixed;
 

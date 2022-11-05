@@ -7,13 +7,13 @@
         :countData="mvRelatedCountData"
       />
       <div class="comment">
-        <CommentsDetail
+        <CommentsList
           v-if="hasHotCom"
           :isMv="true"
           :data="mvHotCommentData"
           :showLine="false"
         />
-        <CommentsDetail
+        <CommentsList
           title="最新评论"
           :isMv="true"
           :data="mvLatestCommentData"
@@ -49,7 +49,7 @@
         </p>
         <p v-else>该视频暂无简介</p>
       </div>
-      <MvRecommend :data="mvRecommendData" />
+      <RecommendMVList :data="mvRecommendData" />
     </div>
   </div>
 </template>
@@ -66,10 +66,10 @@ import {
   getMVRecommend,
 } from "@/api/mv-detail";
 
-import MvDetailInfo from "../../components/mv-detail-info/index.vue";
-import MvRecommend from "../../components/mv-recommend/index.vue";
-import CommentsDetail from "@/components/comments-detail/index.vue";
-import TopTitle from "@/components/base/top-title/index.vue";
+import MvDetailInfo from "./components/mv-detail-info/index.vue";
+import RecommendMVList from "./components/recommend-mv-list/index.vue";
+import CommentsList from "@/components/comments-list/index.vue";
+import TopTitle from "@/components/top-title/index.vue";
 import {
   formatMvDescriData,
   formatMvInfoData,
@@ -87,7 +87,7 @@ const mvId = currentRoute?.value?.params?.id as string;
 const hasHotCom = ref(true);
 const commentCount = ref(0);
 const mvDetailData = ref({});
-const mvDescriData = ref({});
+const mvDescriData = ref<any>({});
 const mvRelatedCountData = ref({});
 const mvRecommendData = ref([]);
 const mvHotCommentData = ref([]);

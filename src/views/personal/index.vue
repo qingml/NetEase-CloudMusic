@@ -87,10 +87,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import Playlist from "@/components/base/playlist/index.vue";
-import songList from "@/components/base/curate-playlist/index.vue";
-import followList from "@/components/follower-list/index.vue";
 import { onMounted, ref } from "vue";
+import Playlist from "@/components/playlist/index.vue";
+import songList from "@/components/curate-playlist/index.vue";
+import followList from "./components/follower-list/index.vue";
 import {
   getFollow,
   getFollower,
@@ -111,7 +111,7 @@ let uID = currentRoute?.value?.params?.id as string;
 const activeName = ref("playlist");
 
 const userPlaylistData = ref([]);
-const userInfoData = ref({});
+const userInfoData = ref<any>({});
 const creatListData = ref([]);
 const collectListData = ref([]);
 const highLight = ref("week");
@@ -185,16 +185,12 @@ const requestOtherData = () => {
   }
 };
 
-
-
 onBeforeRouteUpdate(async (to, from) => {
-  
   if (to.params.id !== from.params.id) {
-    console.log('id',to.params.id,from.params.id,uID)
-    uID = String(to.params.id),
-    queryUserInfoData(uID);
+    console.log("id", to.params.id, from.params.id, uID);
+    (uID = String(to.params.id)), queryUserInfoData(uID);
     queryWeekSonglistData(uID);
-    activeName.value = 'playlist'
+    activeName.value = "playlist";
   }
 });
 
