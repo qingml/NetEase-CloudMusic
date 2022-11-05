@@ -1,29 +1,21 @@
 <template>
-  <div class="singer-detail-introduction__container">
-    <div class="singer-detail-introduction__container-brefdescription">
-      <div class="singer-detail-introduction__container-brefdescription-title">
-        简介
-      </div>
-      <div
-        class="singer-detail-introduction__container-brefdescription-content"
-      >
+  <div class="introduction__container">
+    <div class="introduction__container-brefdescription">
+      <div class="introduction__container-brefdescription-title">简介</div>
+      <div class="introduction__container-brefdescription-content">
         {{ data.briefDesc }}
       </div>
     </div>
-    <div class="singer-detail-introduction__container-introduction">
+    <div class="introduction__container-introduction">
       <div
-        class="singer-detail-introduction__container-introduction--item"
+        class="introduction__container-introduction--item"
         v-for="(item, index) in data.introduction"
         :key="index"
       >
-        <div
-          class="singer-detail-introduction__container-introduction--item-title"
-        >
+        <div class="introduction__container-introduction--item-title">
           {{ item.ti }}
         </div>
-        <p
-          class="singer-detail-introduction__container-introduction--item-introdetail"
-        >
+        <p class="introduction__container-introduction--item-introdetail">
           {{ item.txt }}
         </p>
       </div>
@@ -40,7 +32,7 @@ defineProps({
 </script>
 
 <style lang="less" scoped>
-.singer-detail-introduction {
+.introduction {
   &__container {
     &-brefdescription {
       margin-top: 30px;

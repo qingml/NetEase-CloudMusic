@@ -74,7 +74,6 @@ const handelChangeTag = (index, type, val) => {
 };
 
 const handelChangeTagStatus = (dataIndex, type, val, data) => {
-  console.log(data);
   emit(
     "changeData",
     type,

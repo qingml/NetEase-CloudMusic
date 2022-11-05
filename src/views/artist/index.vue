@@ -86,8 +86,8 @@ const changeData = (type, val, data) => {
 <style scoped lang="less">
 .artistList-main {
   width: 100%;
-  z-index: 99;
 }
+
 .loading-area {
   height: 100px;
   display: flex;

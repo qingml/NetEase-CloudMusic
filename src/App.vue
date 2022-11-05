@@ -191,7 +191,7 @@ header {
   width: 1280px;
   margin: 0 auto;
   overflow: hidden;
-  margin-bottom: 108px;
+  margin-bottom: 88px;
 }
 
 .footer {

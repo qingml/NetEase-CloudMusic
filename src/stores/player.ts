@@ -1,3 +1,4 @@
+import { ElMessage } from 'element-plus';
 import { defineStore } from "pinia";
 import { getSongDetailUrl, getSongDetailLyric } from "@/api/player";
 import { IRecommendSongItem } from "@/components/song-list/type";
@@ -61,6 +62,11 @@ export const usePlayerStore = defineStore({
           playUrl: it.id === id ? data?.[0].url : null,
         }));
 
+        if (!data?.[0]?.url) {
+          ElMessage.error('歌曲信息获取失败，请稍后重试')
+          this.toNext()
+        }
+
         window.localStorage.setItem(
           "playList",
           JSON.stringify(this.playSongList)
@@ -82,7 +88,6 @@ export const usePlayerStore = defineStore({
       try {
         const response = await getSongDetailLyric(id);
         this.lyric = response?.lrc;
-        console.log("lyric", this.lyric);
       } catch (error) {
         console.log("error", error);
       }

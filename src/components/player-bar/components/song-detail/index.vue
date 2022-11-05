@@ -16,14 +16,15 @@
           <i class="iconfont icon-jiantouxia" @click="openLyric = false"></i>
         </h3>
         <p>{{ currentSong?.singer }} - {{ currentSong?.name }}</p>
-        <div>
-          <div class="lyrics-main" :style="{ maxHeight: maxH + 'px' }">
-            <div
-              class="lyrics"
-              ref="lyrics"
-              v-if="lyricInfo?.lyricObj?.length"
-              :style="transform"
-            >
+        <div
+          class="lyrics-wrapper"
+          :style="{ maxHeight: maxH + 'px' }"
+          @scroll="handleScroll"
+          ref="lyricDomRef"
+        >
+          <div class="lyrics-main">
+            <div class="lyrics" ref="lyrics" v-if="lyricInfo?.lyricObj?.length">
+              <!-- :style="transform" -->
               <p
                 :class="[isCurLyric(index)]"
                 v-for="(item, index) in lyricInfo.lyricObj"
@@ -44,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive,  watch } from "vue";
+import { computed, reactive, watch, ref } from "vue";
 import { ElDialog } from "element-plus";
 import { storeToRefs } from "pinia";
 import { usePlayerStore } from "@/stores/player";
@@ -58,6 +59,7 @@ interface LyricInfo {
 const playerStore = usePlayerStore();
 
 const { openLyric, currentSong, lyric, isPlaying } = storeToRefs(playerStore);
+const lyricDomRef = ref<HTMLDivElement>();
 
 const props = defineProps({
   currentTime: {
@@ -85,11 +87,9 @@ const isCurLyric = computed(() => {
 });
 
 // 歌词实时滚动
-const transform = computed(() => {
-  if (lyricInfo["curIndex"] > 6) {
-    return `transform: translateY(-${30 * (lyricInfo["curIndex"] - 6)}px)`;
-  } else {
-    return "transform: translateY(0)";
+watch(lyricInfo, (newVal) => {
+  if (newVal["curIndex"] >= 0) {
+    lyricDomRef.value!.scrollTop = 30 * (newVal["curIndex"] - 6);
   }
 });
 
@@ -201,7 +201,7 @@ watch(
       display: block;
       box-shadow: 5px 0 10px -5px #141414;
       animation: spin 2s linear 1s infinite;
-      background: transparent url(@/assets/imgbo-fang.png) center no-repeat;
+      background: transparent url(@/assets/img/bo-fang.png) center no-repeat;
       transition: all cubic-bezier(0.4, 0, 0.2, 1) 0.8s 0.5s;
     }
 
@@ -220,7 +220,7 @@ watch(
     font-weight: bold;
     margin-bottom: 10px;
 
-    i{
+    i {
       float: right;
       font-size: x-large;
     }
@@ -228,23 +228,27 @@ watch(
 
   p {
     font-size: 14px;
+    margin-bottom: 30px;
+  }
+
+  .lyrics-wrapper {
+    overflow-y: auto;
+    height: 80%;
   }
 
   .lyrics-main {
     width: 100%;
-    margin-top: 30px;
+
     padding: 30px;
-    height: 80%;
     border-radius: 4px;
-    overflow: hidden;
     background: #f8f9ff;
     overflow-y: auto;
     transition: all 1.5s ease-in-out;
   }
 
   ::-webkit-scrollbar {
-  display: none;
-}
+    display: none;
+  }
   .lyrics {
     font-size: 0;
     transform: translateY(0);

@@ -214,7 +214,6 @@ const requestOtherData = () => {
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.id !== from.params.id) {
-    console.log("id", to.params.id, from.params.id, uID);
     (uID = String(to.params.id)), queryUserInfoData(uID);
     queryWeekSonglistData(uID);
     activeName.value = "playlist";

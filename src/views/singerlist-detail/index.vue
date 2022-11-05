@@ -120,10 +120,7 @@ onBeforeRouteUpdate(async (to, from) => {
     bottom: 0;
   }
   &-bottom {
-    margin-bottom: 100px;
-    //padding-left: 30px;
-    // padding-right: 30px;
-    //  text-align: center;
+    margin-bottom: 50px;
     .singer-detail-nav-title {
       padding-top: 20px;
 

@@ -21,6 +21,5 @@ export const getPlaylist = ({
   order = "hot",
   limit = 40,
 }: getPlaylistProps) => {
-  console.log("cat", cat);
   return getAjax("/top/playlist", { params: { cat, offset, order, limit } });
 };

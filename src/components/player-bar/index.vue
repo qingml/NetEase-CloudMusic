@@ -1,15 +1,36 @@
 <template>
   <div class="player-container">
+    <ElSlider
+      class="player-progress"
+      size="small"
+      input-size="small"
+      :show-tooltip="false"
+      v-model="playProgressValue"
+      @change="handleChangePlayTime"
+      @input="handleInputPlayTime"
+    />
     <PlaySongDetail :currentTime="currentPlayTime" />
     <div class="player-block">
       <div class="player-song-info" @click="handleLyric">
         <ElImage :src="`${currentSong?.picUrl}?param=300y300`" />
-        <div class="song-detail">
-          <div class="player-song-songName ellipsis">
-            {{ currentSong?.name }}
+        <div>
+          <div class="song-detail">
+            <div class="player-song-name ellipsis">
+              {{ currentSong?.name }}
+            </div>
+            <div>-</div>
+            <div class="player-song-singer">
+              {{ currentSong?.singer }}
+            </div>
           </div>
-          <div class="player-song-singer">
-            {{ currentSong?.singer }}
+          <div class="song-time">
+            <span>
+              {{ formatDurationPlay(currentPlayTime) }}
+            </span>
+            <span>/</span>
+            <span>
+              {{ formatDurationPlay(currentSong?.duration!) }}
+            </span>
           </div>
         </div>
       </div>
@@ -34,22 +55,6 @@
             </span>
           </div>
         </div>
-        <div class="play-song-slider">
-          <div class="song-currentTime">
-            {{ formatDurationPlay(currentPlayTime) }}
-          </div>
-          <ElSlider
-            size="small"
-            input-size="small"
-            :show-tooltip="false"
-            v-model="playProgressValue"
-            @change="handleChangePlayTime"
-            @input="manualControl = true"
-          />
-          <div class="song-totolTime">
-            {{ formatDurationPlay(currentSong?.duration!) }}
-          </div>
-        </div>
       </div>
       <div class="play-other-control">
         <div class="volume-control">
@@ -64,38 +69,48 @@
             @input="handleVolumeChange"
           />
         </div>
-        <div class="playlist">
-          <i class="iconfont icon-playlistMusic" @click="showPopover"></i>
-          <div class="playlist-popover" v-if="showPlaylistPopover">
-            <div class="playlist-title">
-              播放列表
-              <i
-                class="iconfont icon-qingkong"
-                @click="handleResetPlayList"
-              ></i>
-            </div>
-            <div class="playlist-content">
-              <el-scrollbar>
-                <div
-                  v-for="(item, index) in currentSongData"
-                  :key="index"
-                  :class="[
-                    'playlist-item',
-                    index == playingIndex ? 'highlight' : '',
-                  ]"
-                  @click="() => playerStore.setCurrentPlayIndex(index)"
-                >
-                  <span class="item-index">
-                    <i class="iconfont icon-bofang"></i>
-                    <span class="index">{{ paddingZero(index + 1, 2) }}</span>
-                  </span>
-                  <span class="item-name ellipsis">{{ item.name }}</span>
-                  <span class="item-singer ellipsis">{{ item.singer }}</span>
-                </div>
-              </el-scrollbar>
+        <ElPopover
+          placement="top"
+          trigger="click"
+          :teleported="false"
+          :width="400"
+          popperClass="play-history-list"
+        >
+          <template #reference>
+            <i class="iconfont icon-playlistMusic" @click="showPopover"></i>
+          </template>
+          <div class="playlist">
+            <div class="playlist-popover">
+              <div class="playlist-title">
+                播放列表
+                <i
+                  class="iconfont icon-qingkong"
+                  @click="handleResetPlayList"
+                ></i>
+              </div>
+              <div class="playlist-content">
+                <el-scrollbar>
+                  <div
+                    v-for="(item, index) in currentSongData"
+                    :key="index"
+                    :class="[
+                      'playlist-item',
+                      index == playingIndex ? 'highlight' : '',
+                    ]"
+                    @click="() => playerStore.setCurrentPlayIndex(index)"
+                  >
+                    <span class="item-index">
+                      <i class="iconfont icon-bofang"></i>
+                      <span class="index">{{ paddingZero(index + 1, 2) }}</span>
+                    </span>
+                    <span class="item-name ellipsis">{{ item.name }}</span>
+                    <span class="item-singer ellipsis">{{ item.singer }}</span>
+                  </div>
+                </el-scrollbar>
+              </div>
             </div>
           </div>
-        </div>
+        </ElPopover>
       </div>
 
       <div v-if="currentSong">
@@ -117,7 +132,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { ElSlider, ElImage } from "element-plus";
+import { ElSlider, ElImage, ElPopover } from "element-plus";
 import { Arrayable } from "element-plus/es/utils";
 
 import PlaySongDetail from "./components/song-detail/index.vue";
@@ -138,11 +153,16 @@ const playerStore = usePlayerStore();
 const { isPlaying, openLyric, currentSong, currentSongData, playingIndex } =
   storeToRefs(playerStore);
 
-watch(isPlaying, (newVal) => {
-  if (!newVal) {
+watch([isPlaying, currentSong], ([newStaus, newSong]) => {
+  if (!newStaus) {
     audioRef?.value?.pause();
   } else {
     audioRef?.value?.play();
+  }
+
+  if ((newSong || newStaus) && audioRef.value && !playVolumeValue.value) {
+    audioRef.value.volume = 0.36;
+    playVolumeValue.value = 40;
   }
 });
 
@@ -166,9 +186,15 @@ const handleUpdateTime = () => {
 
 const handleChangePlayTime = (value: Arrayable<number>) => {
   playProgressValue.value = value as number;
-  audioRef.value!.currentTime =
-    currentSong.value?.duration! * ((value as number) / 100);
+  const currentTime = currentSong.value?.duration! * ((value as number) / 100);
+  audioRef.value!.currentTime = currentTime;
   manualControl.value = false;
+};
+
+const handleInputPlayTime = (value: Arrayable<number>) => {
+  manualControl.value = true;
+  const currentTime = currentSong.value?.duration! * ((value as number) / 100);
+  currentPlayTime.value = currentTime;
 };
 
 const handleVolumeChange = (value: Arrayable<number>) => {
@@ -187,13 +213,6 @@ const handleLyric = () => {
     playerStore.getSongDetailLyric(currentSong.value?.id);
   }
 };
-
-watch([currentSong], (newSong) => {
-  if (newSong && audioRef.value && !playVolumeValue.value) {
-    audioRef.value.volume = 0.36;
-    playVolumeValue.value = 40;
-  }
-});
 
 const changeMuted = () => {
   muted.value = !muted.value;
@@ -232,18 +251,42 @@ const handleAudioPlay = () => {
 }
 .player-container {
   width: 100%;
-  position: relative;
+  position: fixed;
+  bottom: 0;
+
+  .player-progress {
+    position: absolute;
+    top: -14px;
+    z-index: 9999;
+    :deep(.el-slider__runway.el-slider__runway) {
+      background-color: #fff;
+    }
+  }
+
+  .el-slider {
+    --el-slider-main-bg-color: var(--vt-c-text-light-2);
+    --el-slider-height: 4px;
+    --el-slider-button-size: 12px;
+    padding: 0 5px;
+
+    .el-slider__button-wrapper {
+      display: none;
+    }
+
+    &:hover {
+      .el-slider__button-wrapper {
+        display: block;
+      }
+    }
+  }
 }
 
 i {
   cursor: pointer;
 }
 .player-block {
-  position: fixed;
-  bottom: 0;
   background-color: #ddd;
-  opacity: 0.9;
-  height: 80px;
+  height: 60px;
   width: 100%;
   padding: 10px 32px;
   box-shadow: 12px 10px 8px 6px rgb(0 0 0 / 30%);
@@ -253,15 +296,20 @@ i {
   justify-content: space-between;
   align-items: center;
 
-  .el-slider {
-    --el-slider-main-bg-color: var(--vt-c-text-light-2);
-    --el-slider-height: 4px;
-    --el-slider-button-size: 12px;
-    padding: 0 8px 0 8px;
-  }
-
   i {
     font-size: larger;
+  }
+
+  .song-time {
+    span {
+      width: 45px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    span:nth-child(2) {
+      width: 15px;
+    }
   }
 }
 
@@ -269,18 +317,23 @@ i {
   display: flex;
   align-items: center;
   padding-top: 4px;
-  width: 180px;
   cursor: pointer;
+  max-width: 760px;
 
   .el-image {
-    width: 80px;
+    width: 42px;
     margin-right: 10px;
   }
 
   .song-detail {
-    width: 160px;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+
+    font-size: 14px;
+
+    div {
+      margin-right: 8px;
+    }
 
     .player-song-singer {
       font-size: 12px;
@@ -291,13 +344,14 @@ i {
 }
 
 .play-song-control {
-  display: flex;
-  flex-direction: column;
-  width: 60%;
+  flex: 1;
 
   .play-song-operator {
-    justify-content: center;
-    display: flex;
+    position: fixed;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+
     &-wrapper {
       display: flex;
       align-items: center;
@@ -315,18 +369,18 @@ i {
       }
     }
   }
-
-  .play-song-slider {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: -5px;
-  }
 }
 
 .play-other-control {
   display: flex;
   flex-direction: row;
+
+  :deep(.play-history-list) {
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 99999;
+  }
+
   .volume-control {
     display: flex;
     flex-direction: row;
@@ -339,8 +393,6 @@ i {
   }
 
   .playlist {
-    // position: relative;
-
     i {
       margin-left: 8px;
     }
@@ -348,8 +400,6 @@ i {
     &-popover {
       height: 560px;
       width: 400px;
-      position: fixed;
-      bottom: 58px;
       background-color: white;
       right: 0px;
       box-shadow: 5px 0 12px -6px #141414;
