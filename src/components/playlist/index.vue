@@ -107,10 +107,12 @@ const handlePlayCurrent = (currentId: number) => {
 };
 
 watch(data, (newData) => {
-  currentData.value = newData.slice(0, pageSize.value);
+  if (newData.length) {
+    currentData.value = newData.slice(0, pageSize.value);
+  }
 });
-
 onMounted(() => {
+  currentData.value = data.value.slice(0, pageSize.value);
   listInnerRef.value!.style.transform = `translateY(${0}px)`;
 });
 

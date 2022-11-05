@@ -1,46 +1,50 @@
 <template>
-  <div class="playlist">
-    <TagBar
-      :catgoryList="tagCatgoryList"
-      :hotTagList="hotTags"
-      @changeStatus="handleChangeTagActive"
-      @clickTag="handleClick"
-    />
-  </div>
-  <div class="playlist-main">
-    <CuratePlaylist :data="playListData" />
-  </div>
-  <div class="playlist-pagination-block">
-    <div class="playlist-pagination-block-wrap">
-      <span class="el-page-total">共{{ playlistCount }}条</span>
-      <el-pagination
-        v-model:currentPage="currentPage"
-        :page-size="40"
-        :small="false"
-        :disabled="false"
-        :background="false"
-        :total="playlistCount"
-        layout="prev, pager, next"
-        @current-change="handleCurrentChange"
+  <ElSkeleton v-if="loading" :rows="10" animated />
+  <template v-else>
+    <div class="playlist">
+      <TagBar
+        :catgoryList="tagCatgoryList"
+        :hotTagList="hotTags"
+        @changeStatus="handleChangeTagActive"
+        @clickTag="handleClick"
       />
     </div>
-  </div>
+    <div class="playlist-main">
+      <CuratePlaylist :data="playListData" />
+    </div>
+    <div class="playlist-pagination-block">
+      <div class="playlist-pagination-block-wrap">
+        <span class="el-page-total">共{{ playlistCount }}条</span>
+        <el-pagination
+          v-model:currentPage="currentPage"
+          :page-size="40"
+          :small="false"
+          :disabled="false"
+          :background="false"
+          :total="playlistCount"
+          layout="prev, pager, next"
+          @current-change="handleCurrentChange"
+        />
+      </div>
+    </div>
+  </template>
 </template>
 
 <script setup>
 import { getHotTag, getTagCatgoryList, getPlaylist } from "@/api/playlist";
 import { onMounted, ref, watch } from "vue";
+import { ElSkeleton } from "element-plus";
+
 import TagBar from "./components/tag-bar/index.vue";
 import CuratePlaylist from "@/components/curate-playlist/index.vue";
 
 const currentPage = ref(1);
-
 const playlistCount = ref(0);
 const playListData = ref([]);
 const currentTag = ref("全部");
-
 const hotTags = ref([]);
 const tagCatgoryList = ref([]);
+const loading = ref(false);
 
 watch([currentPage, currentTag], ([newPage = 1, newTag = ""], [_, oldTag]) => {
   let offset = (newPage - 1) * 40;
@@ -83,15 +87,17 @@ const queryPlaylistData = async (cat, offset) => {
   }));
 };
 
-// const handleCurrentChange = (val) => {
-//   console.log(currentTag.value)
-//   queryPlaylistData(currentTag.value, (val - 1) * 40);
-// };
-
-onMounted(() => {
-  queryHotTags();
-  queryTagCatgoryList();
-  queryPlaylistData();
+onMounted(async () => {
+  loading.value = true;
+  try {
+    await Promise.all([
+      queryHotTags(),
+      queryTagCatgoryList(),
+      queryPlaylistData(),
+    ]);
+  } finally {
+    loading.value = false;
+  }
 });
 
 const handleChangeTagActive = (type, data) => {

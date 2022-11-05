@@ -1,7 +1,21 @@
 <template>
   <div class="personal-container">
     <followList :data="followDetailData" :title="detailTitle" />
-    <div class="personal-info">
+    <ElSkeleton v-if="userLoading" :rows="6" animated>
+      <template #template>
+        <div style="display: flex">
+          <ElSkeletonItem
+            variant="circle"
+            style="width: 150px; height: 150px"
+          />
+          <div>
+            <ElSkeletonItem variant="text" />
+            <ElSkeletonItem variant="text" />
+          </div>
+        </div>
+      </template>
+    </ElSkeleton>
+    <div class="personal-info" v-else>
       <div class="user-ava">
         <img :src="userInfoData?.profile?.avatarUrl" />
       </div>
@@ -54,7 +68,6 @@
         @click="requestOtherData"
       >
         <el-tab-pane label="听歌排行" name="playlist">
-          <!-- <template> -->
           <div class="playlist-top-banner">
             <div class="playlist-title">
               累计听歌 <span> {{ userInfoData?.listenSongs }} </span>首
@@ -63,18 +76,21 @@
               <span
                 :class="[highLight == 'week' ? 'title-highlight' : 'title']"
                 @click.stop="requestWeekPlaylist"
-                >最近一周</span
               >
+                最近一周
+              </span>
               <span>|</span>
               <span
                 :class="[highLight == 'all' ? 'title-highlight' : 'title']"
                 @click.stop="requestAllPlaylist"
-                >所有时间</span
               >
+                所有时间
+              </span>
             </div>
           </div>
-          <!-- </template> -->
-          <Playlist :data="userPlaylistData" :hasCollect="false" />
+          <ElSkeleton v-if="playlistLoading" :rows="8" animated />
+
+          <Playlist v-else :data="userPlaylistData" :hasCollect="false" />
         </el-tab-pane>
         <el-tab-pane label="创建的歌单" name="creatList">
           <songList :data="creatListData" />
@@ -100,10 +116,9 @@ import {
 } from "@/api/personal";
 import { formatSong } from "@/utils/song";
 import { onBeforeRouteUpdate, useRouter } from "vue-router";
-import { ElTabs, ElTabPane } from "element-plus";
+import { ElTabs, ElTabPane, ElSkeleton, ElSkeletonItem } from "element-plus";
 import { storeToRefs } from "pinia";
 import { useLoginStore } from "@/stores/login";
-import { watch } from "vue";
 
 const { currentRoute } = useRouter();
 
@@ -115,6 +130,8 @@ const userInfoData = ref<any>({});
 const creatListData = ref([]);
 const collectListData = ref([]);
 const highLight = ref("week");
+const playlistLoading = ref(false);
+const userLoading = ref(false);
 
 const loginStore = useLoginStore();
 const { openUserFollow } = storeToRefs(loginStore);
@@ -123,9 +140,14 @@ const detailTitle = ref("");
 const followDetailData = ref([]);
 
 const queryUserInfoData = async (uid: string) => {
-  const userInfoRes = await getPersonalInfo(uid);
-  userInfoData.value = userInfoRes;
-  userName = userInfoRes?.profile?.nickname;
+  userLoading.value = true;
+  try {
+    const userInfoRes = await getPersonalInfo(uid);
+    userInfoData.value = userInfoRes;
+    userName = userInfoRes?.profile?.nickname;
+  } finally {
+    userLoading.value = false;
+  }
 };
 
 const queryWeekSonglistData = async (uid: string) => {
@@ -145,8 +167,13 @@ const querySonglistData = async (uid: string) => {
 };
 
 const queryAllPlaylistData = async (uid: string) => {
-  const userPlaylistAllRes = await getPersonalPlaylist(uid, 0);
-  userPlaylistData.value = userPlaylistAllRes?.allData?.map(formatSong);
+  playlistLoading.value = true;
+  try {
+    const userPlaylistAllRes = await getPersonalPlaylist(uid, 0);
+    userPlaylistData.value = userPlaylistAllRes?.allData?.map(formatSong);
+  } finally {
+    playlistLoading.value = false;
+  }
 };
 
 const queryFollowListData = async (uid: string) => {

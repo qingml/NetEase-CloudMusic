@@ -1,16 +1,22 @@
 <template>
   <div class="playlist-detail-whole">
     <div class="playlist-detail-left">
-      <PlayListIntroduction :data="playlistdetailData" />
-      <Playlist :data="playListData" />
+      <ElSkeleton v-if="loading" :rows="15" animated />
+      <template v-else>
+        <PlayListIntroduction :data="playlistdetailData" />
+        <Playlist :data="playListData" />
+      </template>
     </div>
     <div class="playlist-detail-right">
-      <PlaylistDetailSubscribers :data="PlayListSubscriberData" />
-      <PlaylistRelatedRecommend :data="playlistRelatedRecommendData" />
-      <PlaylistDetailComments
-        :data="playlistDetailCommentsData"
-        :hideScrollBar="true"
-      />
+      <ElSkeleton v-if="loading" :rows="12" animated />
+      <template v-else>
+        <PlaylistDetailSubscribers :data="PlayListSubscriberData" />
+        <PlaylistRelatedRecommend :data="playlistRelatedRecommendData" />
+        <PlaylistDetailComments
+          :data="playlistDetailCommentsData"
+          :hideScrollBar="true"
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -18,6 +24,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRouter, onBeforeRouteUpdate } from "vue-router";
+import { ElSkeleton } from "element-plus";
 
 import PlayListIntroduction from "@/components/playlist-introduction/index.vue";
 import Playlist from "@/components/playlist/index.vue";
@@ -43,33 +50,39 @@ const playListData = ref([]);
 const PlayListSubscriberData = ref([]);
 const playlistRelatedRecommendData = ref([]);
 const playlistDetailCommentsData = ref([]);
+const loading = ref(false);
 
 const queryPlayListData = async (playId: string) => {
-  const [
-    playListDetailRes,
-    PlayListSubscriberRes,
-    playlistRelatedRecommendRes,
-    playlistDetailCommentsRes,
-  ] = await Promise.all([
-    getPlaylistDetail(playId),
-    getPlayListSubscribers(playId),
-    getPlayListRelatedrecommend(playId),
-    getPlayListComments(playId),
-  ]);
+  loading.value = true;
+  try {
+    const [
+      playListDetailRes,
+      PlayListSubscriberRes,
+      playlistRelatedRecommendRes,
+      playlistDetailCommentsRes,
+    ] = await Promise.all([
+      getPlaylistDetail(playId),
+      getPlayListSubscribers(playId),
+      getPlayListRelatedrecommend(playId),
+      getPlayListComments(playId),
+    ]);
 
-  playlistdetailData.value = playListDetailRes.playlist;
-  PlayListSubscriberData.value = PlayListSubscriberRes.subscribers;
-  playlistRelatedRecommendData.value =
-    playlistRelatedRecommendRes?.playlists || [];
-  playlistDetailCommentsData.value =
-    playlistDetailCommentsRes?.hotComments || [];
+    playlistdetailData.value = playListDetailRes.playlist;
+    PlayListSubscriberData.value = PlayListSubscriberRes.subscribers;
+    playlistRelatedRecommendData.value =
+      playlistRelatedRecommendRes?.playlists || [];
+    playlistDetailCommentsData.value =
+      playlistDetailCommentsRes?.hotComments || [];
 
-  const ids = playListDetailRes.playlist.trackIds.map(
-    (it: any) => it.id
-  ) as string[];
+    const ids = playListDetailRes.playlist.trackIds.map(
+      (it: any) => it.id
+    ) as string[];
 
-  const playListRes = await getPlayList(ids);
-  playListData.value = playListRes?.songs?.map(formatSong) || [];
+    const playListRes = await getPlayList(ids);
+    playListData.value = playListRes?.songs?.map(formatSong) || [];
+  } finally {
+    loading.value = false;
+  }
 };
 
 onMounted(() => queryPlayListData(playListId));
