@@ -122,7 +122,6 @@ import { useLoginStore } from "@/stores/login";
 
 const { currentRoute } = useRouter();
 
-let uID = currentRoute?.value?.params?.id as string;
 const activeName = ref("playlist");
 
 const userPlaylistData = ref([]);
@@ -186,51 +185,62 @@ const queryFollowerListData = async (uid: string) => {
   followDetailData.value = followerListRes.followeds;
 };
 onMounted(() => {
-  queryUserInfoData(uID);
-  queryWeekSonglistData(uID);
+  const { id } = currentRoute?.value?.params;
+  queryUserInfoData(id as string);
+  queryWeekSonglistData(id as string);
 });
 
 const requestWeekPlaylist = () => {
   if (highLight.value !== "week") {
-    queryWeekSonglistData(uID);
+    const { id } = currentRoute?.value?.params;
+    queryWeekSonglistData(id as string);
     highLight.value = "week";
   }
 };
 
 const requestAllPlaylist = () => {
   if (highLight.value !== "all") {
-    queryAllPlaylistData(uID);
+    const { id } = currentRoute?.value?.params;
+
+    queryAllPlaylistData(id as string);
     highLight.value = "all";
   }
 };
 
 const requestOtherData = () => {
+  const { id } = currentRoute?.value?.params;
+
   if (activeName.value != "playlist") {
-    querySonglistData(uID);
+    querySonglistData(id as string);
   } else {
-    queryWeekSonglistData(uID);
+    queryWeekSonglistData(id as string);
   }
 };
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.id !== from.params.id) {
-    (uID = String(to.params.id)), queryUserInfoData(uID);
-    queryWeekSonglistData(uID);
+    console.log("id", to.params.id, from.params.id);
+    const uid = String(to.params.id);
+    queryUserInfoData(uid);
+    queryWeekSonglistData(uid);
     activeName.value = "playlist";
   }
 });
 
 const openFollowDetail = () => {
   openUserFollow.value = true;
+  const { id } = currentRoute?.value?.params;
 
   detailTitle.value = userName + "的关注";
-  queryFollowListData(uID);
+  queryFollowListData(id as string);
 };
 
 const openFollowerDetail = () => {
+  const { id } = currentRoute?.value?.params;
+
   openUserFollow.value = true;
   detailTitle.value = userName + "的粉丝";
-  queryFollowerListData(uID);
+  queryFollowerListData(id as string);
 };
 </script>
 <style scoped lang="less">

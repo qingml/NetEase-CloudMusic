@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus';
+import { ElMessage } from "element-plus";
 import { defineStore } from "pinia";
 import { getSongDetailUrl, getSongDetailLyric } from "@/api/player";
 import { IRecommendSongItem } from "@/components/song-list/type";
@@ -63,8 +63,8 @@ export const usePlayerStore = defineStore({
         }));
 
         if (!data?.[0]?.url) {
-          ElMessage.error('歌曲信息获取失败，请稍后重试')
-          this.toNext()
+          ElMessage.error("歌曲信息获取失败，请稍后重试");
+          this.toNext();
         }
 
         window.localStorage.setItem(
@@ -116,6 +116,7 @@ export const usePlayerStore = defineStore({
 
     setCurrentPlayIndex(index: number) {
       if (this.currentPlayIndex !== 0 && index === this.currentPlayIndex) {
+        this.isPlaying = true;
         return;
       }
 
