@@ -52,7 +52,7 @@ import { Search } from "@element-plus/icons-vue";
 import { getSearchSongDetail } from "@/api/search-result";
 
 import Playlist from "@/components/playlist/index.vue";
-import SimSingers from "@/components/singers/index.vue";
+import SimSingers from "@/components/singers-list/index.vue";
 import MVList from "@/components/mv-list/index.vue";
 import Album from "@/components/album/index.vue";
 import CuratePlaylist from "@/components/curate-playlist/index.vue";

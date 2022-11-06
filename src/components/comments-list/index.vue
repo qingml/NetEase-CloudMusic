@@ -25,9 +25,9 @@
                 <span>•{{ dateDifference(item.time) }}月前</span>
               </h2>
               <div v-if="isMv" class="mv-comment-count">
-                <i class="iconfont icon-dianzan"></i>
+                <i class="iconfont icon-zan"></i>
                 <span>({{ item.likedCount }})</span>|
-                <i class="iconfont icon-pinglun2"></i>
+                <i class="iconfont icon-pinglun"></i>
               </div>
             </div>
             <p class="comments-detail__block--item-info-content">
@@ -170,7 +170,7 @@ defineProps({
             font-weight: 200;
             position: relative;
 
-            .icon-pinglun2 {
+            .icon-pinglun {
               padding-left: 5px;
             }
 
