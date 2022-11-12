@@ -1,10 +1,5 @@
 <template>
-  <ElDialog
-    v-model="openUserFollow"
-    fullscreen
-    :show-close="false"
-    class="follow__dialog"
-  >
+  <ElDialog v-model="visible" fullscreen class="follow__dialog">
     <div class="follow-detail-container">
       <h2 class="follow-title">
         {{ title }}
@@ -34,40 +29,41 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import { useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
 import { ElDialog } from "element-plus";
-import { useLoginStore } from "@/stores/login";
-import { IFollowItem } from "./type";
+import { IFollowItem } from "../../type";
 
 const router = useRouter();
-const loginStore = useLoginStore();
-const { openUserFollow } = storeToRefs(loginStore);
 
-const props = defineProps({
+defineProps({
   data: {
     type: Array as PropType<IFollowItem[]>,
     default: () => [],
   },
   title: {
     type: String,
-    default: () => "",
+    default: "",
+  },
+  visible: {
+    type: Boolean,
+    default: false,
   },
 });
 
+const emit = defineEmits(["update:visible"]);
+
 const handleClick = (id: string) => {
-  openUserFollow.value = false;
+  emit("update:visible", false);
+
   router.push(`/personal-info/${id}`);
-  // location.reload()
 };
 </script>
+
 <style lang="less" scoped>
 .follow-detail-container {
   width: 1280px;
   display: flex;
   flex-direction: column;
-  // justify-content: center;
   text-align: center;
-  // margin: 10px 98px 10px 98px;
   position: absolute;
   left: 0;
   right: 0;

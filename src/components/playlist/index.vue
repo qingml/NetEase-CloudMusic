@@ -107,6 +107,7 @@ const handlePlayCurrent = (currentId: number) => {
 };
 
 watch(data, (newData) => {
+  console.log("newData", newData);
   if (newData.length) {
     currentData.value = newData.slice(0, pageSize.value);
   }

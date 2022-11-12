@@ -82,8 +82,6 @@ const searchStore = useSearchStore();
 
 const router = useRouter();
 
-const searchHistoryTag = ref([]);
-
 interface HotTagItem {
   first: string;
   iconType: number;

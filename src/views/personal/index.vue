@@ -1,6 +1,10 @@
 <template>
   <div class="personal-container">
-    <followList :data="followDetailData" :title="detailTitle" />
+    <FollowList
+      v-model:visible="followListVisible"
+      :data="followDetailData"
+      :title="followListTitle"
+    />
     <ElSkeleton v-if="userLoading" :rows="6" animated>
       <template #template>
         <div style="display: flex">
@@ -25,12 +29,14 @@
           <div class="info-level">Lv{{ userInfoData.level }}</div>
           <div
             :class="[
-              userInfoData?.profile?.gender == 1 ? 'male' : 'female',
-              'info-gender',
+              userInfoData?.profile?.gender == GenderEnum.MALE
+                ? 'male'
+                : 'female',
             ]"
+            class="info-gender"
           >
             <i
-              v-if="userInfoData?.profile?.gender == 1"
+              v-if="userInfoData?.profile?.gender == GenderEnum.MALE"
               class="iconfont icon-nansheng"
             />
             <i v-else class="iconfont icon-nvsheng" />
@@ -41,18 +47,20 @@
             <span>{{ userInfoData?.profile?.eventCount }}</span>
             <span>动态</span>
           </div>
-          <div class="fenge"></div>
+          <div class="fenge" />
           <div>
-            <span @click="openFollowDetail">{{
-              userInfoData?.profile?.follows
-            }}</span>
+            <span
+              @click="() => handleOpenFollowList(FollowListTypeEnum.ATTENTION)"
+            >
+              {{ userInfoData?.profile?.follows }}
+            </span>
             <span>关注</span>
           </div>
-          <div class="fenge"></div>
+          <div class="fenge" />
           <div>
-            <span @click="openFollowerDetail">{{
-              userInfoData?.profile?.followeds
-            }}</span>
+            <span @click="() => handleOpenFollowList(FollowListTypeEnum.FAN)">
+              {{ userInfoData?.profile?.followeds }}
+            </span>
             <span>粉丝</span>
           </div>
         </div>
@@ -62,51 +70,42 @@
       </div>
     </div>
     <div class="user-playlist">
-      <el-tabs
-        v-model="activeName"
-        class="search-detail-nav-title"
-        @click="requestOtherData"
-      >
-        <el-tab-pane label="听歌排行" name="playlist">
+      <ElTabs v-model="activeName" class="search-detail-nav-title">
+        <ElTabPane label="听歌排行" :name="PersonTabInfoEnum.PLAYLIST">
           <div class="playlist-top-banner">
             <div class="playlist-title">
               累计听歌 <span> {{ userInfoData?.listenSongs }} </span>首
             </div>
-            <div class="playlist-tab">
-              <span
-                :class="[highLight == 'week' ? 'title-highlight' : 'title']"
-                @click.stop="requestWeekPlaylist"
-              >
-                最近一周
-              </span>
-              <span>|</span>
-              <span
-                :class="[highLight == 'all' ? 'title-highlight' : 'title']"
-                @click.stop="requestAllPlaylist"
-              >
-                所有时间
-              </span>
-            </div>
+            <ElTabs class="playlist-tab" v-model="currentSongTab">
+              <ElTabPane label="最近一周" :name="SongListTabEnum.LAST_WEEK" />
+              <ElTabPane label="所有时间" :name="SongListTabEnum.ALL_TIME" />
+            </ElTabs>
           </div>
           <ElSkeleton v-if="playlistLoading" :rows="8" animated />
-
-          <Playlist v-else :data="userPlaylistData" :hasCollect="false" />
-        </el-tab-pane>
-        <el-tab-pane label="创建的歌单" name="creatList">
-          <songList :data="creatListData" />
-        </el-tab-pane>
-        <el-tab-pane label="收藏的歌单" name="collectList">
-          <songList :data="collectListData" />
-        </el-tab-pane>
-      </el-tabs>
+          <Playlist
+            v-if="!playlistLoading"
+            :data="personSongData[currentSongTab]"
+            :hasCollect="false"
+          />
+        </ElTabPane>
+        <ElTabPane label="创建的歌单" :name="PersonTabInfoEnum.CREATLIST">
+          <SongList :data="creatListData" />
+        </ElTabPane>
+        <ElTabPane label="收藏的歌单" :name="PersonTabInfoEnum.COLLECTLIST">
+          <SongList :data="collectListData" />
+        </ElTabPane>
+      </ElTabs>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed, reactive } from "vue";
+import { onBeforeRouteUpdate, useRouter } from "vue-router";
+import { ElTabs, ElTabPane, ElSkeleton, ElSkeletonItem } from "element-plus";
 import Playlist from "@/components/playlist/index.vue";
-import songList from "@/components/curate-playlist/index.vue";
-import followList from "./components/follower-list/index.vue";
+import SongList from "@/components/curate-playlist/index.vue";
+import FollowList from "./components/follower-list/index.vue";
 import {
   getFollow,
   getFollower,
@@ -115,63 +114,75 @@ import {
   getPersonalSonglist,
 } from "@/api/personal";
 import { formatSong } from "@/utils/song";
-import { onBeforeRouteUpdate, useRouter } from "vue-router";
-import { ElTabs, ElTabPane, ElSkeleton, ElSkeletonItem } from "element-plus";
-import { storeToRefs } from "pinia";
-import { useLoginStore } from "@/stores/login";
+import {
+  PersonTabInfoEnum,
+  SongListTabEnum,
+  FollowListTypeEnum,
+  GenderEnum,
+} from "./type";
 
 const { currentRoute } = useRouter();
-
-const activeName = ref("playlist");
-
-const userPlaylistData = ref([]);
+const activeName = ref<PersonTabInfoEnum>(PersonTabInfoEnum.PLAYLIST);
+const currentSongTab = ref<SongListTabEnum.LAST_WEEK>(
+  SongListTabEnum.LAST_WEEK
+);
 const userInfoData = ref<any>({});
 const creatListData = ref([]);
 const collectListData = ref([]);
-const highLight = ref("week");
 const playlistLoading = ref(false);
 const userLoading = ref(false);
-
-const loginStore = useLoginStore();
-const { openUserFollow } = storeToRefs(loginStore);
-let userName = "";
-const detailTitle = ref("");
+const personSongData = reactive({
+  [SongListTabEnum.LAST_WEEK]: [],
+  [SongListTabEnum.ALL_TIME]: [],
+});
+const followListVisible = ref(false);
+const followListTitle = ref("");
 const followDetailData = ref([]);
+
+const currentUserId = computed((): string => {
+  return currentRoute?.value?.params.id as string;
+});
 
 const queryUserInfoData = async (uid: string) => {
   userLoading.value = true;
   try {
     const userInfoRes = await getPersonalInfo(uid);
     userInfoData.value = userInfoRes;
-    userName = userInfoRes?.profile?.nickname;
   } finally {
     userLoading.value = false;
   }
 };
 
-const queryWeekSonglistData = async (uid: string) => {
-  const userPlaylistWeekRes = await getPersonalPlaylist(uid, 1);
-  userPlaylistData.value = userPlaylistWeekRes?.weekData?.map(formatSong);
+const queryPersonalPlaylist = async (uid: string) => {
+  playlistLoading.value = true;
+  personSongData[SongListTabEnum.LAST_WEEK] = [];
+  personSongData[SongListTabEnum.ALL_TIME] = [];
+  try {
+    const [lastWeekRes, allTimeRes] = await Promise.all([
+      getPersonalPlaylist(uid, SongListTabEnum.LAST_WEEK),
+      getPersonalPlaylist(uid, SongListTabEnum.ALL_TIME),
+    ]);
+    personSongData[SongListTabEnum.LAST_WEEK] =
+      lastWeekRes?.weekData?.map(formatSong);
+    personSongData[SongListTabEnum.ALL_TIME] =
+      allTimeRes?.allData?.map(formatSong);
+  } finally {
+    playlistLoading.value = false;
+  }
 };
 
 const querySonglistData = async (uid: string) => {
-  const userSonglistRes = await getPersonalSonglist(uid);
-  const creatListNumber = userInfoData?.value?.profile?.playlistCount;
-  creatListData.value = userSonglistRes?.playlist
-    ?.slice(0, creatListNumber)
-    .map(formatSong);
-  collectListData.value = userSonglistRes?.playlist
-    ?.slice(creatListNumber)
-    .map(formatSong);
-};
-
-const queryAllPlaylistData = async (uid: string) => {
-  playlistLoading.value = true;
+  if (creatListData.value.length > 0) return;
   try {
-    const userPlaylistAllRes = await getPersonalPlaylist(uid, 0);
-    userPlaylistData.value = userPlaylistAllRes?.allData?.map(formatSong);
+    const userSonglistRes = await getPersonalSonglist(uid);
+    const creatListNumber = userInfoData?.value?.profile?.playlistCount;
+    creatListData.value = userSonglistRes?.playlist
+      ?.slice(0, creatListNumber)
+      .map(formatSong);
+    collectListData.value = userSonglistRes?.playlist
+      ?.slice(creatListNumber)
+      .map(formatSong);
   } finally {
-    playlistLoading.value = false;
   }
 };
 
@@ -184,65 +195,35 @@ const queryFollowerListData = async (uid: string) => {
   const followerListRes = await getFollower(uid);
   followDetailData.value = followerListRes.followeds;
 };
+
 onMounted(() => {
-  const { id } = currentRoute?.value?.params;
-  queryUserInfoData(id as string);
-  queryWeekSonglistData(id as string);
+  queryUserInfoData(currentUserId.value);
+  queryPersonalPlaylist(currentUserId.value);
+  querySonglistData(currentUserId.value);
 });
-
-const requestWeekPlaylist = () => {
-  if (highLight.value !== "week") {
-    const { id } = currentRoute?.value?.params;
-    queryWeekSonglistData(id as string);
-    highLight.value = "week";
-  }
-};
-
-const requestAllPlaylist = () => {
-  if (highLight.value !== "all") {
-    const { id } = currentRoute?.value?.params;
-
-    queryAllPlaylistData(id as string);
-    highLight.value = "all";
-  }
-};
-
-const requestOtherData = () => {
-  const { id } = currentRoute?.value?.params;
-
-  if (activeName.value != "playlist") {
-    querySonglistData(id as string);
-  } else {
-    queryWeekSonglistData(id as string);
-  }
-};
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.id !== from.params.id) {
-    console.log("id", to.params.id, from.params.id);
     const uid = String(to.params.id);
     queryUserInfoData(uid);
-    queryWeekSonglistData(uid);
-    activeName.value = "playlist";
+    queryPersonalPlaylist(uid);
+    activeName.value = PersonTabInfoEnum.PLAYLIST;
+    followListVisible.value = false;
   }
 });
 
-const openFollowDetail = () => {
-  openUserFollow.value = true;
-  const { id } = currentRoute?.value?.params;
-
-  detailTitle.value = userName + "的关注";
-  queryFollowListData(id as string);
-};
-
-const openFollowerDetail = () => {
-  const { id } = currentRoute?.value?.params;
-
-  openUserFollow.value = true;
-  detailTitle.value = userName + "的粉丝";
-  queryFollowerListData(id as string);
+const handleOpenFollowList = (type: FollowListTypeEnum) => {
+  followListVisible.value = true;
+  if (type === FollowListTypeEnum.ATTENTION) {
+    followListTitle.value = userInfoData?.value?.profile?.nickname + "的关注";
+    queryFollowListData(currentUserId.value);
+  } else {
+    followListTitle.value = userInfoData?.value?.profile?.nickname + "的粉丝";
+    queryFollowerListData(currentUserId.value);
+  }
 };
 </script>
+
 <style scoped lang="less">
 .personal-container {
   width: 100%;
@@ -378,41 +359,16 @@ const openFollowerDetail = () => {
     padding-top: 30px;
 
     .playlist-top-banner {
-      padding: 4px 0 4px 0;
-      width: 100%;
       display: flex;
-      flex-direction: row;
+      align-items: center;
       justify-content: space-between;
-      flex: 1;
-      .title {
-        font-weight: 400;
-        color: #666;
-        font-size: 12px;
-      }
-      .playlist-title {
-        text-align: center;
-        font-weight: 400;
-        color: #666;
-        font-size: 12px;
+      font-size: 14px;
+      color: #666;
 
-        span {
-          font-weight: 500;
-        }
-      }
+      padding: 6px 15px;
 
-      .playlist-tab {
-        span {
-          padding-right: 4px;
-        }
-        .title {
-          cursor: pointer;
-
-          &-highlight {
-            color: var(--color-text-red);
-            cursor: pointer;
-            font-size: 12px;
-          }
-        }
+      :deep(.el-tabs__header) {
+        margin: 0;
       }
     }
   }
