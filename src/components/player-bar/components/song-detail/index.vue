@@ -19,7 +19,6 @@
         <div
           class="lyrics-wrapper"
           :style="{ maxHeight: maxH + 'px' }"
-          @scroll="handleScroll"
           ref="lyricDomRef"
         >
           <div class="lyrics-main">

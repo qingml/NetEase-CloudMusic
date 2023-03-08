@@ -64,7 +64,7 @@ export const usePlayerStore = defineStore({
 
         if (!data?.[0]?.url) {
           ElMessage.error("歌曲信息获取失败，请稍后重试");
-          this.toNext();
+          this.toNext(true);
         }
 
         window.localStorage.setItem(
@@ -146,7 +146,7 @@ export const usePlayerStore = defineStore({
       }
     },
 
-    toNext(isAutoNext: boolean) {
+    toNext(isAutoNext?: boolean) {
       if (isAutoNext && this.mode == ModeEnum.SINGLE) {
         this.setCurrentPlayIndex(this.currentPlayIndex);
       }

@@ -89,14 +89,14 @@ const submitForm = (formEl: FormInstance | undefined) => {
     align-items: center;
     position: fixed;
     z-index: 9998;
-    background: url(@/assets/login-background1.png) no-repeat 0 9999px;
+    background: url(@/assets/img/login-background1.png) no-repeat 0 9999px;
     background-position: center;
     background-size: cover;
 
     &-overlay {
       width: 100%;
       height: 100%;
-      background-color: RGB(190, 237, 199);
+      background-color: rgb(190, 237, 199);
       opacity: 0.7;
       z-index: 9998;
     }

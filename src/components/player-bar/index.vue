@@ -47,7 +47,7 @@
               <i v-if="isPlaying" class="iconfont icon-zanting"></i>
               <i v-else class="iconfont icon-bofang1"></i>
             </span>
-            <span @click="playerStore.toNext">
+            <span @click="() => playerStore.toNext">
               <i class="iconfont icon-xiayishou"></i>
             </span>
             <span @click="handleLyric">
