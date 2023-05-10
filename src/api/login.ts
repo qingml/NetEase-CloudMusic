@@ -23,3 +23,30 @@ export const getUserInfo = () => {
 export const logout = () => {
   return postAjax("/logout");
 };
+
+export const getQRCodeKey = () => {
+  return getAjax("/login/qr/key", {
+    params: {
+      timestamp: new Date().getTime(),
+    },
+  });
+};
+
+export const createQRCodeImg = (key: string) => {
+  return getAjax("/login/qr/create", {
+    params: {
+      timestamp: new Date().getTime(),
+      qrimg: true,
+      key,
+    },
+  });
+};
+
+export const checkScanQRCodeStatus = (key: string) => {
+  return getAjax("/login/qr/check", {
+    params: {
+      key,
+      timestamp: new Date().getTime(),
+    },
+  });
+};

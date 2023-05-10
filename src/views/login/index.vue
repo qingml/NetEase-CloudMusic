@@ -116,10 +116,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
     left: 0;
     right: 0;
     margin: auto;
-    // background: url(@/assets/login-area-bgi.png) no-repeat 0 9999px;
-    // background-position: center;
-    // background-size: cover;
-   background-color: white;
+
+    background-color: white;
     z-index: 9999;
     opacity: 1;
 
@@ -146,10 +144,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
       }
     }
 
-    // .el-form{
-
-    // }
-
     .login-area {
       padding-top: 40px;
       text-align: center;
@@ -162,7 +156,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     .el-button--primary {
       width: 260px;
       font-weight: 400;
-      border-color:RGB(190, 237, 199);
+      border-color: RGB(190, 237, 199);
       background-color: RGB(190, 237, 199);
     }
   }

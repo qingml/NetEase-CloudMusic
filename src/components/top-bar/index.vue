@@ -1,7 +1,9 @@
 <template>
   <header>
-    <a href="/" class="top-bar__logo" />
-    <a href="/" class="top-bar__name">momoMusic</a>
+    <div class="top-bar__left" @click="goBackHome">
+      <div class="top-bar__logo" />
+      <div @click="goBackHome" class="top-bar__name">momoMusic</div>
+    </div>
     <div class="top-bar__wrapper">
       <nav>
         <RouterLink v-for="(item, index) in data" :key="index" :to="item.path">
@@ -16,7 +18,7 @@
           <span
             class="top-bar__login-text"
             v-if="!loginStore.loginStatus"
-            @click="handleLogin"
+            @click="loginModalVisible = true"
             >登录</span
           >
           <div v-else class="top-bar__user-info">
@@ -45,6 +47,7 @@
       </div>
     </div>
   </header>
+  <LoginModal v-model:visible="loginModalVisible" />
   <SearchOverLay v-model:visible="searchOverlayVisible" />
 </template>
 
@@ -55,6 +58,7 @@ import { useLoginStore } from "@/stores/login";
 import SearchOverLay from "./components/search-overlay/index.vue";
 import { logout } from "@/api/login";
 import { storeToRefs } from "pinia";
+import LoginModal from "./components/login-modal/index.vue";
 
 interface IMenuItem {
   path: string;
@@ -69,13 +73,13 @@ defineProps({
 });
 
 const searchOverlayVisible = ref(false);
+const loginModalVisible = ref(false);
 const showUserPopover = ref(false);
 
 const loginStore = useLoginStore();
 const { loginStatus } = storeToRefs(loginStore);
 
 const router = useRouter();
-const { path } = useRoute();
 
 const handleSearchClick = () => {
   searchOverlayVisible.value = true;
@@ -105,6 +109,10 @@ watch(loginStatus, (newVal) => {
   }
 });
 
+const goBackHome = () => {
+  router.push('/')
+}
+
 const handleJump = () => {
   showUserPopover.value = false;
   router.push(`/personal-info/${loginStore?.userInfo?.userId}`);
@@ -123,6 +131,13 @@ header {
 }
 
 .top-bar {
+  &__left {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    cursor: pointer;
+  }
+
   &__logo {
     width: 42px;
     height: 42px;
