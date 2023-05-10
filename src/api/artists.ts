@@ -15,7 +15,7 @@ export const getArtistList = ({
   offset = 0,
   limit = 50,
 }: getArtistProps) => {
-  return getAjax("/api/artist/list", {
+  return getAjax("/artist/list", {
     params: { type, area, initial, offset, limit },
   });
 };

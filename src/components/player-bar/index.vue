@@ -2,6 +2,7 @@
   <div class="player-container">
     <ElSlider
       class="player-progress"
+      :class="{ 'player-progress--active': !!playProgressValue }"
       size="small"
       input-size="small"
       :show-tooltip="false"
@@ -40,14 +41,14 @@
             <span @click="playerStore.setModeVaule">
               <i :class="['iconfont', playerStore.iconValue]"></i>
             </span>
-            <span @click="playerStore.toLast">
+            <span @click="playerStore.toLast()">
               <i class="iconfont icon-shangyishouge"></i>
             </span>
-            <span @click="handlePlay" class="bofang">
+            <span @click="handlePlay()" class="bofang">
               <i v-if="isPlaying" class="iconfont icon-zanting"></i>
               <i v-else class="iconfont icon-bofang1"></i>
             </span>
-            <span @click="() => playerStore.toNext">
+            <span @click="playerStore.toNext()">
               <i class="iconfont icon-xiayishou"></i>
             </span>
             <span @click="handleLyric">
@@ -130,7 +131,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { ElSlider, ElImage, ElPopover } from "element-plus";
 import { Arrayable } from "element-plus/es/utils";
@@ -154,16 +155,18 @@ const { isPlaying, openLyric, currentSong, currentSongData, playingIndex } =
   storeToRefs(playerStore);
 
 watch([isPlaying, currentSong], ([newStaus, newSong]) => {
-  if (!newStaus) {
-    audioRef?.value?.pause();
-  } else {
-    audioRef?.value?.play();
-  }
+  nextTick(() => {
+    if (!newStaus) {
+      audioRef?.value?.pause?.();
+    } else {
+      audioRef?.value?.play?.();
+    }
 
-  if ((newSong || newStaus) && audioRef.value && !playVolumeValue.value) {
-    audioRef.value.volume = 0.36;
-    playVolumeValue.value = 40;
-  }
+    if ((newSong || newStaus) && audioRef.value && !playVolumeValue.value) {
+      audioRef.value.volume = 0.36;
+      playVolumeValue.value = 40;
+    }
+  });
 });
 
 const handlePlay = () => {
@@ -261,6 +264,13 @@ const handleAudioPlay = () => {
     :deep(.el-slider__runway.el-slider__runway) {
       background-color: #fff;
     }
+
+    // &--active {
+    //   :deep(.el-slider__bar),
+    //   :deep(.el-slider__button-wrapper) {
+    //     transition: all 1s;
+    //   }
+    // }
   }
 
   .el-slider {

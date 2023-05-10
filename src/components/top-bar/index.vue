@@ -1,7 +1,7 @@
 <template>
   <header>
-    <div class="top-bar__logo" />
-    <div class="top-bar__name">momoMusic</div>
+    <a href="/" class="top-bar__logo" />
+    <a href="/" class="top-bar__name">momoMusic</a>
     <div class="top-bar__wrapper">
       <nav>
         <RouterLink v-for="(item, index) in data" :key="index" :to="item.path">
@@ -72,11 +72,10 @@ const searchOverlayVisible = ref(false);
 const showUserPopover = ref(false);
 
 const loginStore = useLoginStore();
-const {loginStatus} = storeToRefs(loginStore)
+const { loginStatus } = storeToRefs(loginStore);
 
 const router = useRouter();
 const { path } = useRoute();
-
 
 const handleSearchClick = () => {
   searchOverlayVisible.value = true;

@@ -27,6 +27,7 @@
 
     <PlayerBar />
   </div>
+  <div></div>
 </template>
 
 <script setup>

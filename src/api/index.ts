@@ -1,3 +1,4 @@
+import { isProd } from "./../utils/index";
 import axios, { AxiosRequestConfig } from "axios";
 import qs from "qs";
 import { ElMessage } from "element-plus";
@@ -63,6 +64,9 @@ export const getAjax = async <T = any>(
   url: string,
   config?: IAjaxConfig
 ): Promise<T> => {
+  if (isProd) {
+    url = `/api${url}`;
+  }
   try {
     const resp = await instance.get(url, config);
     return resp as unknown as T;
@@ -80,6 +84,9 @@ export const postAjax = async <T = any>(
   url: string,
   config?: IAjaxConfig
 ): Promise<T> => {
+  if (isProd) {
+    url = `/api${url}`;
+  }
   try {
     const resp = await instance.post(url, config?.data);
     return resp as unknown as T;

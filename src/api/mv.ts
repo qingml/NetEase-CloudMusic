@@ -15,5 +15,5 @@ export const getMvList = ({
   offset = 0,
   limit = 12,
 }: getMvProps) => {
-  return getAjax("/api/mv/all", { params: { type,area,order, offset, limit } });
+  return getAjax("/mv/all", { params: { type,area,order, offset, limit } });
 };

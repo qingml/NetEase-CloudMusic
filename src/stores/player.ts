@@ -162,6 +162,8 @@ export const usePlayerStore = defineStore({
       const lastIndex = this.currentPlayIndex - 1;
       if (lastIndex > -1) {
         this.setCurrentPlayIndex(lastIndex);
+      } else {
+        this.setCurrentPlayIndex(this.currentSongData.length - 1);
       }
     },
 
