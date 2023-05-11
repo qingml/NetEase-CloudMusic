@@ -1,5 +1,11 @@
 <template>
-  <ElDialog v-model="visible" fullscreen class="follow__dialog">
+  <ElDialog
+    v-model="visible"
+    class="follow__dialog"
+    @close="handleClose"
+    width="60%"
+    :center="true"
+  >
     <div class="follow-detail-container">
       <h2 class="follow-title">
         {{ title }}
@@ -56,18 +62,19 @@ const handleClick = (id: string) => {
 
   router.push(`/personal-info/${id}`);
 };
+
+const handleClose = () => {
+  emit("update:visible", false);
+};
 </script>
 
 <style lang="less" scoped>
 .follow-detail-container {
-  width: 1280px;
   display: flex;
   flex-direction: column;
-  text-align: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin: auto;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
 
   .follow-title {
     display: inline-block;
@@ -77,27 +84,24 @@ const handleClick = (id: string) => {
   }
   .list {
     &-block {
-      width: 100%;
-      margin-top: 40px;
+      margin: 20px auto;
       display: flex;
       flex-wrap: wrap;
-      margin-bottom: 30px;
+      max-height: 500px;
+      width: 885px;
+      overflow: auto;
     }
 
     &-item {
       display: flex;
       flex-direction: row;
       align-items: center;
-      width: 330px;
+      width: 150px;
       margin: 20px 145px 20px 0;
 
-      &:nth-child(3n) {
-        margin-right: 0;
-      }
-
       .el-image {
-        width: 120px;
-        height: 120px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         border: 1px dotted;
 
@@ -114,34 +118,27 @@ const handleClick = (id: string) => {
 
         p {
           width: 200px;
-          height: 40px;
-          padding-top: 20px;
+          max-height: 40px;
+          padding: 8px 0;
           font-size: 12px;
           font-weight: 300;
         }
 
         .user-playlist {
-          width: 200px;
-          vertical-align: middle;
           line-height: 14px;
-          text-align: center;
 
           span {
             font-size: 12px;
             font-weight: 300;
             display: inline-block;
           }
-          .playlist {
-            float: left;
-          }
-          .follow {
-            float: right;
+
+          span.fenge {
+            padding: 0 8px;
           }
         }
       }
     }
-
-    // width: ;
   }
 }
 </style>

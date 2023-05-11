@@ -49,16 +49,14 @@
           </div>
           <div class="fenge" />
           <div>
-            <span
-              @click="() => handleOpenFollowList(FollowListTypeEnum.ATTENTION)"
-            >
+            <span @click="handleOpenFollowList(FollowListTypeEnum.ATTENTION)">
               {{ userInfoData?.profile?.follows }}
             </span>
             <span>关注</span>
           </div>
           <div class="fenge" />
           <div>
-            <span @click="() => handleOpenFollowList(FollowListTypeEnum.FAN)">
+            <span @click="handleOpenFollowList(FollowListTypeEnum.FAN)">
               {{ userInfoData?.profile?.followeds }}
             </span>
             <span>粉丝</span>
@@ -70,7 +68,7 @@
       </div>
     </div>
     <div class="user-playlist">
-      <ElTabs v-model="activeName" class="search-detail-nav-title">
+      <ElTabs v-model="activeName" class="search-detail-nav-title" lazy>
         <ElTabPane label="听歌排行" :name="PersonTabInfoEnum.PLAYLIST">
           <div class="playlist-top-banner">
             <div class="playlist-title">
@@ -100,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, reactive } from "vue";
+import { onMounted, ref, computed, reactive, watch } from "vue";
 import { onBeforeRouteUpdate, useRouter } from "vue-router";
 import { ElTabs, ElTabPane, ElSkeleton, ElSkeletonItem } from "element-plus";
 import Playlist from "@/components/playlist/index.vue";
@@ -202,11 +200,12 @@ onMounted(() => {
   querySonglistData(currentUserId.value);
 });
 
-onBeforeRouteUpdate(async (to, from) => {
+onBeforeRouteUpdate((to, from) => {
   if (to.params.id !== from.params.id) {
     const uid = String(to.params.id);
     queryUserInfoData(uid);
     queryPersonalPlaylist(uid);
+    querySonglistData(uid);
     activeName.value = PersonTabInfoEnum.PLAYLIST;
     followListVisible.value = false;
   }

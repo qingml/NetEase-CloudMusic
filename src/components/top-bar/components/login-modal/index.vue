@@ -1,5 +1,10 @@
 <template>
-  <ElDialog custom-class="login-modal" width="30%" v-model="visible">
+  <ElDialog
+    custom-class="login-modal"
+    width="30%"
+    v-model="visible"
+    @close="handleClose"
+  >
     <template v-slot:title>
       <div class="login-modal__top">
         <div class="login-modal__logo" />
@@ -61,6 +66,8 @@ const qrCodeStatus = ref<ScanQRCodeStatusEnum>();
 
 const emit = defineEmits(["update:visible"]);
 
+const intervalScanTimer = ref<ReturnType<typeof setInterval>>();
+
 const { visible } = toRefs(props);
 
 const loginStore = useLoginStore();
@@ -77,7 +84,7 @@ const queryQRCodeImg = async () => {
     const qrCodeImgRes = await createQRCodeImg(qrCodekey.value);
     qrcodeImg.value = qrCodeImgRes.data.qrimg;
 
-    const timer = setInterval(async () => {
+    intervalScanTimer.value = setInterval(async () => {
       const res = await checkScanQRCodeStatus(qrCodekey.value);
       qrCodeStatus.value = res.code;
       if (res.code === 803) {
@@ -89,11 +96,11 @@ const queryQRCodeImg = async () => {
         await loginStore.queryUserInfo();
 
         const timeout = setTimeout(() => {
-					emit("update:visible", false);
+          emit("update:visible", false);
           clearTimeout(timeout);
         }, 500);
 
-        clearInterval(timer);
+        clearInterval(intervalScanTimer.value);
       }
     }, 3000);
   } catch (error) {}
@@ -101,19 +108,29 @@ const queryQRCodeImg = async () => {
 
 onMounted(queryQRCodeKey);
 
-watch(qrCodekey, async () => {
-  if (qrCodekey.value) {
+watch([qrCodekey, visible], async () => {
+  if (qrCodekey.value && visible.value) {
     queryQRCodeImg();
   }
 });
 
 const handleResetQRCode = async () => {
+  clearInterval(intervalScanTimer.value);
   await queryQRCodeKey();
   await queryQRCodeImg();
+};
+
+const handleClose = () => {
+  emit("update:visible", false);
+  clearInterval(intervalScanTimer.value);
 };
 </script>
 
 <style lang="less" scoped>
+:deep(.el-dialog) {
+  border-radius: 12px;
+}
+
 .login-modal {
   border-radius: 12px;
 
